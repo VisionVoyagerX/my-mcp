@@ -171,9 +171,26 @@ actually calling the tool with a realistic prompt, not just by type-checking.
 
 ## Phase 10 — Packaging & distribution
 
-- [ ] 10.1 Per-bundle `package.json` metadata, versioning, publish config.
-- [ ] 10.2 Root README: what bundles exist, why bundles (link to `CLAUDE.md`),
-      install instructions per bundle.
+- [x] 10.1 Per-bundle `package.json` metadata, versioning, publish config.
+      Added `description`, `repository`, `keywords`, and `files` to all
+      three packages. `license` set to `UNLICENSED` as an explicit
+      placeholder — no real license has been chosen yet, and packages stay
+      `"private": true` until one is and the live-verification pass (Phase
+      9.3 / this phase's own caveat) is done.
+- [x] 10.2 Root README: what bundles exist, why bundles (link to
+      `CLAUDE.md`), install instructions per bundle, plus a rollup of the
+      verification-status caveat that's been repeated at every phase.
+
+**v1 scope (Phases 0-10) is complete.** All 12 planned tools exist across
+both bundles, are unit-tested where they have parseable logic, and have
+been hand-verified end-to-end via the MCP Inspector CLI. The one
+outstanding item repeated throughout every phase: **no tool has been
+verified against a real `.gov.gr`/`.gr` response**, because this
+environment's network policy blocks those domains entirely (confirmed
+403 at the proxy, not just a per-tool restriction). Do that pass — and
+fix whatever it finds — before treating this as production-ready. Beyond
+that, `PLAN.md`'s "Later / not yet scoped" section (health bundle, Tier 3
+services) remains genuinely future work, not something this pass covered.
 
 ## Later / not yet scoped
 
