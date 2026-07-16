@@ -21,14 +21,14 @@ export interface FetchJsonOptions extends RequestInit {
 }
 
 /**
- * Shared fetch wrapper for all gov-service clients: applies a timeout,
- * normalizes non-2xx responses and non-JSON bodies into `GovApiError`
- * instead of letting callers deal with raw fetch/JSON-parse exceptions.
+ * Shared fetch wrapper for all gov-service clients: applies a timeout and
+ * normalizes non-2xx responses into `GovApiError` instead of letting
+ * callers deal with raw fetch exceptions. Returns the raw response body.
  */
-export async function fetchJson<T>(
+export async function fetchText(
   url: string | URL,
   options: FetchJsonOptions = {},
-): Promise<T> {
+): Promise<string> {
   const { timeoutMs = 15_000, ...init } = options;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
@@ -57,6 +57,16 @@ export async function fetchJson<T>(
     );
   }
 
+  return text;
+}
+
+/** Same as `fetchText`, but parses the body as JSON. */
+export async function fetchJson<T>(
+  url: string | URL,
+  options: FetchJsonOptions = {},
+): Promise<T> {
+  const text = await fetchText(url, options);
+
   if (text.length === 0) {
     return undefined as T;
   }
@@ -64,10 +74,11 @@ export async function fetchJson<T>(
   try {
     return JSON.parse(text) as T;
   } catch (cause) {
-    throw new GovApiError(
-      `${init.method ?? "GET"} ${String(url)} returned a non-JSON body`,
-      { url: String(url), status: response.status, body: text.slice(0, 2000), cause },
-    );
+    throw new GovApiError(`${options.method ?? "GET"} ${String(url)} returned a non-JSON body`, {
+      url: String(url),
+      body: text.slice(0, 2000),
+      cause,
+    });
   }
 }
 
