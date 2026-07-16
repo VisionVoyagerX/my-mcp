@@ -9,7 +9,9 @@ Exposes read-only tools over Greece's open transparency/open-data services.
 This bundle is now feature-complete for v1 scope (`PLAN.md` Phases 2-4):
 
 - [Diavgeia](https://diavgeia.gov.gr) — public-sector decisions, decrees, and
-  budget acts. No authentication required.
+  budget acts. No authentication required. Also re-exposed in
+  `bundle-business`, since procurement decisions are genuinely cross-domain
+  (see `CLAUDE.md`) — both bundles share the same `@my-mcp/core` client.
 - [data.gov.gr](https://data.gov.gr) — the national open-data catalog
   (~22k datasets), a standard CKAN deployment. No authentication required for
   reads, but a free token raises rate limits.

@@ -22,6 +22,11 @@ Exposes tools over three business/tax services, per `PLAN.md` Phases 5-7:
   declarations) are real filings to the labor ministry, and only their URL
   paths — not their request payload schemas — could be confirmed, so they
   aren't exposed as tools yet.
+- **Diavgeia** — search/fetch public-sector decisions, re-exposed from
+  `bundle-transparency` since procurement/contract-award decisions matter
+  to business users too (e.g. checking a counterparty's public contracts).
+  This is the same `@my-mcp/core` client both bundles share, not a
+  reimplementation — see `CLAUDE.md`'s cross-domain note. No auth required.
 
 > **Verification status**: ΓΕΜΗ's client is built against
 > github.com/firebed/vat-registry, a maintained open-source client, which
@@ -47,6 +52,8 @@ Exposes tools over three business/tax services, per `PLAN.md` Phases 5-7:
   counterparty, using your own myDATA credentials.
 - `ergani_list_services` — list Ergani services available to your account,
   using your own Ergani credentials.
+- `diavgeia_search_decisions` / `diavgeia_get_decision` — search and fetch
+  Diavgeia public-sector decisions (shared with `bundle-transparency`).
 
 ## Install / configure
 
@@ -82,6 +89,8 @@ Then point an MCP client at the built server:
 - `GEMI_BASE_URL` (optional) — override the GEMI API base URL.
 - `MYDATA_BASE_URL` (optional) — override the myDATA API base URL, e.g. to
   point at AADE's dev/sandbox environment instead of production.
+- `DIAVGEIA_BASE_URL` (optional) — override the Diavgeia API base URL, e.g.
+  to point at the `test3.diavgeia.gov.gr` sandbox instead of production.
 - `ERGANI_BASE_URL` (optional) — override the Ergani API base URL; defaults
   to the `trialeservices.yeka.gr` sandbox rather than production, since
   production credentials are a much higher-stakes thing to point an

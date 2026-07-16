@@ -4,6 +4,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { registerGemiTools } from "./tools/gemi.js";
 import { registerMyDataTools } from "./tools/mydata.js";
 import { registerErganiTools } from "./tools/ergani.js";
+import { registerDiavgeiaTools } from "./tools/diavgeia.js";
 
 const server = new McpServer({
   name: "my-mcp-business",
@@ -13,6 +14,7 @@ const server = new McpServer({
 registerGemiTools(server);
 registerMyDataTools(server);
 registerErganiTools(server);
+registerDiavgeiaTools(server);
 
 async function main() {
   const transport = new StdioServerTransport();
