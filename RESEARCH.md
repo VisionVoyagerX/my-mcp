@@ -32,8 +32,8 @@ Methodology: cross-checked each service against its official `.gov.gr`/`.gr` dom
 | ΕΟΠΥΥ citizen e-services | Portal login only; programmatic access only via the restricted ΗΔΙΚΑ vendor API above. |
 | EU VIES VAT validation | Not Greek-specific — it's an EU Commission SOAP service Greece participates in (`ec.europa.eu/taxation_customs/vies`). Useful as a companion tool, not "Greek gov" per se. |
 
-## Competitive note
-An existing product, **Monopigi** (`monopigi.com`), already markets "One API — All Greek Government Data" with MCP support. Worth a quick look before committing scope, to differentiate.
+## Competitive note (unverified)
+Search snippets referenced a product called **Monopigi** (`monopigi.com`) marketing "One API — All Greek Government Data" with MCP support. The domain could not be confirmed live — this sandbox's outbound network access is blocked, so no direct fetch was possible, and the user separately reported the link doesn't resolve. Treat as unverified; do not rely on it as a confirmed competitor without checking directly from an unrestricted machine.
 
 ## Recommended v1 MCP scope (highest value, lowest friction)
 1. Diavgeia — open reads, zero friction, rich data (transparency/procurement/decisions)
