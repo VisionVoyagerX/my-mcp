@@ -1,19 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { DiavgeiaClient, GovApiError } from "@my-mcp/core";
+import { DiavgeiaClient, toolErrorResult } from "@my-mcp/core";
 
 function formatDate(value: string | number | undefined): string {
   if (value === undefined) return "unknown date";
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? String(value) : date.toISOString().slice(0, 10);
-}
-
-function errorContent(error: unknown, context: string) {
-  const message =
-    error instanceof GovApiError
-      ? `${context}: ${error.message}${error.status ? ` (HTTP ${error.status})` : ""}`
-      : `${context}: ${error instanceof Error ? error.message : String(error)}`;
-  return { content: [{ type: "text" as const, text: message }], isError: true };
 }
 
 export function registerDiavgeiaTools(server: McpServer): void {
@@ -79,7 +71,7 @@ export function registerDiavgeiaTools(server: McpServer): void {
         const header = `Found ${result.total ?? result.decisions.length} decision(s), showing page ${result.page ?? 0} (${result.decisions.length} shown):`;
         return { content: [{ type: "text", text: `${header}\n${lines.join("\n")}` }] };
       } catch (error) {
-        return errorContent(error, "Failed to search Diavgeia decisions");
+        return toolErrorResult(error, "Failed to search Diavgeia decisions");
       }
     },
   );
@@ -113,7 +105,7 @@ export function registerDiavgeiaTools(server: McpServer): void {
         ].filter((line): line is string => line !== undefined);
         return { content: [{ type: "text", text: lines.join("\n") }] };
       } catch (error) {
-        return errorContent(error, `Failed to fetch Diavgeia decision "${ada}"`);
+        return toolErrorResult(error, `Failed to fetch Diavgeia decision "${ada}"`);
       }
     },
   );
