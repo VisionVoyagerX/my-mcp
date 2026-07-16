@@ -2,12 +2,21 @@
   "name": "@my-mcp/core",
   "version": "0.1.0",
   "private": true,
+  "description": "Shared per-service API clients and auth handling for Greek government MCP bundles (Diavgeia, data.gov.gr, Geodata.gov.gr, GEMI, myDATA, Ergani).",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VisionVoyagerX/my-mcp",
+    "directory": "packages/core"
+  },
+  "keywords": ["mcp", "greece", "gov.gr", "diavgeia", "ckan", "gemi"],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js"
   },
+  "files": ["dist"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",

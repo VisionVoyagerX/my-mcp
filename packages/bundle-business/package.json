@@ -2,10 +2,19 @@
   "name": "@my-mcp/bundle-business",
   "version": "0.1.0",
   "private": true,
+  "description": "MCP server for the business/tax domain: GEMI, myDATA, and Ergani (plus shared Diavgeia procurement tools).",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VisionVoyagerX/my-mcp",
+    "directory": "packages/bundle-business"
+  },
+  "keywords": ["mcp", "greece", "gov.gr", "gemi", "mydata", "ergani"],
   "type": "module",
   "bin": {
     "my-mcp-business": "./dist/index.js"
   },
+  "files": ["dist"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
