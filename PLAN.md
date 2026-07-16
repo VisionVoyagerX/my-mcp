@@ -136,10 +136,16 @@ actually calling the tool with a realistic prompt, not just by type-checking.
 
 ## Phase 8 — Cross-bundle sharing pass
 
-- [ ] 8.1 Revisit whether any service belongs in more than one bundle (e.g.
+- [x] 8.1 Revisit whether any service belongs in more than one bundle (e.g.
       Diavgeia procurement decisions inside the business bundle too, per the
       cross-domain note in `CLAUDE.md`). Where it does, re-export the
       existing core client into the second bundle — do not reimplement it.
+      Added `diavgeia_search_decisions`/`diavgeia_get_decision` to
+      `bundle-business` too: same `@my-mcp/core` `DiavgeiaClient`, a thin
+      duplicated tool-registration wrapper (business-framed descriptions)
+      per the "code is shared, packaging is not" principle. Business bundle
+      is now 6 tools total; verified via MCP Inspector CLI. No other
+      service in v1 scope is genuinely cross-domain.
 
 ## Phase 9 — Hardening
 
