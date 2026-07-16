@@ -15,3 +15,6 @@ export type { CkanDataset, CkanSearchResult } from "./ckan/types.js";
 
 export { GeodataClient } from "./geodata/client.js";
 export type { GeoJsonFeatureCollection, GeodataLayer } from "./geodata/types.js";
+
+export { GemiClient } from "./gemi/client.js";
+export type { GemiCompany } from "./gemi/types.js";
