@@ -5,20 +5,37 @@ services, per the architecture in the repo root's `CLAUDE.md`.
 
 ## What it does
 
-Exposes tools over ΓΕΜΗ (the General Commercial Registry) open data: look up
-a Greek company by tax ID (ΑΦΜ) or by its ΓΕΜΗ registration number.
+Exposes tools over three business/tax services, per `PLAN.md` Phases 5-7:
 
-myDATA (AADE e-invoicing) and Ergani (labor/employment) tools are planned
-for this bundle (see `PLAN.md` Phases 6-7) but not yet implemented.
+- **ΓΕΜΗ** (General Commercial Registry) — look up a Greek company by tax ID
+  (ΑΦΜ) or by its ΓΕΜΗ registration number. Server-side API key
+  (`GEMI_API_KEY`).
+- **myDATA** (AADE e-invoicing) — fetch e-invoices for a business. **Bring
+  your own credentials**: myDATA subscription keys belong to an individual
+  business's Taxisnet registration, so this server never holds one —
+  `userId`/`subscriptionKey` are passed as tool arguments on every call, not
+  server config.
+- **Ergani** (labor/employment) — list the Ergani web services available to
+  your account. **Bring your own credentials**, same pattern as myDATA
+  (`username`/`password` as tool arguments). Deliberately **read-only**:
+  Ergani's write endpoints (work-card submission, overtime/schedule
+  declarations) are real filings to the labor ministry, and only their URL
+  paths — not their request payload schemas — could be confirmed, so they
+  aren't exposed as tools yet.
 
-> **Verification status**: the client is built against
+> **Verification status**: ΓΕΜΗ's client is built against
 > github.com/firebed/vat-registry, a maintained open-source client, which
 > confirms the base URL, endpoint paths, and `api_key` header — but no
 > evidence of the actual company-record field names was found (the official
 > Swagger docs returned 403 to automated fetches from this environment), so
 > tool output is the raw JSON response rather than a hand-picked field
-> summary. This sandbox cannot reach `.gov.gr`/`.gr` domains at all
-> (confirmed 403 at the proxy), so no live response has been verified —
+> summary. myDATA's `RequestDocs` endpoint, headers, and query params are
+> confirmed against AADE's official API documentation PDFs; its response is
+> raw XML, returned as-is (not parsed) since the invoice XSD is large and
+> out of scope for v1. Ergani's authentication flow and `ServicesList`
+> endpoint are confirmed against github.com/withlogicco/ergani-python-sdk.
+> This sandbox cannot reach `.gov.gr`/`.gr` domains at all (confirmed 403 at
+> the proxy), so no live response has been verified for any of the three —
 > do that from an unrestricted network before relying on this in
 > production, per `CLAUDE.md`.
 
@@ -26,6 +43,10 @@ for this bundle (see `PLAN.md` Phases 6-7) but not yet implemented.
 
 - `gemi_search_company_by_tin` — look up companies by ΑΦΜ.
 - `gemi_get_company` — fetch full details by ΓΕΜΗ registration number.
+- `mydata_request_docs` — fetch e-invoices (raw XML) for a date range/
+  counterparty, using your own myDATA credentials.
+- `ergani_list_services` — list Ergani services available to your account,
+  using your own Ergani credentials.
 
 ## Install / configure
 
@@ -59,3 +80,13 @@ Then point an MCP client at the built server:
   an actionable configuration error instead of calling the API. The Swagger
   docs page also lists a limited test key, `api-docs-key`.
 - `GEMI_BASE_URL` (optional) — override the GEMI API base URL.
+- `MYDATA_BASE_URL` (optional) — override the myDATA API base URL, e.g. to
+  point at AADE's dev/sandbox environment instead of production.
+- `ERGANI_BASE_URL` (optional) — override the Ergani API base URL; defaults
+  to the `trialeservices.yeka.gr` sandbox rather than production, since
+  production credentials are a much higher-stakes thing to point an
+  unverified client at.
+
+myDATA and Ergani take no server-side credentials — pass your own
+`userId`/`subscriptionKey` (myDATA) or `username`/`password` (Ergani) as
+arguments to the relevant tool call.

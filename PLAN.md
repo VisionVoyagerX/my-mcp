@@ -106,19 +106,33 @@ actually calling the tool with a realistic prompt, not just by type-checking.
 
 ## Phase 6 — Business bundle: myDATA
 
-- [ ] 6.1 Core: myDATA client. This is bring-your-own-Taxisnet-credential —
+- [x] 6.1 Core: myDATA client. This is bring-your-own-Taxisnet-credential —
       design the tool so the caller supplies their own key per call/session
       rather than the MCP holding a shared credential (per `CLAUDE.md`).
-- [ ] 6.2 Liveness-check (or sandboxed test account if available), then add
-      tool(s). Tests + README, including a clear note on what credential the
-      user must supply and how.
+      `RequestDocs` endpoint/headers/params confirmed against AADE's
+      official API documentation PDFs. Response is raw XML (myDATA invoices
+      are XSD-schema based), returned as-is rather than parsed into
+      structured fields — out of scope for v1.
+- [x] 6.2 **Liveness/sandbox check NOT done** (same sandbox network block) —
+      added `mydata_request_docs` tool. Tests + README, with a clear note
+      that `userId`/`subscriptionKey` are per-call tool arguments, never
+      server config.
 
 ## Phase 7 — Business bundle: Ergani
 
-- [ ] 7.1 Same bring-your-own-credential pattern as Phase 6, applied to
-      Ergani's labor/employment endpoints.
-- [ ] 7.2 Liveness-check, tools, tests, README. Business bundle is now
-      feature-complete for v1 scope.
+- [x] 7.1 Same bring-your-own-credential pattern as Phase 6, applied to
+      Ergani's labor/employment endpoints. Authentication flow (Username/
+      Password/UserType -> Bearer token) and `ServicesList` confirmed
+      against github.com/withlogicco/ergani-python-sdk. Deliberately does
+      **not** implement Ergani's write endpoints (work-card submission,
+      overtime/schedule declarations) — those are real regulatory filings
+      and only their URL paths, not their payload schemas, could be
+      confirmed; a wrong guess there is a worse failure mode than a wrong
+      GET, so v1 stays read-only pending a confirmed schema.
+- [x] 7.2 **Liveness check NOT done** (same sandbox network block) — added
+      `ergani_list_services` tool. Tests + README. Business bundle is now
+      feature-complete for v1 scope (4 tools total, all hand-tested via MCP
+      Inspector CLI).
 
 ## Phase 8 — Cross-bundle sharing pass
 
