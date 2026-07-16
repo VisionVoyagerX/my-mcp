@@ -89,11 +89,20 @@ actually calling the tool with a realistic prompt, not just by type-checking.
 
 ## Phase 5 — Business bundle v1, first service (ΓΕΜΗ)
 
-- [ ] 5.1 New `packages/bundle-business` package (same scaffolding pattern as
-      Phase 0.3, using the now-proven approach).
-- [ ] 5.2 Core: ΓΕΜΗ client (free self-service API key — same explicit
-      config pattern as data.gov.gr).
-- [ ] 5.3 Liveness-check, then add ΓΕΜΗ lookup tool(s). Tests + README.
+- [x] 5.1 New `packages/bundle-business` package (same scaffolding pattern as
+      Phase 0.3, using the now-proven approach). Replaces the Phase 0.2
+      empty skeleton with a real server.
+- [x] 5.2 Core: ΓΕΜΗ client (free self-service API key via `GEMI_API_KEY` —
+      same explicit config pattern as data.gov.gr, but required rather than
+      optional: throws an actionable config error if unset rather than
+      calling the API). Base URL/paths/header confirmed against
+      github.com/firebed/vat-registry; no evidence found for the actual
+      company-record field names (Swagger docs 403'd), so tools return raw
+      JSON rather than a hand-picked field summary.
+- [x] 5.3 **Liveness check NOT done** (same sandbox network block) — added
+      `gemi_search_company_by_tin` / `gemi_get_company` tools. Tests +
+      README. Hand-tested via MCP Inspector CLI: missing-key path returns
+      an actionable error, and a configured key reaches the network layer.
 
 ## Phase 6 — Business bundle: myDATA
 

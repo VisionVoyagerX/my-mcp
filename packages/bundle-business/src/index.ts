@@ -1,3 +1,21 @@
-// Business/tax domain bundle (GEMI, myDATA, Ergani) — not yet implemented.
-// Scaffolding placeholder per PLAN.md Phase 0.2; real server lands in Phase 5.
-export {};
+#!/usr/bin/env node
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { registerGemiTools } from "./tools/gemi.js";
+
+const server = new McpServer({
+  name: "my-mcp-business",
+  version: "0.1.0",
+});
+
+registerGemiTools(server);
+
+async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+}
+
+main().catch((error: unknown) => {
+  console.error("Fatal error starting my-mcp-business server:", error);
+  process.exit(1);
+});
