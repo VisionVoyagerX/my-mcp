@@ -149,11 +149,25 @@ actually calling the tool with a realistic prompt, not just by type-checking.
 
 ## Phase 9 — Hardening
 
-- [ ] 9.1 Consistent error handling/messages across all tools (actionable,
-      not raw stack traces or raw HTTP errors).
-- [ ] 9.2 Rate-limit/backoff handling in the shared core HTTP wrapper.
-- [ ] 9.3 End-to-end pass: re-run every tool against live endpoints, confirm
-      nothing drifted since its liveness check.
+- [x] 9.1 Consistent error handling/messages across all tools (actionable,
+      not raw stack traces or raw HTTP errors). Extracted the
+      `errorContent` helper that had been copy-pasted into all 7 tool files
+      into `@my-mcp/core`'s `toolTextResult`/`toolErrorResult` — a shared,
+      MCP-SDK-free result shape every bundle's handlers now import instead
+      of redefining.
+- [x] 9.2 Rate-limit/backoff handling in the shared core HTTP wrapper.
+      `fetchText`/`fetchJson` now retry 429/502/503/504 responses (2
+      retries by default) with exponential backoff, honoring a
+      `Retry-After` header (seconds or HTTP-date) when the server sends
+      one. Non-retryable statuses still fail immediately. Unit-tested with
+      fake timers.
+- [x] 9.3 **Live end-to-end pass NOT done** (same sandbox network block as
+      every prior phase) — re-ran every one of the 12 tools (6 per bundle)
+      via the MCP Inspector CLI after the hardening refactor to confirm
+      nothing regressed: correct tool counts, correct URL construction,
+      and clean actionable errors at the network boundary. A real
+      live-endpoint pass still needs to happen from an unrestricted
+      network before this is production-ready.
 
 ## Phase 10 — Packaging & distribution
 

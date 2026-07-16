@@ -1,14 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { MyDataClient, GovApiError } from "@my-mcp/core";
-
-function errorContent(error: unknown, context: string) {
-  const message =
-    error instanceof GovApiError
-      ? `${context}: ${error.message}${error.status ? ` (HTTP ${error.status})` : ""}`
-      : `${context}: ${error instanceof Error ? error.message : String(error)}`;
-  return { content: [{ type: "text" as const, text: message }], isError: true };
-}
+import { MyDataClient, toolErrorResult } from "@my-mcp/core";
 
 export function registerMyDataTools(server: McpServer): void {
   const client = new MyDataClient();
@@ -62,7 +54,7 @@ export function registerMyDataTools(server: McpServer): void {
         const xml = await client.requestDocs({ userId, subscriptionKey }, params);
         return { content: [{ type: "text", text: xml }] };
       } catch (error) {
-        return errorContent(error, "Failed to fetch myDATA invoices");
+        return toolErrorResult(error, "Failed to fetch myDATA invoices");
       }
     },
   );

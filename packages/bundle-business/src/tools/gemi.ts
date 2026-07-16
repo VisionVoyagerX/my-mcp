@@ -1,14 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { GemiClient, GovApiError } from "@my-mcp/core";
-
-function errorContent(error: unknown, context: string) {
-  const message =
-    error instanceof GovApiError
-      ? `${context}: ${error.message}${error.status ? ` (HTTP ${error.status})` : ""}`
-      : `${context}: ${error instanceof Error ? error.message : String(error)}`;
-  return { content: [{ type: "text" as const, text: message }], isError: true };
-}
+import { GemiClient, toolErrorResult } from "@my-mcp/core";
 
 export function registerGemiTools(server: McpServer): void {
   const client = new GemiClient();
@@ -45,7 +37,7 @@ export function registerGemiTools(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return errorContent(error, `Failed to search ΓΕΜΗ for ΑΦΜ "${tin}"`);
+        return toolErrorResult(error, `Failed to search ΓΕΜΗ for ΑΦΜ "${tin}"`);
       }
     },
   );
@@ -70,7 +62,7 @@ export function registerGemiTools(server: McpServer): void {
         const company = await client.getCompany(registrationNumber);
         return { content: [{ type: "text", text: JSON.stringify(company, null, 2) }] };
       } catch (error) {
-        return errorContent(
+        return toolErrorResult(
           error,
           `Failed to fetch ΓΕΜΗ company "${registrationNumber}"`,
         );

@@ -1,14 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { CkanClient, GovApiError } from "@my-mcp/core";
-
-function errorContent(error: unknown, context: string) {
-  const message =
-    error instanceof GovApiError
-      ? `${context}: ${error.message}${error.status ? ` (HTTP ${error.status})` : ""}`
-      : `${context}: ${error instanceof Error ? error.message : String(error)}`;
-  return { content: [{ type: "text" as const, text: message }], isError: true };
-}
+import { CkanClient, toolErrorResult } from "@my-mcp/core";
 
 export function registerCkanTools(server: McpServer): void {
   const client = new CkanClient();
@@ -59,7 +51,7 @@ export function registerCkanTools(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return errorContent(error, "Failed to search data.gov.gr datasets");
+        return toolErrorResult(error, "Failed to search data.gov.gr datasets");
       }
     },
   );
@@ -93,7 +85,7 @@ export function registerCkanTools(server: McpServer): void {
         ].filter((line): line is string => line !== undefined);
         return { content: [{ type: "text", text: lines.join("\n") }] };
       } catch (error) {
-        return errorContent(error, `Failed to fetch data.gov.gr dataset "${id}"`);
+        return toolErrorResult(error, `Failed to fetch data.gov.gr dataset "${id}"`);
       }
     },
   );

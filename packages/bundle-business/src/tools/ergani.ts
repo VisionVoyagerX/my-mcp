@@ -1,14 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { ErganiClient, GovApiError } from "@my-mcp/core";
-
-function errorContent(error: unknown, context: string) {
-  const message =
-    error instanceof GovApiError
-      ? `${context}: ${error.message}${error.status ? ` (HTTP ${error.status})` : ""}`
-      : `${context}: ${error instanceof Error ? error.message : String(error)}`;
-  return { content: [{ type: "text" as const, text: message }], isError: true };
-}
+import { ErganiClient, toolErrorResult } from "@my-mcp/core";
 
 export function registerErganiTools(server: McpServer): void {
   const client = new ErganiClient();
@@ -36,7 +28,7 @@ export function registerErganiTools(server: McpServer): void {
         const services = await client.listServices({ username, password });
         return { content: [{ type: "text", text: JSON.stringify(services, null, 2) }] };
       } catch (error) {
-        return errorContent(error, "Failed to list Ergani services");
+        return toolErrorResult(error, "Failed to list Ergani services");
       }
     },
   );
