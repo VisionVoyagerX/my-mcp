@@ -1,0 +1,29 @@
+{
+  "help": "https://data.gov.gr/api/3/action/help_show?name=package_search",
+  "success": true,
+  "result": {
+    "count": 2,
+    "results": [
+      {
+        "id": "abc-123",
+        "name": "state-budget-2026",
+        "title": "State Budget 2026",
+        "notes": "Annual state budget figures.",
+        "organization": { "name": "min-finance", "title": "Ministry of Finance" },
+        "resources": [
+          { "id": "res-1", "name": "budget.csv", "format": "CSV", "url": "https://data.gov.gr/dataset/state-budget-2026/resource/res-1" }
+        ],
+        "tags": [{ "name": "budget" }, { "name": "finance" }]
+      },
+      {
+        "id": "def-456",
+        "name": "school-directory",
+        "title": "School Directory",
+        "notes": "Registry of public schools.",
+        "organization": { "name": "min-education", "title": "Ministry of Education" },
+        "resources": [],
+        "tags": [{ "name": "education" }]
+      }
+    ]
+  }
+}
