@@ -1,6 +1,9 @@
 export { GovApiError, fetchJson, fetchText, buildQuery } from "./http.js";
 export type { FetchJsonOptions } from "./http.js";
 
+export { toolTextResult, toolErrorResult } from "./tool-result.js";
+export type { ToolTextResult } from "./tool-result.js";
+
 export { DiavgeiaClient } from "./diavgeia/client.js";
 export type { DiavgeiaSearchParams } from "./diavgeia/client.js";
 export type {

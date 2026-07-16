@@ -1,14 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { GeodataClient, GovApiError } from "@my-mcp/core";
-
-function errorContent(error: unknown, context: string) {
-  const message =
-    error instanceof GovApiError
-      ? `${context}: ${error.message}${error.status ? ` (HTTP ${error.status})` : ""}`
-      : `${context}: ${error instanceof Error ? error.message : String(error)}`;
-  return { content: [{ type: "text" as const, text: message }], isError: true };
-}
+import { GeodataClient, toolErrorResult } from "@my-mcp/core";
 
 export function registerGeodataTools(server: McpServer): void {
   const client = new GeodataClient();
@@ -32,7 +24,7 @@ export function registerGeodataTools(server: McpServer): void {
         const lines = layers.map((l) => `- ${l.name}${l.title ? ` — ${l.title}` : ""}`);
         return { content: [{ type: "text", text: lines.join("\n") }] };
       } catch (error) {
-        return errorContent(error, "Failed to list Geodata.gov.gr layers");
+        return toolErrorResult(error, "Failed to list Geodata.gov.gr layers");
       }
     },
   );
@@ -74,7 +66,7 @@ export function registerGeodataTools(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return errorContent(error, `Failed to fetch features for layer "${typeName}"`);
+        return toolErrorResult(error, `Failed to fetch features for layer "${typeName}"`);
       }
     },
   );

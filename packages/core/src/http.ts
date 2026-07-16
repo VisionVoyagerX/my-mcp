@@ -18,24 +18,37 @@ export class GovApiError extends Error {
 export interface FetchJsonOptions extends RequestInit {
   /** Aborts the request after this many milliseconds. Defaults to 15000. */
   timeoutMs?: number;
+  /**
+   * How many times to retry a 429 or 5xx response before giving up.
+   * Defaults to 2 (i.e. up to 3 attempts total). Set to 0 to disable.
+   */
+  maxRetries?: number;
 }
 
-/**
- * Shared fetch wrapper for all gov-service clients: applies a timeout and
- * normalizes non-2xx responses into `GovApiError` instead of letting
- * callers deal with raw fetch exceptions. Returns the raw response body.
- */
-export async function fetchText(
+const RETRYABLE_STATUSES = new Set([429, 502, 503, 504]);
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** Parses a `Retry-After` header (seconds, or an HTTP-date) into milliseconds. */
+function parseRetryAfterMs(header: string | null): number | undefined {
+  if (!header) return undefined;
+  const seconds = Number(header);
+  if (Number.isFinite(seconds)) return Math.max(0, seconds * 1000);
+  const dateMs = Date.parse(header);
+  return Number.isFinite(dateMs) ? Math.max(0, dateMs - Date.now()) : undefined;
+}
+
+async function attemptFetch(
   url: string | URL,
-  options: FetchJsonOptions = {},
-): Promise<string> {
-  const { timeoutMs = 15_000, ...init } = options;
+  init: RequestInit,
+  timeoutMs: number,
+): Promise<Response> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
-
-  let response: Response;
   try {
-    response = await fetch(url, { ...init, signal: controller.signal });
+    return await fetch(url, { ...init, signal: controller.signal });
   } catch (cause) {
     const isAbort = cause instanceof Error && cause.name === "AbortError";
     throw new GovApiError(
@@ -47,17 +60,46 @@ export async function fetchText(
   } finally {
     clearTimeout(timeout);
   }
+}
 
-  const text = await response.text();
+/**
+ * Shared fetch wrapper for all gov-service clients: applies a timeout,
+ * retries 429/5xx responses with exponential backoff (honoring
+ * `Retry-After` when the server sends one), and normalizes any final
+ * non-2xx response into `GovApiError` instead of letting callers deal with
+ * raw fetch exceptions. Returns the raw response body.
+ */
+export async function fetchText(
+  url: string | URL,
+  options: FetchJsonOptions = {},
+): Promise<string> {
+  const { timeoutMs = 15_000, maxRetries = 2, ...init } = options;
 
-  if (!response.ok) {
-    throw new GovApiError(
-      `${init.method ?? "GET"} ${String(url)} returned HTTP ${response.status}`,
-      { url: String(url), status: response.status, body: text.slice(0, 2000) },
-    );
+  let lastResponse: Response | undefined;
+  let lastText = "";
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const response = await attemptFetch(url, init, timeoutMs);
+    const text = await response.text();
+
+    if (response.ok) {
+      return text;
+    }
+
+    lastResponse = response;
+    lastText = text;
+
+    if (!RETRYABLE_STATUSES.has(response.status) || attempt === maxRetries) {
+      break;
+    }
+
+    const retryAfterMs = parseRetryAfterMs(response.headers.get("retry-after"));
+    await sleep(retryAfterMs ?? 2 ** attempt * 500);
   }
 
-  return text;
+  throw new GovApiError(
+    `${init.method ?? "GET"} ${String(url)} returned HTTP ${lastResponse!.status}`,
+    { url: String(url), status: lastResponse!.status, body: lastText.slice(0, 2000) },
+  );
 }
 
 /** Same as `fetchText`, but parses the body as JSON. */
