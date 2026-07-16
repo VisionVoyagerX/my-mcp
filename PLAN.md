@@ -35,22 +35,32 @@ actually calling the tool with a realistic prompt, not just by type-checking.
 
 ## Phase 1 — Core library, first client (Diavgeia)
 
-- [ ] 1.1 `packages/core`: shared HTTP client wrapper (fetch + timeout + error
+- [x] 1.1 `packages/core`: shared HTTP client wrapper (fetch + timeout + error
       normalization) and shared types. No auth logic yet — Diavgeia is open.
-- [ ] 1.2 Diavgeia client: search decisions + get decision by ADA. Do a real
-      liveness check against the live API first (per `CLAUDE.md`, this
-      sandbox blocks `.gov.gr`, so this must happen from an unrestricted
-      network) before trusting the request/response shapes.
-- [ ] 1.3 Unit tests for the Diavgeia client against recorded fixtures.
+- [x] 1.2 Diavgeia client: search decisions + get decision by ADA. **Live
+      liveness check NOT done** — this sandbox's proxy hard-blocks all
+      `.gov.gr` CONNECT attempts at the policy level (confirmed via
+      `$HTTPS_PROXY/__agentproxy/status`), so this must happen from an
+      unrestricted network before trusting the request/response shapes.
+      Client built against the official client-sample repos
+      (github.com/diavgeia/opendata-client-samples-*) and indexed live call
+      URLs; response schemas use lenient/passthrough parsing so a shape
+      drift degrades to "missing field" rather than a crash.
+- [x] 1.3 Unit tests for the Diavgeia client against recorded fixtures.
 
 ## Phase 2 — Transparency bundle v1 (Diavgeia only)
 
-- [ ] 2.1 Expose `diavgeia_search_decisions` and `diavgeia_get_decision` tools
+- [x] 2.1 Expose `diavgeia_search_decisions` and `diavgeia_get_decision` tools
       in `bundle-transparency`, replacing the placeholder from 0.3.
-- [ ] 2.2 Write tool descriptions/schemas and hand-test with real prompts in
+- [x] 2.2 Write tool descriptions/schemas and hand-test with real prompts in
       an MCP client — confirm the model actually picks and uses them
-      correctly, not just that they typecheck.
-- [ ] 2.3 README for the bundle: what it does, install/config snippet for
+      correctly, not just that they typecheck. Verified via
+      `@modelcontextprotocol/inspector --cli`: `tools/list` shows both tools
+      with correct schemas, and `tools/call` on `diavgeia_get_decision`
+      round-trips through the real HTTP call, hits the blocked network, and
+      surfaces a clean actionable `GovApiError` instead of crashing —
+      confirms the full wiring except the live 200-response shape.
+- [x] 2.3 README for the bundle: what it does, install/config snippet for
       Claude Desktop / Claude Code.
 
 ## Phase 3 — Add data.gov.gr (CKAN) to transparency bundle
