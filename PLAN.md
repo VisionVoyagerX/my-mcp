@@ -18,17 +18,20 @@ actually calling the tool with a realistic prompt, not just by type-checking.
 
 ## Phase 0 — Repo scaffolding
 
-- [ ] 0.1 Choose runtime/tooling: Node/TypeScript + `@modelcontextprotocol/sdk`,
+- [x] 0.1 Choose runtime/tooling: Node/TypeScript + `@modelcontextprotocol/sdk`,
       pnpm workspaces monorepo, `vitest` for tests, `eslint`/`prettier`.
       (Rationale: best MCP SDK maturity/docs, and a single `fetch`-based HTTP
-      client style suits all these REST/CKAN-style gov APIs.)
-- [ ] 0.2 Create workspace skeleton only — no service logic yet:
+      client style suits all these REST/CKAN-style gov APIs.) TypeScript pinned
+      to 5.9.3 rather than the 7.0.2 `latest` tag — `typescript-eslint` 8.64.0
+      doesn't support the TS 7 line yet.
+- [x] 0.2 Create workspace skeleton only — no service logic yet:
       `packages/core`, `packages/bundle-transparency`, `packages/bundle-business`,
       root `package.json`, `tsconfig.json`, CI config (lint + test on push).
-- [ ] 0.3 Add a minimal "hello world" MCP server in `bundle-transparency` with
+- [x] 0.3 Add a minimal "hello world" MCP server in `bundle-transparency` with
       one placeholder tool, wired up end-to-end and confirmed to load in an
       MCP client (e.g. MCP Inspector). Proves the scaffolding before any real
-      API work starts.
+      API work starts. Verified with `@modelcontextprotocol/inspector --cli`:
+      `tools/list` shows the `ping` tool and `tools/call` round-trips correctly.
 
 ## Phase 1 — Core library, first client (Diavgeia)
 

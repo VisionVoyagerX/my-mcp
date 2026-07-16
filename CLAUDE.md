@@ -4,7 +4,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project state
 
-This repository is pre-implementation. It currently contains only `RESEARCH.md` — no source code, package manifest, build tooling, or tests exist yet. There are no build/lint/test commands to run because there is nothing to build yet.
+Scaffolding is in place: a pnpm workspaces monorepo with `packages/core` (shared library, currently empty pending Phase 1), `packages/bundle-transparency` (a working MCP server with a placeholder `ping` tool, per `PLAN.md` Phase 0.3), and `packages/bundle-business` (empty skeleton, no server yet — real work starts in `PLAN.md` Phase 5). `PLAN.md` is the authoritative, phase-by-phase build plan; follow it one chunk at a time rather than batching work.
+
+### Build/lint/test commands
+
+Run from the repo root (requires `pnpm`):
+
+- `pnpm install` — install all workspace dependencies
+- `pnpm run build` — build every package (`tsc`), topologically ordered so `core` builds before the bundles that depend on it
+- `pnpm run typecheck` — typecheck every package with `tsc --noEmit`
+- `pnpm run lint` — `eslint .` across the whole repo (flat config in `eslint.config.js`, typescript-eslint + eslint-config-prettier)
+- `pnpm run format` — `prettier --write .`
+- `pnpm run test` — run each package's `vitest` suite
+- Per-package: `pnpm --filter @my-mcp/<pkg> <script>` (e.g. `pnpm --filter @my-mcp/bundle-transparency run build`)
+- Manually exercise a bundle server: `node packages/bundle-transparency/dist/index.js`, or drive it with the MCP Inspector CLI: `npx @modelcontextprotocol/inspector --cli node packages/bundle-transparency/dist/index.js --method tools/list`
+
+TypeScript is pinned to `^5.9.3`, not the `latest` npm dist-tag (currently 7.0.2) — `typescript-eslint` doesn't support the TS 7 line yet. Re-evaluate this pin once the lint tooling catches up.
 
 ## Purpose
 
@@ -34,7 +49,7 @@ We are not shipping a single MCP server exposing every Greek gov service, and no
 
 ## Working in this repo right now
 
-Since there's no scaffolding yet, the first implementation work here will involve setting up the project structure itself: a shared core package (per-service clients, auth handling) plus thin bundle-server packages on top (language/runtime choice, package manifest, MCP SDK dependency). When that scaffolding is added, update this file with the actual build/lint/test commands and the resulting architecture.
+Follow `PLAN.md`'s phases in order, one chunk at a time: implement, verify it actually works (build + lint + typecheck + a real MCP Inspector call, and for any live API a liveness check from an unrestricted network per the confidence-rating caveat above), then check in before starting the next chunk. Current state: Phase 0 (scaffolding) is done; Phase 1 (core HTTP client + Diavgeia client) is next.
 
 ## Merge strategy
 
