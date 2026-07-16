@@ -18,3 +18,9 @@ export type { GeoJsonFeatureCollection, GeodataLayer } from "./geodata/types.js"
 
 export { GemiClient } from "./gemi/client.js";
 export type { GemiCompany } from "./gemi/types.js";
+
+export { MyDataClient } from "./mydata/client.js";
+export type { MyDataCredentials, MyDataRequestDocsParams } from "./mydata/client.js";
+
+export { ErganiClient } from "./ergani/client.js";
+export type { ErganiCredentials, ErganiService } from "./ergani/client.js";
