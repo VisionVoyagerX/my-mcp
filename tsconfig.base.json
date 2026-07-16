@@ -14,5 +14,6 @@
     "sourceMap": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true
-  }
+  },
+  "exclude": ["**/*.test.ts", "**/__fixtures__/**"]
 }
