@@ -65,19 +65,27 @@ actually calling the tool with a realistic prompt, not just by type-checking.
 
 ## Phase 3 — Add data.gov.gr (CKAN) to transparency bundle
 
-- [ ] 3.1 Core: CKAN client (dataset search, dataset detail). Needs the free
+- [x] 3.1 Core: CKAN client (dataset search, dataset detail). Needs the free
       token — add a small, explicit config/env-var pattern in core (not a
-      generic "auth abstraction").
-- [ ] 3.2 Liveness-check the real CKAN endpoints, then add
-      `ckan_search_datasets` / `ckan_get_dataset` tools to the bundle.
-- [ ] 3.3 Tests + README update.
+      generic "auth abstraction"). `DATA_GOV_GR_TOKEN` sent as
+      `Authorization: Token <id>`, confirmed header format per RESEARCH.md.
+- [x] 3.2 **Liveness check NOT done** (same sandbox network block as Phase
+      1) — added `ckan_search_datasets` / `ckan_get_dataset` tools to the
+      bundle against the standard, well-documented CKAN Action API shape.
+- [x] 3.3 Tests + README update.
 
 ## Phase 4 — Add Geodata.gov.gr, close out transparency bundle v1
 
-- [ ] 4.1 Core: Geodata client (no auth, like Diavgeia).
-- [ ] 4.2 Liveness-check, then add its tool(s) to the bundle.
-- [ ] 4.3 Tests + README update. Transparency bundle is now feature-complete
-      for v1 scope.
+- [x] 4.1 Core: Geodata client (no auth, like Diavgeia). WFS over GeoServer
+      OWS; base URL is an unverified best guess (RESEARCH.md rates this
+      Low-Medium confidence) — override via `GEODATA_BASE_URL` once the
+      real endpoint is confirmed live.
+- [x] 4.2 **Liveness check NOT done** (same sandbox network block) — added
+      `geodata_list_layers` / `geodata_get_features` tools to the bundle.
+- [x] 4.3 Tests + README update. Transparency bundle is now feature-complete
+      for v1 scope (6 tools total, all hand-tested via MCP Inspector CLI —
+      correct schemas and network wiring confirmed, live response shapes
+      still pending an unrestricted-network check).
 
 ## Phase 5 — Business bundle v1, first service (ΓΕΜΗ)
 

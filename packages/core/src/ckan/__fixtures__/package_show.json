@@ -1,0 +1,18 @@
+{
+  "help": "https://data.gov.gr/api/3/action/help_show?name=package_show",
+  "success": true,
+  "result": {
+    "id": "abc-123",
+    "name": "state-budget-2026",
+    "title": "State Budget 2026",
+    "notes": "Annual state budget figures.",
+    "license_title": "Creative Commons Attribution",
+    "organization": { "name": "min-finance", "title": "Ministry of Finance" },
+    "resources": [
+      { "id": "res-1", "name": "budget.csv", "format": "CSV", "url": "https://data.gov.gr/dataset/state-budget-2026/resource/res-1" }
+    ],
+    "tags": [{ "name": "budget" }, { "name": "finance" }],
+    "metadata_created": "2026-01-05T10:00:00.000000",
+    "metadata_modified": "2026-06-01T08:30:00.000000"
+  }
+}
