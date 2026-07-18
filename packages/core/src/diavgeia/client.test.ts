@@ -34,7 +34,7 @@ describe("DiavgeiaClient", () => {
     const decision = await client.getDecision("6ΣΦ4ΩΞΧ-ΑΒΓ");
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "https://example.test/api/decisions/6%CE%A3%CE%A64%CE%A9%CE%9E%CE%A7-%CE%91%CE%92%CE%93.json",
+      "https://example.test/api/decisions/6%CE%A3%CE%A64%CE%A9%CE%9E%CE%A7-%CE%91%CE%92%CE%93/",
       expect.anything(),
     );
     expect(decision.ada).toBe("6ΣΦ4ΩΞΧ-ΑΒΓ");
@@ -61,14 +61,11 @@ describe("DiavgeiaClient", () => {
     expect(result.total).toBe(2);
   });
 
-  it("defaults to a match-all query when no filters are given", async () => {
-    fetchMock.mockResolvedValueOnce(jsonResponse({ decisions: [] }));
+  it("rejects a search with no filters instead of sending a match-all query", async () => {
     const client = new DiavgeiaClient({ baseUrl: "https://example.test/api" });
 
-    await client.searchDecisions();
-
-    const calledUrl = new URL(fetchMock.mock.calls[0]![0] as string);
-    expect(calledUrl.searchParams.get("q")).toBe("*:*");
+    await expect(client.searchDecisions()).rejects.toThrow(/at least one filter/);
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("surfaces a GovApiError with status on a non-2xx response", async () => {

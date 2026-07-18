@@ -30,7 +30,8 @@ export function registerDiavgeiaTools(server: McpServer): void {
         "transparency portal), including procurement and contract-award decisions — useful " +
         "for checking a business counterparty's public contracts, or finding tender awards " +
         "from a specific ministry. Filter by organization, decision type, signer, and/or a " +
-        "date range; results are paginated (10 per page by default). Use " +
+        "date range; results are paginated (10 per page by default). At least one filter is " +
+        "required — Diavgeia's API rejects an unfiltered search with HTTP 400. Use " +
         "diavgeia_get_decision afterwards to fetch the full record for a specific ADA.",
       inputSchema: {
         query: z

@@ -6,11 +6,14 @@ import {
 } from "./types.js";
 
 /**
- * Best-guess default per RESEARCH.md ("likely geodata.gov.gr/geoserver/ows",
- * Low-Medium confidence) — NOT confirmed against a live GetCapabilities
- * response. Override with GEODATA_BASE_URL once verified.
+ * Path confirmed live 2026-07-18 via indexed dataset resource URLs (e.g.
+ * geodata.gov.gr/en/dataset/periphereies-elladas/resource/... links to a
+ * geoserver/ows WMS GetCapabilities call). Scheme is plain HTTP, not HTTPS —
+ * an earlier `https://` default produced a connection-level "fetch failed"
+ * rather than an HTTP error, consistent with this host not serving TLS.
+ * Override with GEODATA_BASE_URL if that changes.
  */
-const DEFAULT_BASE_URL = "https://geodata.gov.gr/geoserver/ows";
+const DEFAULT_BASE_URL = "http://geodata.gov.gr/geoserver/ows";
 
 const FEATURE_TYPE_BLOCK = /<(?:wfs:)?FeatureType>([\s\S]*?)<\/(?:wfs:)?FeatureType>/g;
 const NAME_TAG = /<(?:wfs:)?Name>([^<]+)<\/(?:wfs:)?Name>/;

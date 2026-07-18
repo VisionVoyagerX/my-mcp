@@ -18,7 +18,8 @@ export function registerDiavgeiaTools(server: McpServer): void {
       description:
         "Search Greek public-sector decisions, decrees, and budget acts published on Diavgeia " +
         "(the government transparency portal). Filter by organization, decision type, signer, " +
-        "and/or a date range; results are paginated (10 per page by default). Use " +
+        "and/or a date range; results are paginated (10 per page by default). At least one " +
+        "filter is required — Diavgeia's API rejects an unfiltered search with HTTP 400. Use " +
         "diavgeia_get_decision afterwards to fetch the full record for a specific ADA. " +
         "Example: find recent procurement decisions from a ministry by passing its " +
         "organizationUid and a fromDate.",

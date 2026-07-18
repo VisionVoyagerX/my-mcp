@@ -7,35 +7,40 @@ import { z } from "zod";
  * than the bespoke gov services — but the specific data.gov.gr deployment
  * has not been live-verified from this environment (see CLAUDE.md network
  * caveat). `.loose()` throughout so extra/renamed fields degrade gracefully.
+ *
+ * `.nullish()` (not just `.optional()`) on string fields: CKAN's Action API
+ * returns `null` for absent optional fields rather than omitting them, live-
+ * confirmed 2026-07-18 when `license_title: null` failed validation under
+ * `.optional()`.
  */
 export const CkanResourceSchema = z
   .object({
-    id: z.string().optional(),
-    name: z.string().optional(),
-    format: z.string().optional(),
-    url: z.string().optional(),
+    id: z.string().nullish(),
+    name: z.string().nullish(),
+    format: z.string().nullish(),
+    url: z.string().nullish(),
   })
   .loose();
 
 export const CkanOrganizationSchema = z
   .object({
-    name: z.string().optional(),
-    title: z.string().optional(),
+    name: z.string().nullish(),
+    title: z.string().nullish(),
   })
   .loose();
 
 export const CkanDatasetSchema = z
   .object({
-    id: z.string().optional(),
-    name: z.string().optional(),
-    title: z.string().optional(),
-    notes: z.string().optional(),
-    license_title: z.string().optional(),
-    organization: CkanOrganizationSchema.optional(),
+    id: z.string().nullish(),
+    name: z.string().nullish(),
+    title: z.string().nullish(),
+    notes: z.string().nullish(),
+    license_title: z.string().nullish(),
+    organization: CkanOrganizationSchema.nullish(),
     resources: z.array(CkanResourceSchema).default([]),
-    tags: z.array(z.object({ name: z.string().optional() }).loose()).default([]),
-    metadata_created: z.string().optional(),
-    metadata_modified: z.string().optional(),
+    tags: z.array(z.object({ name: z.string().nullish() }).loose()).default([]),
+    metadata_created: z.string().nullish(),
+    metadata_modified: z.string().nullish(),
   })
   .loose();
 
