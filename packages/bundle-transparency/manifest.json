@@ -1,0 +1,18 @@
+{
+  "manifest_version": "0.3",
+  "name": "greek-gov-transparency",
+  "display_name": "Greek Gov: Transparency",
+  "version": "0.1.0",
+  "description": "Diavgeia, data.gov.gr, and Geodata.gov.gr tools for the Greek government transparency/open-data domain.",
+  "author": {
+    "name": "my-mcp"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "dist/bundle.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/bundle.js"]
+    }
+  }
+}

@@ -9,14 +9,19 @@ import {
 } from "./types.js";
 
 /**
- * Production base confirmed via indexed live call URLs
- * (`opendata.diavgeia.gov.gr/luminapi/api/search/export?...`) and the
- * official client-sample repos (github.com/diavgeia/opendata-client-samples-*).
- * Not live-verified from this environment — see CLAUDE.md network caveat.
- * Override with DIAVGEIA_BASE_URL, e.g. to point at the
- * test3.diavgeia.gov.gr sandbox.
+ * Root path confirmed 2026-07-18 against the official reference client
+ * (github.com/diavgeia/opendata-client-samples-python, opendata.py) — its
+ * `OpendataClient.__init__` defaults to
+ * `https://test3.diavgeia.gov.gr/luminapi/opendata`, and every read method
+ * (`/search/advanced`, `/decisions/{ada}/`, `/organizations/{uid}/`, etc.)
+ * matches this client's paths. Two earlier defaults both 404'd in
+ * production: `opendata.diavgeia.gov.gr/luminapi/api` (wrong subdomain) and
+ * `diavgeia.gov.gr/luminapi/api` (right host, wrong root segment — `/api`
+ * is a separate bulk-export surface, not the documented JSON API this
+ * client's paths follow). Override with DIAVGEIA_BASE_URL, e.g. to point at
+ * the test3.diavgeia.gov.gr sandbox itself.
  */
-const DEFAULT_BASE_URL = "https://opendata.diavgeia.gov.gr/luminapi/api";
+const DEFAULT_BASE_URL = "https://diavgeia.gov.gr/luminapi/opendata";
 
 export interface DiavgeiaSearchParams {
   /** Free-text search term. */
@@ -64,7 +69,15 @@ export class DiavgeiaClient {
     if (params.fromDate) clauses.push(`issueDate>="${params.fromDate}"`);
     if (params.toDate) clauses.push(`issueDate<="${params.toDate}"`);
 
-    const q = clauses.length > 0 ? clauses.join(" AND ") : "*:*";
+    if (clauses.length === 0) {
+      throw new Error(
+        "diavgeia_search_decisions requires at least one filter (query, organizationUid, " +
+          "decisionTypeUid, signerUid, fromDate, or toDate) — Diavgeia's API rejects an " +
+          "unfiltered match-all search with HTTP 400 rather than returning its entire index.",
+      );
+    }
+
+    const q = clauses.join(" AND ");
     const qs = buildQuery({
       q,
       page: params.page ?? 0,
@@ -72,22 +85,25 @@ export class DiavgeiaClient {
       sort: "recent",
     });
 
-    const raw = await fetchJson<unknown>(`${this.baseUrl}/search/advanced${qs}`);
+    const raw = await fetchJson<unknown>(`${this.baseUrl}/search/advanced${qs}`, {
+      headers: { Accept: "application/json" },
+    });
     return DiavgeiaSearchResponseSchema.parse(raw);
   }
 
   /** Fetch a single decision by its ADA (Αριθμός Διαδικτυακής Ανάρτησης). */
   async getDecision(ada: string): Promise<DiavgeiaDecision> {
-    const raw = await fetchJson<unknown>(
-      `${this.baseUrl}/decisions/${encodeURIComponent(ada)}.json`,
-    );
+    const raw = await fetchJson<unknown>(`${this.baseUrl}/decisions/${encodeURIComponent(ada)}/`, {
+      headers: { Accept: "application/json" },
+    });
     return DiavgeiaDecisionSchema.parse(raw);
   }
 
   /** Fetch metadata for a public-sector organization by its Diavgeia UID. */
   async getOrganization(organizationUid: string): Promise<DiavgeiaOrganization> {
     const raw = await fetchJson<unknown>(
-      `${this.baseUrl}/organizations/${encodeURIComponent(organizationUid)}.json`,
+      `${this.baseUrl}/organizations/${encodeURIComponent(organizationUid)}/`,
+      { headers: { Accept: "application/json" } },
     );
     return DiavgeiaOrganizationSchema.parse(raw);
   }
