@@ -61,6 +61,16 @@ describe("DiavgeiaClient", () => {
     expect(result.total).toBe(2);
   });
 
+  it("wraps a free-text query in a quoted content: field clause", async () => {
+    fetchMock.mockResolvedValueOnce(jsonResponse(loadFixture("search.json")));
+    const client = new DiavgeiaClient({ baseUrl: "https://example.test/api" });
+
+    await client.searchDecisions({ query: 'budget "review"' });
+
+    const calledUrl = new URL(fetchMock.mock.calls[0]![0] as string);
+    expect(calledUrl.searchParams.get("q")).toBe('content:"budget \\"review\\""');
+  });
+
   it("rejects a search with no filters instead of sending a match-all query", async () => {
     const client = new DiavgeiaClient({ baseUrl: "https://example.test/api" });
 
