@@ -58,7 +58,13 @@ export class DiavgeiaClient {
     params: DiavgeiaSearchParams = {},
   ): Promise<DiavgeiaSearchResponse> {
     const clauses: string[] = [];
-    if (params.query) clauses.push(params.query);
+    if (params.query) {
+      // Diavgeia's /search/advanced Lucene parser rejects a bare, unfielded
+      // term (confirmed live 2026-07-19: even `subject:budget` 400s, while
+      // `content:"budget"` 200s with matching results) — free text must be
+      // field-qualified and quoted against `content`, the full-text field.
+      clauses.push(`content:"${params.query.replace(/"/g, '\\"')}"`);
+    }
     if (params.organizationUid) {
       clauses.push(`organizationUid:"${params.organizationUid}"`);
     }
