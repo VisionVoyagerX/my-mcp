@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "diavgeia-local": {
+      "command": "node",
+      "args": [
+        "packages/bundle-transparency/dist/index.js"
+      ],
+      "cwd": "/home/nick/Projects/my-mcp"
+    }
+  }
+}

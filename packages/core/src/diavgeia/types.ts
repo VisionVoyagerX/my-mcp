@@ -1,58 +1,82 @@
 import { z } from "zod";
 
 /**
- * Diavgeia's decision/search JSON shapes are not live-verified in this
- * environment (the sandbox's network policy blocks `.gov.gr`, see
- * CLAUDE.md). Fields below are the ones consistently evidenced across the
- * official client samples and blog docs; schemas use `.passthrough()` so
- * unexpected extra fields never cause a parse failure, and the
- * well-evidenced fields are optional rather than required so a shape drift
- * degrades to "missing field" instead of a hard error.
+ * Field names, required/nullable-ness verified live 2026-07-19 against
+ * https://diavgeia.gov.gr/luminapi/opendata (search/advanced, decisions/{ada},
+ * organizations/{uid}) — not just docs/samples. Nullable fields below are
+ * ones actually observed as `null` in live responses; everything else was
+ * observed present across every sampled decision/organization.
+ *
+ * Note the naming split: the *search query* field for organization/decision-type
+ * filters is `organizationUid`/`decisionTypeUid` (see client.ts), but the
+ * *decision object* returned by the API uses `organizationId`/`decisionTypeId`.
+ * That's a real inconsistency in Diavgeia's own API, not a bug here.
  */
-export const DiavgeiaOrganizationRef = z
-  .object({
-    uid: z.string().optional(),
-    label: z.string().optional(),
-  })
-  .loose();
 
-export const DiavgeiaDecisionSchema = z
-  .object({
-    ada: z.string().optional(),
-    subject: z.string().optional(),
-    issueDate: z.union([z.string(), z.number()]).optional(),
-    submissionTimestamp: z.union([z.string(), z.number()]).optional(),
-    protocolNumber: z.string().optional(),
-    organizationId: z.union([z.string(), z.number()]).optional(),
-    organization: DiavgeiaOrganizationRef.optional(),
-    decisionTypeUid: z.string().optional(),
-    unitIds: z.array(z.union([z.string(), z.number()])).optional(),
-    documentUrl: z.string().optional(),
-    url: z.string().optional(),
-    status: z.string().optional(),
-  })
-  .loose();
+export const DiavgeiaDecisionSchema = z.object({
+  ada: z.string(),
+  subject: z.string(),
+  issueDate: z.number(),
+  submissionTimestamp: z.number(),
+  publishTimestamp: z.number(),
+  protocolNumber: z.string(),
+  organizationId: z.string(),
+  decisionTypeId: z.string(),
+  signerIds: z.array(z.string()),
+  unitIds: z.array(z.string()),
+  thematicCategoryIds: z.array(z.string()),
+  /** Shape varies per decision type (hundreds of them) — intentionally untyped. */
+  extraFieldValues: z.record(z.string(), z.unknown()),
+  privateData: z.boolean(),
+  versionId: z.string(),
+  status: z.string(),
+  url: z.string(),
+  documentUrl: z.string(),
+  documentChecksum: z.string().nullable(),
+  correctedVersionId: z.string().nullable(),
+  warnings: z.array(z.unknown()).nullable(),
+  attachments: z.array(z.unknown()),
+});
 
 export type DiavgeiaDecision = z.infer<typeof DiavgeiaDecisionSchema>;
 
 export const DiavgeiaSearchResponseSchema = z
   .object({
     decisions: z.array(DiavgeiaDecisionSchema).default([]),
-    total: z.number().optional(),
-    page: z.number().optional(),
-    size: z.number().optional(),
+    info: z.object({
+      query: z.string(),
+      page: z.number(),
+      size: z.number(),
+      actualSize: z.number(),
+      total: z.number(),
+      order: z.string(),
+    }),
   })
-  .loose();
+  .transform(({ decisions, info }) => ({
+    decisions,
+    total: info.total,
+    page: info.page,
+    size: info.size,
+  }));
 
 export type DiavgeiaSearchResponse = z.infer<typeof DiavgeiaSearchResponseSchema>;
 
-export const DiavgeiaOrganizationSchema = z
-  .object({
-    uid: z.string().optional(),
-    label: z.string().optional(),
-    category: z.string().optional(),
-    status: z.string().optional(),
-  })
-  .loose();
+export const DiavgeiaOrganizationSchema = z.object({
+  uid: z.string(),
+  label: z.string(),
+  abbreviation: z.string().nullable(),
+  latinName: z.string(),
+  status: z.string(),
+  category: z.string(),
+  vatNumber: z.string(),
+  fekNumber: z.string(),
+  fekIssue: z.string(),
+  fekYear: z.string(),
+  odeManagerEmail: z.string(),
+  website: z.string(),
+  supervisorId: z.string().nullable(),
+  supervisorLabel: z.string().nullable(),
+  organizationDomains: z.array(z.string()).nullable(),
+});
 
 export type DiavgeiaOrganization = z.infer<typeof DiavgeiaOrganizationSchema>;

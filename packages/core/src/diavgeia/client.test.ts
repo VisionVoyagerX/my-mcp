@@ -38,7 +38,7 @@ describe("DiavgeiaClient", () => {
       expect.anything(),
     );
     expect(decision.ada).toBe("6ΣΦ4ΩΞΧ-ΑΒΓ");
-    expect(decision.organization?.label).toContain("ΨΗΦΙΑΚΗΣ ΔΙΑΚΥΒΕΡΝΗΣΗΣ");
+    expect(decision.organizationId).toBe("100037417");
   });
 
   it("searches decisions and builds a Solr-style query from filters", async () => {

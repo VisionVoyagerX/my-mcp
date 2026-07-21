@@ -3,23 +3,56 @@
     {
       "ada": "6ΣΦ4ΩΞΧ-ΑΒΓ",
       "subject": "Απόφαση ανάθεσης προμήθειας ειδών γραφείου",
-      "issueDate": "2026-05-12T00:00:00.000+03:00",
-      "organization": {
-        "uid": "100037417",
-        "label": "ΥΠΟΥΡΓΕΙΟ ΨΗΦΙΑΚΗΣ ΔΙΑΚΥΒΕΡΝΗΣΗΣ"
-      }
+      "issueDate": 1778911200000,
+      "submissionTimestamp": 1778911260000,
+      "publishTimestamp": 1778911260000,
+      "protocolNumber": "12345/2026",
+      "organizationId": "100037417",
+      "decisionTypeId": "Β.1.1",
+      "signerIds": ["100091120"],
+      "unitIds": ["1234"],
+      "thematicCategoryIds": ["20"],
+      "extraFieldValues": {},
+      "privateData": false,
+      "versionId": "726516c5-faad-4169-9b94-42897cf7a8c1",
+      "status": "PUBLISHED",
+      "url": "https://diavgeia.gov.gr/luminapi/api/decisions/6ΣΦ4ΩΞΧ-ΑΒΓ",
+      "documentUrl": "https://diavgeia.gov.gr/doc/6%CE%A3%CE%A64%CE%A9%CE%9E%CE%A7-%CE%91%CE%92%CE%93",
+      "documentChecksum": null,
+      "correctedVersionId": null,
+      "warnings": null,
+      "attachments": []
     },
     {
       "ada": "7ΤΨ5ΩΞΧ-ΔΕΖ",
       "subject": "Απόφαση έγκρισης δαπάνης",
-      "issueDate": "2026-05-10T00:00:00.000+03:00",
-      "organization": {
-        "uid": "100037417",
-        "label": "ΥΠΟΥΡΓΕΙΟ ΨΗΦΙΑΚΗΣ ΔΙΑΚΥΒΕΡΝΗΣΗΣ"
-      }
+      "issueDate": 1778738400000,
+      "submissionTimestamp": 1778738460000,
+      "publishTimestamp": 1778738460000,
+      "protocolNumber": "12300/2026",
+      "organizationId": "100037417",
+      "decisionTypeId": "Β.1.1",
+      "signerIds": ["100091120"],
+      "unitIds": ["1234"],
+      "thematicCategoryIds": ["20"],
+      "extraFieldValues": {},
+      "privateData": false,
+      "versionId": "8b1e2f3a-1234-4abc-9def-abcdef123456",
+      "status": "PUBLISHED",
+      "url": "https://diavgeia.gov.gr/luminapi/api/decisions/7ΤΨ5ΩΞΧ-ΔΕΖ",
+      "documentUrl": "https://diavgeia.gov.gr/doc/7%CE%A4%CE%A85%CE%A9%CE%9E%CE%A7-%CE%94%CE%95%CE%96",
+      "documentChecksum": null,
+      "correctedVersionId": null,
+      "warnings": null,
+      "attachments": []
     }
   ],
-  "total": 2,
-  "page": 0,
-  "size": 10
+  "info": {
+    "query": "organizationUid:\"100037417\"",
+    "page": 0,
+    "size": 10,
+    "actualSize": 2,
+    "total": 2,
+    "order": "recent"
+  }
 }

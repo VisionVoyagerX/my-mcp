@@ -11,6 +11,8 @@ export type {
   DiavgeiaOrganization,
   DiavgeiaSearchResponse,
 } from "./diavgeia/types.js";
+export { registerDiavgeiaTools } from "./diavgeia/tools.js";
+export type { RegisterDiavgeiaToolsOptions } from "./diavgeia/tools.js";
 
 export { CkanClient } from "./ckan/client.js";
 export type { CkanSearchParams } from "./ckan/client.js";
