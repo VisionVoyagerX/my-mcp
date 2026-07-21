@@ -14,12 +14,8 @@ import {
  * `OpendataClient.__init__` defaults to
  * `https://test3.diavgeia.gov.gr/luminapi/opendata`, and every read method
  * (`/search/advanced`, `/decisions/{ada}/`, `/organizations/{uid}/`, etc.)
- * matches this client's paths. Two earlier defaults both 404'd in
- * production: `opendata.diavgeia.gov.gr/luminapi/api` (wrong subdomain) and
- * `diavgeia.gov.gr/luminapi/api` (right host, wrong root segment — `/api`
- * is a separate bulk-export surface, not the documented JSON API this
- * client's paths follow). Override with DIAVGEIA_BASE_URL, e.g. to point at
- * the test3.diavgeia.gov.gr sandbox itself.
+ * matches this client's paths. Override with DIAVGEIA_BASE_URL, e.g. to
+ * point at the test3.diavgeia.gov.gr sandbox itself.
  */
 const DEFAULT_BASE_URL = "https://diavgeia.gov.gr/luminapi/opendata";
 
@@ -28,7 +24,7 @@ export interface DiavgeiaSearchParams {
   query?: string;
   /** Filter to decisions from this organization (Diavgeia organizationUid). */
   organizationUid?: string;
-  /** Filter to decisions of this type (Diavgeia decisionTypeUid). */
+  /** Filter to decisions of this type (Diavgeia decisionTypeUid — the search field name; the returned decision object calls this decisionTypeId). */
   decisionTypeUid?: string;
   /** Filter to decisions signed by this signer (Diavgeia signerUid). */
   signerUid?: string;

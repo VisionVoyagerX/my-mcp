@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project state
 
-Scaffolding is in place: a pnpm workspaces monorepo with `packages/core` (shared library, currently empty pending Phase 1), `packages/bundle-transparency` (a working MCP server with a placeholder `ping` tool, per `PLAN.md` Phase 0.3), and `packages/bundle-business` (empty skeleton, no server yet — real work starts in `PLAN.md` Phase 5). `PLAN.md` is the authoritative, phase-by-phase build plan; follow it one chunk at a time rather than batching work.
+A pnpm workspaces monorepo with `packages/core` (shared library with HTTP client and per-service client implementations), `packages/bundle-transparency` (working MCP server exposing Diavgeia, CKAN/data.gov.gr, and Geodata.gov.gr tools), and `packages/bundle-business` (working MCP server exposing Diavgeia, ΓΕΜΗ, myDATA, and Ergani tools). Both bundles are feature-complete for their respective domains; current focus is testing and deployment.
 
 ### Build/lint/test commands
 

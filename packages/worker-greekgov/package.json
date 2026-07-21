@@ -1,0 +1,30 @@
+{
+  "name": "@my-mcp/worker-greekgov",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cloudflare Worker hosting GreekGovMCP: a public, IP-rate-limited MCP server for Diavgeia (Greek government transparency portal).",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VisionVoyagerX/my-mcp",
+    "directory": "packages/worker-greekgov"
+  },
+  "keywords": ["mcp", "cloudflare", "worker", "greece", "gov.gr", "diavgeia"],
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "wrangler build",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@cloudflare/workers-types": "^4.20250710.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@my-mcp/core": "workspace:*",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "wrangler": "^3.98.0"
+  }
+}
