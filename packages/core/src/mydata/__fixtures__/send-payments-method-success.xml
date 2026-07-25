@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResponseDoc>
+  <response>
+    <index>1</index>
+    <paymentMethodMark>600000000000001</paymentMethodMark>
+    <statusCode>Success</statusCode>
+  </response>
+</ResponseDoc>

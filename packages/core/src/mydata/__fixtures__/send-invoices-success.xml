@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResponseDoc>
+  <response>
+    <index>1</index>
+    <invoiceUid>625c3ba3-a0d9-4b8b-9f4e-8c2d1e5b7a9c</invoiceUid>
+    <invoiceMark>400000000000001</invoiceMark>
+    <qrUrl>https://mydata.aade.gr/invoices/400000000000001/print</qrUrl>
+    <statusCode>Success</statusCode>
+  </response>
+</ResponseDoc>

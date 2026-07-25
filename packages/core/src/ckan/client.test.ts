@@ -4,7 +4,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CkanClient } from "./client.js";
 
 function loadFixture(name: string): unknown {
-  const path = fileURLToPath(new URL(`./__fixtures__/${name}`, import.meta.url));
+  const path = fileURLToPath(
+    new URL(`./__fixtures__/${name}`, import.meta.url),
+  );
   return JSON.parse(readFileSync(path, "utf-8"));
 }
 
@@ -28,8 +30,12 @@ describe("CkanClient", () => {
   }
 
   it("searches datasets and unwraps the CKAN result envelope", async () => {
-    fetchMock.mockResolvedValueOnce(jsonResponse(loadFixture("package_search.json")));
-    const client = new CkanClient({ baseUrl: "https://example.test/api/3/action" });
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse(loadFixture("package_search.json")),
+    );
+    const client = new CkanClient({
+      baseUrl: "https://example.test/api/3/action",
+    });
 
     const result = await client.searchDatasets({ query: "budget" });
 
@@ -42,7 +48,9 @@ describe("CkanClient", () => {
   });
 
   it("sends the Authorization: Token header when a token is configured", async () => {
-    fetchMock.mockResolvedValueOnce(jsonResponse(loadFixture("package_show.json")));
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse(loadFixture("package_show.json")),
+    );
     const client = new CkanClient({
       baseUrl: "https://example.test/api/3/action",
       token: "my-token",
@@ -58,7 +66,9 @@ describe("CkanClient", () => {
     fetchMock.mockResolvedValueOnce(
       jsonResponse({ success: false, error: { message: "Not found" } }),
     );
-    const client = new CkanClient({ baseUrl: "https://example.test/api/3/action" });
+    const client = new CkanClient({
+      baseUrl: "https://example.test/api/3/action",
+    });
 
     await expect(client.getDataset("missing")).rejects.toMatchObject({
       name: "GovApiError",

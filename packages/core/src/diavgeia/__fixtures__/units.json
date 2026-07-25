@@ -1,0 +1,26 @@
+{
+  "units": [
+    {
+      "uid": "73040",
+      "label": "ΓΕΝΙΚΗ ΔΙΕΥΘΥΝΣΗ",
+      "abbreviation": null,
+      "category": "GENERAL_ADMINISTRATION",
+      "unitDomains": [],
+      "active": true,
+      "activeFrom": 1517270400000,
+      "activeUntil": null,
+      "parentId": "100037417"
+    },
+    {
+      "uid": "100077981",
+      "label": "ΓΡΑΦΕΙΟ ΑΝΑΠΛΗΡΩΤΗ ΓΕΝΙΚΟΥ ΔΙΕΥΘΥΝΤΗ",
+      "abbreviation": null,
+      "category": "GENERAL_ADMINISTRATION",
+      "unitDomains": ["LandArchives"],
+      "active": true,
+      "activeFrom": 1672185600000,
+      "activeUntil": null,
+      "parentId": "100037417"
+    }
+  ]
+}

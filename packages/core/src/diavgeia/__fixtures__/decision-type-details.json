@@ -1,0 +1,40 @@
+{
+  "uid": "Β.1.1",
+  "label": "ΕΓΚΡΙΣΗ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ",
+  "parent": null,
+  "allowedInDecisions": true,
+  "extraFields": [
+    {
+      "uid": "financialYear",
+      "label": "Οικονομικό Έτος",
+      "help": "Εισάγετε το Οικονομικό Έτος",
+      "type": "integer",
+      "validation": null,
+      "required": true,
+      "multiple": false,
+      "maxLength": 4,
+      "dictionary": null,
+      "searchTerm": "textFinancialYear",
+      "relAdaDecisionTypes": null,
+      "relAdaConstrainedInOrganization": null,
+      "fixedValueList": null,
+      "nestedFields": []
+    },
+    {
+      "uid": "budgetkind",
+      "label": "Είδος Προϋπολογισμού",
+      "help": null,
+      "type": "string",
+      "validation": "fixedValueList",
+      "required": true,
+      "multiple": false,
+      "maxLength": 0,
+      "dictionary": null,
+      "searchTerm": "textBudgetKind",
+      "relAdaDecisionTypes": null,
+      "relAdaConstrainedInOrganization": null,
+      "fixedValueList": ["Κρατικός", "Φορέα"],
+      "nestedFields": []
+    }
+  ]
+}

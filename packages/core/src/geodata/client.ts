@@ -15,7 +15,8 @@ import {
  */
 const DEFAULT_BASE_URL = "http://geodata.gov.gr/geoserver/ows";
 
-const FEATURE_TYPE_BLOCK = /<(?:wfs:)?FeatureType>([\s\S]*?)<\/(?:wfs:)?FeatureType>/g;
+const FEATURE_TYPE_BLOCK =
+  /<(?:wfs:)?FeatureType>([\s\S]*?)<\/(?:wfs:)?FeatureType>/g;
 const NAME_TAG = /<(?:wfs:)?Name>([^<]+)<\/(?:wfs:)?Name>/;
 const TITLE_TAG = /<(?:wfs:)?Title>([^<]+)<\/(?:wfs:)?Title>/;
 
@@ -23,7 +24,8 @@ export class GeodataClient {
   private readonly baseUrl: string;
 
   constructor(options: { baseUrl?: string } = {}) {
-    this.baseUrl = options.baseUrl ?? process.env.GEODATA_BASE_URL ?? DEFAULT_BASE_URL;
+    this.baseUrl =
+      options.baseUrl ?? process.env.GEODATA_BASE_URL ?? DEFAULT_BASE_URL;
   }
 
   /**
@@ -32,7 +34,11 @@ export class GeodataClient {
    * than a full XML parser, since we only need those two fields.
    */
   async listLayers(): Promise<GeodataLayer[]> {
-    const qs = buildQuery({ service: "WFS", version: "2.0.0", request: "GetCapabilities" });
+    const qs = buildQuery({
+      service: "WFS",
+      version: "2.0.0",
+      request: "GetCapabilities",
+    });
     const xml = await fetchText(`${this.baseUrl}${qs}`);
     const layers: GeodataLayer[] = [];
     for (const match of xml.matchAll(FEATURE_TYPE_BLOCK)) {

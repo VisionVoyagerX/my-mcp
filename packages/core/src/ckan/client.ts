@@ -28,7 +28,8 @@ export class CkanClient {
   private readonly token: string | undefined;
 
   constructor(options: { baseUrl?: string; token?: string } = {}) {
-    this.baseUrl = options.baseUrl ?? process.env.DATA_GOV_GR_BASE_URL ?? DEFAULT_BASE_URL;
+    this.baseUrl =
+      options.baseUrl ?? process.env.DATA_GOV_GR_BASE_URL ?? DEFAULT_BASE_URL;
     this.token = options.token ?? process.env.DATA_GOV_GR_TOKEN;
   }
 
@@ -37,19 +38,25 @@ export class CkanClient {
   }
 
   /** Search the data.gov.gr open-data catalog for datasets. */
-  async searchDatasets(params: CkanSearchParams = {}): Promise<CkanSearchResult> {
+  async searchDatasets(
+    params: CkanSearchParams = {},
+  ): Promise<CkanSearchResult> {
     const qs = buildQuery({
       q: params.query ?? "",
       rows: params.rows ?? 10,
       start: params.start ?? 0,
     });
-    const raw = await fetchJson<unknown>(`${this.baseUrl}/package_search${qs}`, {
-      headers: this.headers(),
-    });
+    const raw = await fetchJson<unknown>(
+      `${this.baseUrl}/package_search${qs}`,
+      {
+        headers: this.headers(),
+      },
+    );
     const envelope = CkanEnvelopeSchema(CkanSearchResultSchema).parse(raw);
     if (!envelope.success || envelope.result === undefined) {
       throw new GovApiError(
-        envelope.error?.message ?? "data.gov.gr package_search reported failure",
+        envelope.error?.message ??
+          "data.gov.gr package_search reported failure",
         { url: `${this.baseUrl}/package_search` },
       );
     }

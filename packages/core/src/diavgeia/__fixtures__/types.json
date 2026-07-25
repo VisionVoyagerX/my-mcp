@@ -1,0 +1,22 @@
+{
+  "decisionTypes": [
+    {
+      "uid": "2.4.2",
+      "label": "ΠΡΑΞΕΙΣ ΟΙΚΟΝΟΜΙΚΟΥ ΠΕΡΙΕΧΟΜΕΝΟΥ",
+      "parent": null,
+      "allowedInDecisions": false
+    },
+    {
+      "uid": "Β.1.1",
+      "label": "ΕΓΚΡΙΣΗ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ",
+      "parent": "2.4.2",
+      "allowedInDecisions": true
+    },
+    {
+      "uid": "Β.2.1",
+      "label": "ΕΓΚΡΙΣΗ ΔΑΠΑΝΗΣ",
+      "parent": "2.4.2",
+      "allowedInDecisions": true
+    }
+  ]
+}

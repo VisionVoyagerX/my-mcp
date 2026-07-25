@@ -23,12 +23,20 @@ describe("ErganiClient", () => {
   it("authenticates then lists services with a bearer token", async () => {
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ accessToken: "token-123" }))
-      .mockResolvedValueOnce(jsonResponse([{ name: "WRKCardSE" }, { name: "OvTime" }]));
+      .mockResolvedValueOnce(
+        jsonResponse([{ name: "WRKCardSE" }, { name: "OvTime" }]),
+      );
     const client = new ErganiClient({ baseUrl: "https://example.test/api" });
 
-    const services = await client.listServices({ username: "u", password: "p" });
+    const services = await client.listServices({
+      username: "u",
+      password: "p",
+    });
 
-    const [authUrl, authInit] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const [authUrl, authInit] = fetchMock.mock.calls[0] as [
+      string,
+      RequestInit,
+    ];
     expect(authUrl).toBe("https://example.test/api/Authentication");
     expect(JSON.parse(authInit.body as string)).toEqual({
       Username: "u",
@@ -36,8 +44,13 @@ describe("ErganiClient", () => {
       UserType: "01",
     });
 
-    const [servicesUrl, servicesInit] = fetchMock.mock.calls[1] as [string, RequestInit];
-    expect(servicesUrl).toBe("https://example.test/api/WebServices/ServicesList");
+    const [servicesUrl, servicesInit] = fetchMock.mock.calls[1] as [
+      string,
+      RequestInit,
+    ];
+    expect(servicesUrl).toBe(
+      "https://example.test/api/WebServices/ServicesList",
+    );
     expect(servicesInit.headers).toEqual({ Authorization: "Bearer token-123" });
 
     expect(services).toEqual([{ name: "WRKCardSE" }, { name: "OvTime" }]);
@@ -47,8 +60,8 @@ describe("ErganiClient", () => {
     fetchMock.mockResolvedValueOnce(jsonResponse({}));
     const client = new ErganiClient({ baseUrl: "https://example.test/api" });
 
-    await expect(client.listServices({ username: "u", password: "p" })).rejects.toThrow(
-      /no accessToken/,
-    );
+    await expect(
+      client.listServices({ username: "u", password: "p" }),
+    ).rejects.toThrow(/no accessToken/);
   });
 });

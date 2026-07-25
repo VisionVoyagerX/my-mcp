@@ -9,9 +9,17 @@
         "name": "state-budget-2026",
         "title": "State Budget 2026",
         "notes": "Annual state budget figures.",
-        "organization": { "name": "min-finance", "title": "Ministry of Finance" },
+        "organization": {
+          "name": "min-finance",
+          "title": "Ministry of Finance"
+        },
         "resources": [
-          { "id": "res-1", "name": "budget.csv", "format": "CSV", "url": "https://data.gov.gr/dataset/state-budget-2026/resource/res-1" }
+          {
+            "id": "res-1",
+            "name": "budget.csv",
+            "format": "CSV",
+            "url": "https://data.gov.gr/dataset/state-budget-2026/resource/res-1"
+          }
         ],
         "tags": [{ "name": "budget" }, { "name": "finance" }]
       },
@@ -20,7 +28,10 @@
         "name": "school-directory",
         "title": "School Directory",
         "notes": "Registry of public schools.",
-        "organization": { "name": "min-education", "title": "Ministry of Education" },
+        "organization": {
+          "name": "min-education",
+          "title": "Ministry of Education"
+        },
         "resources": [],
         "tags": [{ "name": "education" }]
       }

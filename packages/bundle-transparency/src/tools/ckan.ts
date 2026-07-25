@@ -16,7 +16,10 @@ export function registerCkanTools(server: McpServer): void {
         "links for a specific dataset. Requires a free DATA_GOV_GR_TOKEN to be configured on " +
         "the server for higher rate limits; unauthenticated requests may be rate-limited.",
       inputSchema: {
-        query: z.string().optional().describe("Free-text search term, e.g. \"budget\"."),
+        query: z
+          .string()
+          .optional()
+          .describe('Free-text search term, e.g. "budget".'),
         rows: z
           .number()
           .int()
@@ -36,7 +39,9 @@ export function registerCkanTools(server: McpServer): void {
       try {
         const result = await client.searchDatasets(params);
         if (result.results.length === 0) {
-          return { content: [{ type: "text", text: "No datasets matched the query." }] };
+          return {
+            content: [{ type: "text", text: "No datasets matched the query." }],
+          };
         }
         const lines = result.results.map((d) => {
           const org = d.organization?.title ?? "unknown organization";
@@ -62,7 +67,7 @@ export function registerCkanTools(server: McpServer): void {
       title: "Get a data.gov.gr dataset",
       description:
         "Fetch full metadata for a single data.gov.gr dataset by its id or URL slug " +
-        "(e.g. \"state-budget-2026\"), including its resources (downloadable files) with " +
+        '(e.g. "state-budget-2026"), including its resources (downloadable files) with ' +
         "format and URL. Use ckan_search_datasets first if you don't already know the id.",
       inputSchema: {
         id: z.string().min(1).describe("The dataset's CKAN id or name/slug."),
@@ -73,7 +78,8 @@ export function registerCkanTools(server: McpServer): void {
         const d = await client.getDataset(id);
         const org = d.organization?.title ?? "unknown organization";
         const resourceLines = d.resources.map(
-          (r) => `  - ${r.name ?? r.id ?? "resource"} (${r.format ?? "unknown format"}): ${r.url ?? "no URL"}`,
+          (r) =>
+            `  - ${r.name ?? r.id ?? "resource"} (${r.format ?? "unknown format"}): ${r.url ?? "no URL"}`,
         );
         const lines = [
           `Title: ${d.title ?? d.name ?? id}`,
@@ -85,7 +91,10 @@ export function registerCkanTools(server: McpServer): void {
         ].filter((line): line is string => line !== undefined);
         return { content: [{ type: "text", text: lines.join("\n") }] };
       } catch (error) {
-        return toolErrorResult(error, `Failed to fetch data.gov.gr dataset "${id}"`);
+        return toolErrorResult(
+          error,
+          `Failed to fetch data.gov.gr dataset "${id}"`,
+        );
       }
     },
   );

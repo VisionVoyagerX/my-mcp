@@ -71,7 +71,9 @@ Then point an MCP client at the built server:
   "mcpServers": {
     "greek-gov-business": {
       "command": "node",
-      "args": ["/absolute/path/to/my-mcp/packages/bundle-business/dist/index.js"],
+      "args": [
+        "/absolute/path/to/my-mcp/packages/bundle-business/dist/index.js"
+      ],
       "env": {
         "GEMI_API_KEY": "your-key-here"
       }

@@ -55,7 +55,9 @@ Then point an MCP client at the built server:
   "mcpServers": {
     "greek-gov-transparency": {
       "command": "node",
-      "args": ["/absolute/path/to/my-mcp/packages/bundle-transparency/dist/index.js"]
+      "args": [
+        "/absolute/path/to/my-mcp/packages/bundle-transparency/dist/index.js"
+      ]
     }
   }
 }
@@ -67,7 +69,7 @@ Then point an MCP client at the built server:
   to point at the `test3.diavgeia.gov.gr` sandbox instead of production.
 - `DATA_GOV_GR_TOKEN` (optional) — free self-service token from
   `data.gov.gr/token`, raises CKAN rate limits. Sent as `Authorization: Token
-  <id>`.
+<id>`.
 - `DATA_GOV_GR_BASE_URL` (optional) — override the CKAN API base URL.
 - `GEODATA_BASE_URL` (optional) — override the Geodata WFS base URL; the
   default is an unverified best guess (see Verification status above).

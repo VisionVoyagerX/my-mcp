@@ -4,7 +4,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GemiClient } from "./client.js";
 
 function loadFixture(name: string): unknown {
-  const path = fileURLToPath(new URL(`./__fixtures__/${name}`, import.meta.url));
+  const path = fileURLToPath(
+    new URL(`./__fixtures__/${name}`, import.meta.url),
+  );
   return JSON.parse(readFileSync(path, "utf-8"));
 }
 
@@ -38,7 +40,9 @@ describe("GemiClient", () => {
   });
 
   it("sends the api_key header and parses a company lookup", async () => {
-    fetchMock.mockResolvedValueOnce(jsonResponse(loadFixture("company_show.json")));
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse(loadFixture("company_show.json")),
+    );
     const client = new GemiClient({
       baseUrl: "https://example.test/api",
       apiKey: "test-key",
@@ -48,13 +52,17 @@ describe("GemiClient", () => {
 
     expect(fetchMock).toHaveBeenCalledWith(
       "https://example.test/api/companies/000237954001",
-      expect.objectContaining({ headers: { api_key: "test-key", Accept: "application/json" } }),
+      expect.objectContaining({
+        headers: { api_key: "test-key", Accept: "application/json" },
+      }),
     );
     expect(company.companyName).toBe("ΠΑΡΑΔΕΙΓΜΑ ΑΕ");
   });
 
   it("searches companies by TIN", async () => {
-    fetchMock.mockResolvedValueOnce(jsonResponse(loadFixture("companies_search.json")));
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse(loadFixture("companies_search.json")),
+    );
     const client = new GemiClient({
       baseUrl: "https://example.test/api",
       apiKey: "test-key",

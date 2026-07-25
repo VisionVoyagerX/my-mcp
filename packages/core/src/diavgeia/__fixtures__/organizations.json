@@ -1,0 +1,38 @@
+{
+  "organizations": [
+    {
+      "uid": "10",
+      "label": "ΥΠΟΥΡΓΕΙΟ ΕΞΩΤΕΡΙΚΩΝ",
+      "abbreviation": null,
+      "latinName": "mfa",
+      "status": "active",
+      "category": "MINISTRY",
+      "vatNumber": "090026913",
+      "fekNumber": "0",
+      "fekIssue": "",
+      "fekYear": "0",
+      "odeManagerEmail": null,
+      "website": null,
+      "supervisorId": null,
+      "supervisorLabel": null,
+      "organizationDomains": []
+    },
+    {
+      "uid": "15",
+      "label": "ΥΠΟΥΡΓΕΙΟ ΟΙΚΟΝΟΜΙΚΩΝ",
+      "abbreviation": null,
+      "latinName": "mof",
+      "status": "active",
+      "category": "MINISTRY",
+      "vatNumber": "090029362",
+      "fekNumber": "0",
+      "fekIssue": "",
+      "fekYear": "0",
+      "odeManagerEmail": "support@minfin.gr",
+      "website": "http://www.minfin.gr",
+      "supervisorId": null,
+      "supervisorLabel": null,
+      "organizationDomains": []
+    }
+  ]
+}

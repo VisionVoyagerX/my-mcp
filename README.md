@@ -18,10 +18,10 @@ not a persona-shaped combination someone else picked for you.
 
 ## Bundles
 
-| Package | Domain | Services | Auth |
-|---|---|---|---|
-| [`packages/bundle-transparency`](./packages/bundle-transparency) | Transparency / open-data | Diavgeia, data.gov.gr, Geodata.gov.gr | None required; optional free token for data.gov.gr |
-| [`packages/bundle-business`](./packages/bundle-business) | Business / tax | ΓΕΜΗ, myDATA, Ergani, (+ shared Diavgeia) | ΓΕΜΗ needs a free server-side API key; myDATA/Ergani are bring-your-own-credential per call |
+| Package                                                          | Domain                   | Services                                  | Auth                                                                                        |
+| ---------------------------------------------------------------- | ------------------------ | ----------------------------------------- | ------------------------------------------------------------------------------------------- |
+| [`packages/bundle-transparency`](./packages/bundle-transparency) | Transparency / open-data | Diavgeia, data.gov.gr, Geodata.gov.gr     | None required; optional free token for data.gov.gr                                          |
+| [`packages/bundle-business`](./packages/bundle-business)         | Business / tax           | ΓΕΜΗ, myDATA, Ergani, (+ shared Diavgeia) | ΓΕΜΗ needs a free server-side API key; myDATA/Ergani are bring-your-own-credential per call |
 
 A service can appear in more than one bundle when it's genuinely
 cross-domain — Diavgeia does, since procurement decisions matter to both
@@ -44,6 +44,19 @@ bundle package is a thin MCP server that imports clients from `core` and
 registers only the tools relevant to its domain. See `CLAUDE.md` for the
 full architecture strategy and `PLAN.md` for the phase-by-phase build log.
 
+## Hosted: GreekGovMCP
+
+[`packages/worker-greekgov`](./packages/worker-greekgov) deploys the Diavgeia
+tools as a public, no-auth, rate-limited remote MCP server on Cloudflare
+Workers — no local install required. Live at:
+
+```
+https://greekgov-mcp.nickdandis96.workers.dev
+```
+
+This is v0.1: Diavgeia only. See the package README for how to point an MCP
+client at it and what's planned for later versions.
+
 ## Getting started
 
 ```sh
@@ -62,17 +75,17 @@ want to use:
 
 ## Verification status
 
-**No live `.gov.gr`/`.gr` traffic has been verified from this development
-environment** — its network policy blocks all such domains at the proxy
-level (confirmed via repeated 403s across every phase of `PLAN.md`). Every
-client was built against the most authoritative evidence available without
-live access (official documentation PDFs, maintained open-source SDKs,
-indexed live call URLs) and every tool has been exercised end-to-end with
-the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) CLI
-in this environment — schemas are correct and calls reach the network layer
-correctly, but the actual 200-response shapes are unconfirmed. **Do a real
-liveness check from an unrestricted network before relying on this in
-production.** Per-service confidence ratings are in
+Diavgeia has been verified live end-to-end: direct calls to
+`diavgeia.gov.gr`, MCP Inspector / tools-list / tools-call runs against the
+built `bundle-transparency` server, and (as of the GreekGovMCP deploy) real
+tool calls through the deployed Cloudflare Worker all return real 200
+responses from this development environment. Earlier phases of `PLAN.md`
+hit a sandboxed network that blocked `.gov.gr`/`.gr` domains — that
+restriction does not apply universally; re-check reachability per
+environment rather than assuming it's blocked. The other services
+(data.gov.gr, Geodata.gov.gr, ΓΕΜΗ, myDATA, Ergani) are still unverified
+against live traffic — do a real liveness check before relying on them in
+production. Per-service confidence ratings are in
 [`RESEARCH.md`](./RESEARCH.md); per-phase verification notes are in
 [`PLAN.md`](./PLAN.md).
 

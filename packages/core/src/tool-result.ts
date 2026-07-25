@@ -28,7 +28,10 @@ const MAX_BODY_SNIPPET_LENGTH = 300;
  * e.g., a missing API key from an invalid one. Used consistently across
  * every bundle's tool handlers.
  */
-export function toolErrorResult(error: unknown, context: string): ToolTextResult {
+export function toolErrorResult(
+  error: unknown,
+  context: string,
+): ToolTextResult {
   const message =
     error instanceof GovApiError
       ? `${context}: ${error.message}${error.status ? ` (HTTP ${error.status})` : ""}${bodySnippet(error.body)}`

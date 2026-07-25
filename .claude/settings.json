@@ -1,9 +1,7 @@
 {
   "sandbox": {
     "network": {
-      "allowedDomains": [
-        "*"
-      ]
+      "allowedDomains": ["*"]
     }
   }
 }

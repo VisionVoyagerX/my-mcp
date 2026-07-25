@@ -1,0 +1,6 @@
+{
+  "dictionaries": [
+    { "uid": "ORG_CATEGORY", "label": "Κατηγορία Φορέα" },
+    { "uid": "CPV", "label": "Κωδικοί CPV" }
+  ]
+}
