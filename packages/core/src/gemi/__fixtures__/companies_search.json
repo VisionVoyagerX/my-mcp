@@ -1,9 +1,16 @@
-[
-  {
-    "gemiNumber": "000237954001",
-    "afm": "094014201",
-    "companyName": "ΠΑΡΑΔΕΙΓΜΑ ΑΕ",
-    "legalFormDescription": "Ανώνυμη Εταιρεία",
-    "companyStatusDescription": "Ενεργή"
-  }
-]
+{
+  "searchMetadata": {
+    "totalCount": 1,
+    "resultsOffset": 0,
+    "resultsSize": "10"
+  },
+  "searchResults": [
+    {
+      "arGemi": 237954001,
+      "afm": "094014201",
+      "coNameEl": "ΠΑΡΑΔΕΙΓΜΑ ΑΕ",
+      "legalType": { "id": 3, "descr": "Ανώνυμη Εταιρεία" },
+      "status": { "id": 1, "descr": "Ενεργή" }
+    }
+  ]
+}
