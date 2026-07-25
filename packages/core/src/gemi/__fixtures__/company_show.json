@@ -1,9 +1,47 @@
 {
-  "gemiNumber": "000237954001",
+  "arGemi": 237954001,
   "afm": "094014201",
-  "companyName": "ΠΑΡΑΔΕΙΓΜΑ ΑΕ",
-  "legalFormDescription": "Ανώνυμη Εταιρεία",
-  "companyStatusDescription": "Ενεργή",
-  "region": "ΑΤΤΙΚΗΣ",
-  "registrationDate": "2010-03-15"
+  "coNameEl": "ΠΑΡΑΔΕΙΓΜΑ ΑΕ",
+  "coNamesEn": ["PARADEIGMA SA"],
+  "coTitlesEl": ["ΠΑΡΑΔΕΙΓΜΑ"],
+  "coTitlesEn": ["PARADEIGMA"],
+  "municipality": { "id": 501, "descr": "ΑΘΗΝΑΙΩΝ" },
+  "prefecture": { "id": 1, "descr": "ΑΤΤΙΚΗΣ" },
+  "city": "ΑΘΗΝΑ",
+  "street": "ΠΑΝΕΠΙΣΤΗΜΙΟΥ",
+  "streetNumber": "10",
+  "zipCode": "10564",
+  "url": "https://example.test",
+  "email": "info@example.test",
+  "isBranch": false,
+  "objective": "Εμπόριο ηλεκτρονικών ειδών",
+  "legalType": { "id": 3, "descr": "Ανώνυμη Εταιρεία" },
+  "gemiOffice": { "id": 1, "descr": "ΓΕΜΗ Αθηνών" },
+  "incorporationDate": "2010-03-15",
+  "lastStatusChange": "2010-03-15",
+  "status": { "id": 1, "descr": "Ενεργή" },
+  "autoRegistered": true,
+  "activities": [
+    {
+      "activity": {
+        "id": "47.41",
+        "descr": "Λιανικό εμπόριο ηλεκτρονικών υπολογιστών",
+        "kadVersion": "2008"
+      },
+      "type": "ΚΥΡΙΑ",
+      "dtFrom": "2010-03-15"
+    }
+  ],
+  "persons": [
+    {
+      "personName": "ΓΕΩΡΓΙΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ",
+      "role": "ΔΙΕΥΘΥΝΩΝ ΣΥΜΒΟΥΛΟΣ",
+      "dtFrom": "2010-03-15",
+      "isRepresentativeAlone": true,
+      "isRepresentativeInCommon": false
+    }
+  ],
+  "capital": [{ "capitalStock": 24000, "currency": "EUR" }],
+  "stocks": [],
+  "branch": []
 }

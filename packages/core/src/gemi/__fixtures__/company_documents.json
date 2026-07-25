@@ -1,0 +1,21 @@
+{
+  "decision": [
+    {
+      "dateAssemblyDecided": "2010-03-10",
+      "assembly": "ΓΕΝΙΚΗ ΣΥΝΕΛΕΥΣΗ",
+      "summary": "Σύσταση εταιρείας",
+      "kak": "12345",
+      "decisionSubject": "Σύσταση",
+      "dateAnnounced": "2010-03-15",
+      "assemblyDecisionUrl": "https://example.test/files/12345.pdf",
+      "dateRegistrated": "2010-03-15",
+      "applicationStatusDescription": "Καταχωρήθηκε"
+    }
+  ],
+  "publication": [
+    {
+      "url": "https://example.test/files/gazette-1.pdf",
+      "kad": "67890"
+    }
+  ]
+}

@@ -8,8 +8,10 @@ services, per the architecture in the repo root's `CLAUDE.md`.
 Exposes tools over three business/tax services, per `PLAN.md` Phases 5-7:
 
 - **ΓΕΜΗ** (General Commercial Registry) — look up a Greek company by tax ID
-  (ΑΦΜ) or by its ΓΕΜΗ registration number. Server-side API key
-  (`GEMI_API_KEY`).
+  (ΑΦΜ) or by its ΓΕΜΗ registration number, fetch its public documents
+  (decisions/gazette publications), and browse ΓΕΜΗ's reference code lists
+  (activities, prefectures, municipalities, statuses, legal types, offices,
+  assembly subjects). Server-side API key (`GEMI_API_KEY`).
 - **myDATA** (AADE e-invoicing) — fetch e-invoices for a business. **Bring
   your own credentials**: myDATA subscription keys belong to an individual
   business's Taxisnet registration, so this server never holds one —
@@ -28,13 +30,18 @@ Exposes tools over three business/tax services, per `PLAN.md` Phases 5-7:
   This is the same `@my-mcp/core` client both bundles share, not a
   reimplementation — see `CLAUDE.md`'s cross-domain note. No auth required.
 
-> **Verification status**: ΓΕΜΗ's client is built against
-> github.com/firebed/vat-registry, a maintained open-source client, which
-> confirms the base URL, endpoint paths, and `api_key` header — but no
-> evidence of the actual company-record field names was found (the official
-> Swagger docs returned 403 to automated fetches from this environment), so
-> tool output is the raw JSON response rather than a hand-picked field
-> summary. myDATA's `RequestDocs` endpoint, headers, and query params are
+> **Verification status**: ΓΕΜΗ's client is built directly against the
+> official Swagger 2.0 spec, fetched live 2026-07-25 from
+> `https://opendata-api.businessportal.gr/api-docs` (the interactive docs
+> page is a JS-rendered Swagger UI shell; the actual spec URL is only
+> discoverable via the `Swagger-API-Docs-URL` response header on a HEAD
+> request to that page). All 12 endpoints in the spec are catalogued; 4 are
+> implemented as tools (company lookup, company search, company documents,
+> metadata/reference lists) — `downloadFile` (binary file attachment) and
+> `health` (ops-only) are deliberately not exposed as tools. Response field
+> names come straight from the spec's `definitions`, cross-checked against
+> github.com/firebed/vat-registry (a maintained open-source client) for the
+> base URL/auth pattern. myDATA's `RequestDocs` endpoint, headers, and query params are
 > confirmed against AADE's official API documentation PDFs; its response is
 > raw XML, returned as-is (not parsed) since the invoice XSD is large and
 > out of scope for v1. Ergani's authentication flow and `ServicesList`
@@ -48,6 +55,12 @@ Exposes tools over three business/tax services, per `PLAN.md` Phases 5-7:
 
 - `gemi_search_company_by_tin` — look up companies by ΑΦΜ.
 - `gemi_get_company` — fetch full details by ΓΕΜΗ registration number.
+- `gemi_get_company_documents` — fetch a company's public documents
+  (assembly/board decisions, gazette publications) by ΓΕΜΗ registration
+  number.
+- `gemi_list_metadata` — browse ΓΕΜΗ's reference code lists (activities,
+  prefectures, municipalities, business statuses, legal types, ΓΕΜΗ
+  offices, assembly subjects).
 - `mydata_request_docs` — fetch e-invoices (raw XML) for a date range/
   counterparty, using your own myDATA credentials.
 - `ergani_list_services` — list Ergani services available to your account,

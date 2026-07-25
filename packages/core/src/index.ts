@@ -39,7 +39,18 @@ export type {
 } from "./geodata/types.js";
 
 export { GemiClient } from "./gemi/client.js";
-export type { GemiCompany } from "./gemi/types.js";
+export type {
+  GemiActivity,
+  GemiAssemblySubject,
+  GemiCompany,
+  GemiCompanyDocumentSet,
+  GemiCompanyStatus,
+  GemiLegalType,
+  GemiMunicipality,
+  GemiOffice,
+  GemiPrefecture,
+  GemiSearchResponse,
+} from "./gemi/types.js";
 
 export { MyDataClient } from "./mydata/client.js";
 export type {
