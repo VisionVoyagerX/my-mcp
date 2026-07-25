@@ -1,0 +1,19 @@
+{
+  "uid": "102984",
+  "firstName": "ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "lastName": "ΑΓΡΟΓΙΑΝΝΗΣ",
+  "active": true,
+  "activeFrom": 1262304000000,
+  "activeUntil": 32503672800245,
+  "organizationId": "100037417",
+  "hasOrganizationSignRights": true,
+  "units": [
+    {
+      "uid": "100037417",
+      "positionId": "POS_10009",
+      "positionLabel": "Διευθυντής",
+      "activationDate": null,
+      "deactivationDate": null
+    }
+  ]
+}

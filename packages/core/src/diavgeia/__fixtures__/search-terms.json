@@ -1,0 +1,7 @@
+{
+  "terms": [
+    { "term": "ada", "label": "ΑΔΑ" },
+    { "term": "subject", "label": "Θέμα" },
+    { "term": "issueDate", "label": "Ημ/νία έκδοσης" }
+  ]
+}

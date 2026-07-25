@@ -53,10 +53,7 @@ export const CkanEnvelopeSchema = <T extends z.ZodTypeAny>(result: T) =>
       // Omitted by CKAN entirely on error responses, so this must stay
       // optional even though a successful response always includes it.
       result: result.optional(),
-      error: z
-        .object({ message: z.string().optional() })
-        .loose()
-        .optional(),
+      error: z.object({ message: z.string().optional() }).loose().optional(),
     })
     .loose();
 

@@ -1,0 +1,7 @@
+{
+  "name": "ORG_CATEGORY",
+  "items": [
+    { "uid": "NPID", "label": "ΝΠΙΔ", "parent": null },
+    { "uid": "NPDD", "label": "ΝΠΔΔ", "parent": null }
+  ]
+}

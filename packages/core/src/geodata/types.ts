@@ -32,4 +32,6 @@ export const GeoJsonFeatureCollectionSchema = z
   })
   .loose();
 
-export type GeoJsonFeatureCollection = z.infer<typeof GeoJsonFeatureCollectionSchema>;
+export type GeoJsonFeatureCollection = z.infer<
+  typeof GeoJsonFeatureCollectionSchema
+>;

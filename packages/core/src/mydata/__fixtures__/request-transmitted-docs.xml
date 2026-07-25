@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RequestedDocs>
+  <doc>
+    <invoiceMark>400000000000001</invoiceMark>
+    <issueDate>2026-01-15</issueDate>
+    <invoiceType>1.1</invoiceType>
+  </doc>
+  <doc>
+    <invoiceMark>400000000000002</invoiceMark>
+    <issueDate>2026-01-20</issueDate>
+    <invoiceType>1.1</invoiceType>
+  </doc>
+</RequestedDocs>

@@ -9,22 +9,29 @@
     "url": "https://github.com/VisionVoyagerX/my-mcp",
     "directory": "packages/worker-greekgov"
   },
-  "keywords": ["mcp", "cloudflare", "worker", "greece", "gov.gr", "diavgeia"],
+  "keywords": [
+    "mcp",
+    "cloudflare",
+    "worker",
+    "greece",
+    "gov.gr",
+    "diavgeia"
+  ],
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "build": "wrangler build",
+    "build": "wrangler deploy --dry-run --outdir=dist",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "^4.20250710.0",
+    "@cloudflare/workers-types": "^5.20260721.1",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@my-mcp/core": "workspace:*",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
-    "wrangler": "^3.98.0"
+    "wrangler": "^4.113.0"
   }
 }

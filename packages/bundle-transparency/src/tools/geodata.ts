@@ -19,9 +19,13 @@ export function registerGeodataTools(server: McpServer): void {
       try {
         const layers = await client.listLayers();
         if (layers.length === 0) {
-          return { content: [{ type: "text", text: "No layers were returned." }] };
+          return {
+            content: [{ type: "text", text: "No layers were returned." }],
+          };
         }
-        const lines = layers.map((l) => `- ${l.name}${l.title ? ` — ${l.title}` : ""}`);
+        const lines = layers.map(
+          (l) => `- ${l.name}${l.title ? ` — ${l.title}` : ""}`,
+        );
         return { content: [{ type: "text", text: lines.join("\n") }] };
       } catch (error) {
         return toolErrorResult(error, "Failed to list Geodata.gov.gr layers");
@@ -40,23 +44,32 @@ export function registerGeodataTools(server: McpServer): void {
         typeName: z
           .string()
           .min(1)
-          .describe("The layer's qualified name, e.g. \"gr:administrative_boundaries\"."),
+          .describe(
+            'The layer\'s qualified name, e.g. "gr:administrative_boundaries".',
+          ),
         maxFeatures: z
           .number()
           .int()
           .min(1)
           .max(1000)
           .optional()
-          .describe("Maximum number of features to return (1-1000). Defaults to 50."),
+          .describe(
+            "Maximum number of features to return (1-1000). Defaults to 50.",
+          ),
         bbox: z
           .string()
           .optional()
-          .describe("Bounding box filter as \"minX,minY,maxX,maxY\" in the layer's CRS."),
+          .describe(
+            'Bounding box filter as "minX,minY,maxX,maxY" in the layer\'s CRS.',
+          ),
       },
     },
     async ({ typeName, maxFeatures, bbox }) => {
       try {
-        const collection = await client.getFeatures(typeName, { maxFeatures, bbox });
+        const collection = await client.getFeatures(typeName, {
+          maxFeatures,
+          bbox,
+        });
         return {
           content: [
             {
@@ -66,7 +79,10 @@ export function registerGeodataTools(server: McpServer): void {
           ],
         };
       } catch (error) {
-        return toolErrorResult(error, `Failed to fetch features for layer "${typeName}"`);
+        return toolErrorResult(
+          error,
+          `Failed to fetch features for layer "${typeName}"`,
+        );
       }
     },
   );

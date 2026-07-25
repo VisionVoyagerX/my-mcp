@@ -98,7 +98,11 @@ export async function fetchText(
 
   throw new GovApiError(
     `${init.method ?? "GET"} ${String(url)} returned HTTP ${lastResponse!.status}`,
-    { url: String(url), status: lastResponse!.status, body: lastText.slice(0, 2000) },
+    {
+      url: String(url),
+      status: lastResponse!.status,
+      body: lastText.slice(0, 2000),
+    },
   );
 }
 
@@ -116,11 +120,14 @@ export async function fetchJson<T>(
   try {
     return JSON.parse(text) as T;
   } catch (cause) {
-    throw new GovApiError(`${options.method ?? "GET"} ${String(url)} returned a non-JSON body`, {
-      url: String(url),
-      body: text.slice(0, 2000),
-      cause,
-    });
+    throw new GovApiError(
+      `${options.method ?? "GET"} ${String(url)} returned a non-JSON body`,
+      {
+        url: String(url),
+        body: text.slice(0, 2000),
+        cause,
+      },
+    );
   }
 }
 

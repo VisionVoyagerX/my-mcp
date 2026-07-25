@@ -15,18 +15,27 @@ export function registerGemiTools(server: McpServer): void {
         "on the server (register at opendata.businessportal.gr/register); returns an " +
         "actionable error naming that requirement if it's missing.",
       inputSchema: {
-        tin: z.string().min(1).describe("The company's ΑΦΜ (tax identification number)."),
+        tin: z
+          .string()
+          .min(1)
+          .describe("The company's ΑΦΜ (tax identification number)."),
         isActive: z
           .boolean()
           .optional()
-          .describe("Filter to only active (true) or only inactive (false) companies."),
+          .describe(
+            "Filter to only active (true) or only inactive (false) companies.",
+          ),
       },
     },
     async ({ tin, isActive }) => {
       try {
         const results = await client.searchCompanyByTin(tin, { isActive });
         if (results.length === 0) {
-          return { content: [{ type: "text", text: `No companies found for ΑΦΜ ${tin}.` }] };
+          return {
+            content: [
+              { type: "text", text: `No companies found for ΑΦΜ ${tin}.` },
+            ],
+          };
         }
         return {
           content: [
@@ -54,13 +63,17 @@ export function registerGemiTools(server: McpServer): void {
         registrationNumber: z
           .string()
           .min(1)
-          .describe("The company's ΓΕΜΗ registration number, e.g. \"000237954001\"."),
+          .describe(
+            'The company\'s ΓΕΜΗ registration number, e.g. "000237954001".',
+          ),
       },
     },
     async ({ registrationNumber }) => {
       try {
         const company = await client.getCompany(registrationNumber);
-        return { content: [{ type: "text", text: JSON.stringify(company, null, 2) }] };
+        return {
+          content: [{ type: "text", text: JSON.stringify(company, null, 2) }],
+        };
       } catch (error) {
         return toolErrorResult(
           error,

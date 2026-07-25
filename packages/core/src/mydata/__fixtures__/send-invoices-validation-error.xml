@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResponseDoc>
+  <response>
+    <index>1</index>
+    <statusCode>ValidationError</statusCode>
+    <errors>
+      <error>
+        <code>209</code>
+        <message>The sum of the line-level VAT does not match the invoice total VAT amount</message>
+      </error>
+    </errors>
+  </response>
+</ResponseDoc>

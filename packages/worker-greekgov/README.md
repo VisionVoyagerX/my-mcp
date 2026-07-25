@@ -4,14 +4,13 @@
 
 ## Overview
 
-This package deploys the Diavgeia MCP tools to Cloudflare Workers, making them available as a remote MCP server that any MCP client can point at via HTTP.
+This package deploys the full Diavgeia tool set from `@my-mcp/core` to Cloudflare Workers, making them available as a remote MCP server that any MCP client can point at via HTTP. It reuses the exact same `registerDiavgeiaTools` factory as `bundle-transparency`/`bundle-business` — no separate copy of the tool logic.
 
-**Current scope (v0.1)**:
-- `diavgeia_search_decisions` — search Greek public-sector decisions by organization, type, signer, and date range
-- `diavgeia_get_decision` — fetch full details for a specific decision by ADA code
-- `diavgeia_get_organization` — resolve organization UIDs to names and metadata
+**Live URL**: `https://greekgov-mcp.nickdandis96.workers.dev`
 
-**Rate limiting**: 100 requests per 60 seconds per IP address (Cloudflare native rate limiter).
+**Current scope (v0.1)**: all 15 Diavgeia tools (search/get decisions and version history, organization/unit/signer lookups, decision-type and dictionary metadata, positions, organization browsing). See [`packages/core/src/diavgeia/tools.ts`](/packages/core/src/diavgeia/tools.ts) for the full list and schemas.
+
+**Rate limiting**: 30 requests per 60 seconds per IP address (Cloudflare native `ratelimit` binding, requires Wrangler v4.36.0+). No accounts or API keys — this is an open public endpoint.
 
 ## Local Development
 
@@ -28,8 +27,10 @@ pnpm run dev
 ## Deployment
 
 ### Prerequisites
+
 - Cloudflare account with Workers enabled
 - `wrangler` CLI authenticated with your Cloudflare credentials
+- Node.js 22+ (required by Wrangler 4.x) and `wrangler` v4.36.0+ (required for the `ratelimits` binding)
 
 ### Deploy to Cloudflare Workers
 
@@ -38,35 +39,40 @@ wrangler login
 pnpm run deploy
 ```
 
-The worker will be deployed to `https://greekgov-mcp.workers.dev` (or a custom domain if configured).
+The worker deploys to `https://greekgov-mcp.<your-account-subdomain>.workers.dev` (or a custom domain if configured).
 
 ## Configuration
 
 Edit `wrangler.toml` to adjust:
-- **Rate limits**: Change `simple = { limit = 100, period = 60 }` to adjust requests/period
-- **Worker name**: Change `name = "greekgov-mcp"` to deploy under a different name
-- **Compatibility**: Adjust `compatibility_date` if needed for specific Cloudflare API versions
+
+- **Rate limits**: change `[ratelimits.simple] limit`/`period` to adjust requests/period
+- **Worker name**: change `name = "greekgov-mcp"` to deploy under a different name
+- **Compatibility**: adjust `compatibility_date` if needed for specific Cloudflare API versions
 
 ## Using the Remote Server
 
-In your MCP client (e.g., Claude Desktop), add the remote server configuration:
+The server speaks MCP's [Streamable HTTP transport](https://spec.modelcontextprotocol.io/latest/basics/transports/) at the worker's root URL — no separate SSE endpoint. Point any MCP client that supports remote/Streamable HTTP servers at:
+
+```
+https://greekgov-mcp.nickdandis96.workers.dev
+```
+
+For clients that take raw JSON config (exact key names vary by client — check its docs):
 
 ```json
 {
   "mcpServers": {
     "greekgov-mcp": {
-      "url": "https://greekgov-mcp.workers.dev",
-      "transport": "sse"
+      "url": "https://greekgov-mcp.nickdandis96.workers.dev"
     }
   }
 }
 ```
 
-The server will respond to MCP protocol requests over HTTP/SSE from any client.
-
 ## Examples
 
 ### Search procurement decisions from a ministry
+
 ```
 User → Client: "Search Diavgeia for procurement decisions (type Β.1.1) from ministry 100037417 issued in the last 30 days"
 Client → MCP → diavgeia_search_decisions:
@@ -74,6 +80,7 @@ Client → MCP → diavgeia_search_decisions:
 ```
 
 ### Fetch a specific decision
+
 ```
 User → Client: "Get full details for Diavgeia decision with ADA 6ΣΦ4ΩΞΧ-ΑΒΓ"
 Client → MCP → diavgeia_get_decision:
@@ -81,6 +88,7 @@ Client → MCP → diavgeia_get_decision:
 ```
 
 ### Resolve organization metadata
+
 ```
 User → Client: "What is organization UID 100037417?"
 Client → MCP → diavgeia_get_organization:
@@ -92,6 +100,7 @@ Client → MCP → diavgeia_get_organization:
 - **Stateless**: Each HTTP request creates a fresh MCP server instance (no persistent sessions)
 - **Transport**: `WebStandardStreamableHTTPServerTransport` (Web Standard APIs — works on any runtime: Cloudflare Workers, Node.js 18+, Deno, Bun, etc.)
 - **Rate limiting**: Cloudflare Workers' native `ratelimit` binding checks IP address before MCP logic runs
+- **Icon**: served at `/icon.svg` and referenced from `serverInfo.icons` per MCP's icons extension ([SEP-973](https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/2573)). Claude.ai doesn't render connector icons yet ([anthropics/claude-ai-mcp#152](https://github.com/anthropics/claude-ai-mcp/issues/152)), so this is forward-compatible rather than immediately visible
 
 ## Future Enhancements (Parked for v0.2+)
 

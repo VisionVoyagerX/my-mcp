@@ -9,7 +9,12 @@
     "license_title": "Creative Commons Attribution",
     "organization": { "name": "min-finance", "title": "Ministry of Finance" },
     "resources": [
-      { "id": "res-1", "name": "budget.csv", "format": "CSV", "url": "https://data.gov.gr/dataset/state-budget-2026/resource/res-1" }
+      {
+        "id": "res-1",
+        "name": "budget.csv",
+        "format": "CSV",
+        "url": "https://data.gov.gr/dataset/state-budget-2026/resource/res-1"
+      }
     ],
     "tags": [{ "name": "budget" }, { "name": "finance" }],
     "metadata_created": "2026-01-05T10:00:00.000000",

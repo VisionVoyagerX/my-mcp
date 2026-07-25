@@ -32,7 +32,8 @@ export class ErganiClient {
   private readonly baseUrl: string;
 
   constructor(options: { baseUrl?: string } = {}) {
-    this.baseUrl = options.baseUrl ?? process.env.ERGANI_BASE_URL ?? DEFAULT_BASE_URL;
+    this.baseUrl =
+      options.baseUrl ?? process.env.ERGANI_BASE_URL ?? DEFAULT_BASE_URL;
   }
 
   private async authenticate(credentials: ErganiCredentials): Promise<string> {
@@ -49,7 +50,9 @@ export class ErganiClient {
       },
     );
     if (!response.accessToken) {
-      throw new Error("Ergani authentication succeeded but no accessToken was returned.");
+      throw new Error(
+        "Ergani authentication succeeded but no accessToken was returned.",
+      );
     }
     return response.accessToken;
   }
@@ -57,8 +60,11 @@ export class ErganiClient {
   /** List the Ergani web services available to this account. Read-only. */
   async listServices(credentials: ErganiCredentials): Promise<ErganiService[]> {
     const accessToken = await this.authenticate(credentials);
-    return fetchJson<ErganiService[]>(`${this.baseUrl}/WebServices/ServicesList`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    return fetchJson<ErganiService[]>(
+      `${this.baseUrl}/WebServices/ServicesList`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
   }
 }

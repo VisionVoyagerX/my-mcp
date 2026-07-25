@@ -26,7 +26,9 @@ export function registerErganiTools(server: McpServer): void {
     async ({ username, password }) => {
       try {
         const services = await client.listServices({ username, password });
-        return { content: [{ type: "text", text: JSON.stringify(services, null, 2) }] };
+        return {
+          content: [{ type: "text", text: JSON.stringify(services, null, 2) }],
+        };
       } catch (error) {
         return toolErrorResult(error, "Failed to list Ergani services");
       }

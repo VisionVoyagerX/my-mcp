@@ -7,14 +7,16 @@ import { GemiCompanySchema, type GemiCompany } from "./types.js";
  * client): base URL, `/companies` and `/companies/{registrationNumber}`
  * paths, and the `api_key` header. Not live-verified from this environment.
  */
-const DEFAULT_BASE_URL = "https://opendata-api.businessportal.gr/api/opendata/v1";
+const DEFAULT_BASE_URL =
+  "https://opendata-api.businessportal.gr/api/opendata/v1";
 
 export class GemiClient {
   private readonly baseUrl: string;
   private readonly apiKey: string | undefined;
 
   constructor(options: { baseUrl?: string; apiKey?: string } = {}) {
-    this.baseUrl = options.baseUrl ?? process.env.GEMI_BASE_URL ?? DEFAULT_BASE_URL;
+    this.baseUrl =
+      options.baseUrl ?? process.env.GEMI_BASE_URL ?? DEFAULT_BASE_URL;
     this.apiKey = options.apiKey ?? process.env.GEMI_API_KEY;
   }
 
