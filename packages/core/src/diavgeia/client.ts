@@ -477,9 +477,7 @@ export class DiavgeiaClient {
    * as searchOrganizations(). Prefer getOrganizationDetails() when you only
    * need the positions held within one specific organization.
    */
-  async listPositions(
-    params: { page?: number; size?: number } = {},
-  ): Promise<{
+  async listPositions(params: { page?: number; size?: number } = {}): Promise<{
     positions: DiavgeiaPosition[];
     total: number;
     page: number;

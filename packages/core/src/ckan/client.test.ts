@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import * as XLSX from "xlsx";
 import { CkanClient } from "./client.js";
 
 function loadFixture(name: string): unknown {
@@ -73,6 +74,100 @@ describe("CkanClient", () => {
     await expect(client.getDataset("missing")).rejects.toMatchObject({
       name: "GovApiError",
       message: "Not found",
+    });
+  });
+
+  function bufferResponse(bytes: Uint8Array) {
+    return new Response(bytes, { status: 200 });
+  }
+
+  describe("getResourceData", () => {
+    it("parses a CSV resource into columns and rows", async () => {
+      const csv = "name,population\nAthens,664046\nThessaloniki,315196\n";
+      fetchMock.mockResolvedValueOnce(
+        bufferResponse(new TextEncoder().encode(csv)),
+      );
+      const client = new CkanClient({
+        baseUrl: "https://example.test/api/3/action",
+      });
+
+      const data = await client.getResourceData(
+        "https://example.test/files/cities.csv",
+      );
+
+      expect(data.columns).toEqual(["name", "population"]);
+      expect(data.rows).toEqual([
+        ["Athens", 664046],
+        ["Thessaloniki", 315196],
+      ]);
+      expect(data.totalRows).toBe(2);
+    });
+
+    it("parses an XLSX resource and paginates rows", async () => {
+      const sheet = XLSX.utils.aoa_to_sheet([
+        ["id", "amount"],
+        [1, 100],
+        [2, 200],
+        [3, 300],
+      ]);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, sheet, "Data");
+      const bytes = XLSX.write(workbook, {
+        type: "buffer",
+        bookType: "xlsx",
+      }) as Uint8Array;
+      fetchMock.mockResolvedValueOnce(bufferResponse(bytes));
+      const client = new CkanClient({
+        baseUrl: "https://example.test/api/3/action",
+      });
+
+      const data = await client.getResourceData(
+        "https://example.test/files/amounts.xlsx",
+        { limit: 2, offset: 1 },
+      );
+
+      expect(data.sheet).toBe("Data");
+      expect(data.sheetNames).toEqual(["Data"]);
+      expect(data.rows).toEqual([
+        [2, 200],
+        [3, 300],
+      ]);
+      expect(data.totalRows).toBe(3);
+    });
+
+    it("does not send the CKAN API token when downloading a resource", async () => {
+      fetchMock.mockResolvedValueOnce(
+        bufferResponse(new TextEncoder().encode("a,b\n1,2\n")),
+      );
+      const client = new CkanClient({
+        baseUrl: "https://example.test/api/3/action",
+        token: "my-token",
+      });
+
+      await client.getResourceData("https://other-host.test/file.csv");
+
+      const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+      expect(init.headers).toBeUndefined();
+    });
+
+    it("throws a GovApiError for an unknown sheet name", async () => {
+      const sheet = XLSX.utils.aoa_to_sheet([["a"]]);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, sheet, "Data");
+      const bytes = XLSX.write(workbook, {
+        type: "buffer",
+        bookType: "xlsx",
+      }) as Uint8Array;
+      fetchMock.mockResolvedValueOnce(bufferResponse(bytes));
+      const client = new CkanClient({
+        baseUrl: "https://example.test/api/3/action",
+      });
+
+      await expect(
+        client.getResourceData("https://example.test/files/x.xlsx", {
+          sheet: "Missing",
+        }),
+      ).rejects.toMatchObject({ name: "GovApiError" });
     });
   });
 });

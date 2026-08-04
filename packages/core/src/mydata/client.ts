@@ -17,24 +17,30 @@ import type {
 /**
  * Confirmed via AADE's official myDATA REST API documentation (v2.0.1,
  * March 2026, "myDATA API Documentation v2.0.1_official_erp.pdf"): base
- * URLs, required headers, and the full 11-endpoint ERP-user surface. Not
- * live-verified from this environment — this sandbox's network policy
- * blocks outbound requests to .gov.gr/.gr domains, and sandbox credentials
- * require a human to register via Taxisnet at
- * https://mydata-dev-register.azurewebsites.net first. Live-verify against
- * the dev sandbox (`MYDATA_BASE_URL=https://mydataapidev.aade.gr`) before
- * trusting this against production.
+ * URLs, required headers, and the full 11-endpoint ERP-user surface.
  *
- * This is a bring-your-own-credential service per CLAUDE.md: myDATA
- * subscription keys are tied to an individual business's Taxisnet
- * registration, so this client never reads credentials from the
- * environment — every call takes them as explicit parameters.
- *
- * Every submission endpoint (`send*`/`cancelInvoice`) returns HTTP 200 even
- * when the submission itself failed — see `parseMyDataResponseOrThrow` in
- * `./xml.js`, which every submission method here uses to surface
- * `statusCode !== "Success"` as a thrown `MyDataApiError` instead of letting
- * it look like success.
+ * Endpoint existence and routing live-verified 2026-07-25 from an
+ * unrestricted network (unauthenticated, no real subscription key
+ * available — sandbox credentials still require a human to register via
+ * Taxisnet at https://mydata-dev-register.azurewebsites.net first):
+ * - All 11 paths below exist under `https://mydatapi.aade.gr/myDATA/*` in
+ *   production — GET endpoints return 401 ("missing subscription key"),
+ *   POST endpoints return 411 ("length required") for a bodyless POST,
+ *   both confirming the route exists and requires exactly the method this
+ *   client uses, not a 404.
+ * - The dev sandbox at `https://mydataapidev.aade.gr` is live and correctly
+ *   reachable, but — confirmed against the official PDF's worked dev-URL
+ *   examples too — does NOT use the `/myDATA` path prefix. Set
+ *   `MYDATA_BASE_URL=https://mydataapidev.aade.gr` (no `/myDATA` suffix) to
+ *   target it; this client's `${baseUrl}/${endpoint}` construction handles
+ *   both forms correctly already.
+ * - Sending a bogus/invalid subscription key produces HTTP 403 with an
+ *   empty body (vs. 401 with none at all) — confirming this client's
+ *   header wiring (`aade-user-id` / `Ocp-Apim-Subscription-Key`) reaches
+ *   the real APIM gateway correctly for both GET and POST calls.
+ * - The gateway authenticates before validating query parameters or body
+ *   content, so no unauthenticated check can confirm parameter *names* —
+ *   see `counterVatNumber` below for the one still-open case.
  */
 const DEFAULT_BASE_URL = "https://mydatapi.aade.gr/myDATA";
 
@@ -62,12 +68,19 @@ export interface MyDataDocsQueryParams {
   /** Restrict to invoices issued by this ΑΦΜ. */
   entityVatNumber?: string;
   /**
-   * Restrict to invoices involving this counterparty ΑΦΜ. The official
-   * v2.0.1 PDF is internally inconsistent here — the worked URL example
-   * uses `counterVatNumber`, but the parameter table two lines below lists
-   * `receiverVatNumber`. This client sends `counterVatNumber` (matching the
-   * URL example); resolve empirically against the live sandbox before
-   * trusting this against production, per the plan's Part A Step 2.
+   * Restrict to invoices involving this counterparty ΑΦΜ. Confirmed 2026-07-25
+   * against the official v1.0.6/v2.0.1 PDFs: this table/URL mismatch is real
+   * and present in both doc versions, specific to `RequestDocs` and
+   * `RequestTransmittedDocs` only — the worked URL examples embed
+   * `[&counterVatNumber]`, but the parameter table two lines below (and
+   * note 5 beneath it) both call it `receiverVatNumber`. No unauthenticated
+   * live request can settle which name the backend actually reads (the
+   * APIM gateway 401s on the missing subscription key before parameters are
+   * evaluated), so `getDocs` below sends the value under BOTH query keys —
+   * cheap, harmless if one is ignored, and correct either way. (This
+   * ambiguity does not affect `RequestMyIncome`/`RequestMyExpenses`, whose
+   * table and URL examples agree on `counterVatNumber` — see
+   * `MyDataIncomeExpenseQueryParams` below.)
    */
   counterVatNumber?: string;
   /** AADE invoice-type code, e.g. "1.1" for a sales invoice. */
@@ -143,7 +156,9 @@ function embeddedIncomeClassificationXml(
   detail: MyDataIncomeClassificationDetail,
 ): Record<string, unknown> {
   return {
-    ...(detail.classificationType ? { "icls:classificationType": detail.classificationType } : {}),
+    ...(detail.classificationType
+      ? { "icls:classificationType": detail.classificationType }
+      : {}),
     "icls:classificationCategory": detail.classificationCategory,
     "icls:amount": detail.amount.toFixed(2),
     ...(detail.id !== undefined ? { "icls:id": detail.id } : {}),
@@ -179,8 +194,12 @@ function buildInvoicesDocXml(invoices: MyDataInvoiceInput[]): string {
               paymentMethodDetails: inv.paymentMethods.map((detail) => ({
                 type: detail.type,
                 amount: detail.amount.toFixed(2),
-                ...(detail.paymentMethodInfo ? { paymentMethodInfo: detail.paymentMethodInfo } : {}),
-                ...(detail.tipAmount !== undefined ? { tipAmount: detail.tipAmount.toFixed(2) } : {}),
+                ...(detail.paymentMethodInfo
+                  ? { paymentMethodInfo: detail.paymentMethodInfo }
+                  : {}),
+                ...(detail.tipAmount !== undefined
+                  ? { tipAmount: detail.tipAmount.toFixed(2) }
+                  : {}),
               })),
             },
           }
@@ -194,7 +213,11 @@ function buildInvoicesDocXml(invoices: MyDataInvoiceInput[]): string {
           ? { vatExemptionCategory: line.vatExemptionCategory }
           : {}),
         ...(line.incomeClassifications && line.incomeClassifications.length > 0
-          ? { incomeClassification: line.incomeClassifications.map(embeddedIncomeClassificationXml) }
+          ? {
+              incomeClassification: line.incomeClassifications.map(
+                embeddedIncomeClassificationXml,
+              ),
+            }
           : {}),
       })),
       invoiceSummary: {
@@ -212,7 +235,8 @@ function buildInvoicesDocXml(invoices: MyDataInvoiceInput[]): string {
           2,
         ),
         totalGrossValue: inv.summary.totalGrossValue.toFixed(2),
-        ...(inv.summary.incomeClassifications && inv.summary.incomeClassifications.length > 0
+        ...(inv.summary.incomeClassifications &&
+        inv.summary.incomeClassifications.length > 0
           ? {
               incomeClassification: inv.summary.incomeClassifications.map(
                 embeddedIncomeClassificationXml,
@@ -234,41 +258,58 @@ function buildInvoicesDocXml(invoices: MyDataInvoiceInput[]): string {
  * the "could not find schema information" `XMLSyntaxError` we hit live
  * against the sandbox on 2026-07-24 before this fix.
  */
-function incomeDetailXml(detail: MyDataIncomeClassificationDetail): Record<string, unknown> {
+function incomeDetailXml(
+  detail: MyDataIncomeClassificationDetail,
+): Record<string, unknown> {
   return {
-    ...(detail.classificationType ? { "icls:classificationType": detail.classificationType } : {}),
+    ...(detail.classificationType
+      ? { "icls:classificationType": detail.classificationType }
+      : {}),
     "icls:classificationCategory": detail.classificationCategory,
     "icls:amount": detail.amount.toFixed(2),
     ...(detail.id !== undefined ? { "icls:id": detail.id } : {}),
   };
 }
 
-function buildIncomeClassificationXml(input: MyDataClassificationInput): string {
+function buildIncomeClassificationXml(
+  input: MyDataClassificationInput,
+): string {
   return buildXml("icls:IncomeClassificationsDoc", {
     "@_xmlns:icls": ICLS_NS,
     "icls:incomeInvoiceClassification": {
       "icls:invoiceMark": input.invoiceMark,
-      ...(input.entityVatNumber ? { "icls:entityVatNumber": input.entityVatNumber } : {}),
+      ...(input.entityVatNumber
+        ? { "icls:entityVatNumber": input.entityVatNumber }
+        : {}),
       ...(input.transactionMode !== undefined
         ? { "icls:transactionMode": input.transactionMode }
         : {
-            "icls:invoicesIncomeClassificationDetails": (input.lines ?? []).map((line) => ({
-              "icls:lineNumber": line.lineNumber,
-              "icls:incomeClassificationDetailData": line.details.map(incomeDetailXml),
-            })),
+            "icls:invoicesIncomeClassificationDetails": (input.lines ?? []).map(
+              (line) => ({
+                "icls:lineNumber": line.lineNumber,
+                "icls:incomeClassificationDetailData":
+                  line.details.map(incomeDetailXml),
+              }),
+            ),
           }),
     },
   });
 }
 
-function expensesDetailXml(detail: MyDataExpensesClassificationDetail): Record<string, unknown> {
+function expensesDetailXml(
+  detail: MyDataExpensesClassificationDetail,
+): Record<string, unknown> {
   return {
-    ...(detail.classificationType ? { "ecls:classificationType": detail.classificationType } : {}),
+    ...(detail.classificationType
+      ? { "ecls:classificationType": detail.classificationType }
+      : {}),
     ...(detail.classificationCategory
       ? { "ecls:classificationCategory": detail.classificationCategory }
       : {}),
     "ecls:amount": detail.amount.toFixed(2),
-    ...(detail.vatAmount !== undefined ? { "ecls:vatAmount": detail.vatAmount.toFixed(2) } : {}),
+    ...(detail.vatAmount !== undefined
+      ? { "ecls:vatAmount": detail.vatAmount.toFixed(2) }
+      : {}),
     ...(detail.vatCategory ? { "ecls:vatCategory": detail.vatCategory } : {}),
     ...(detail.vatExemptionCategory
       ? { "ecls:vatExemptionCategory": detail.vatExemptionCategory }
@@ -277,18 +318,25 @@ function expensesDetailXml(detail: MyDataExpensesClassificationDetail): Record<s
   };
 }
 
-function buildExpensesClassificationXml(input: MyDataExpensesClassificationInput): string {
+function buildExpensesClassificationXml(
+  input: MyDataExpensesClassificationInput,
+): string {
   return buildXml("ecls:ExpensesClassificationsDoc", {
     "@_xmlns:ecls": ECLS_NS,
     "ecls:expensesInvoiceClassification": {
       "ecls:invoiceMark": input.invoiceMark,
-      ...(input.entityVatNumber ? { "ecls:entityVatNumber": input.entityVatNumber } : {}),
+      ...(input.entityVatNumber
+        ? { "ecls:entityVatNumber": input.entityVatNumber }
+        : {}),
       ...(input.transactionMode !== undefined
         ? { "ecls:transactionMode": input.transactionMode }
         : {
-            "ecls:invoicesExpensesClassificationDetails": (input.lines ?? []).map((line) => ({
+            "ecls:invoicesExpensesClassificationDetails": (
+              input.lines ?? []
+            ).map((line) => ({
               "ecls:lineNumber": line.lineNumber,
-              "ecls:expensesClassificationDetailData": line.details.map(expensesDetailXml),
+              "ecls:expensesClassificationDetailData":
+                line.details.map(expensesDetailXml),
             })),
           }),
       ...(input.classificationPostMode !== undefined
@@ -314,8 +362,12 @@ function buildPaymentMethodXml(input: MyDataPaymentMethodInput): string {
       "pmt:paymentMethodDetails": input.paymentMethods.map((detail) => ({
         "inv:type": detail.type,
         "inv:amount": detail.amount.toFixed(2),
-        ...(detail.paymentMethodInfo ? { "inv:paymentMethodInfo": detail.paymentMethodInfo } : {}),
-        ...(detail.tipAmount !== undefined ? { "inv:tipAmount": detail.tipAmount.toFixed(2) } : {}),
+        ...(detail.paymentMethodInfo
+          ? { "inv:paymentMethodInfo": detail.paymentMethodInfo }
+          : {}),
+        ...(detail.tipAmount !== undefined
+          ? { "inv:tipAmount": detail.tipAmount.toFixed(2) }
+          : {}),
       })),
     },
   });
@@ -364,7 +416,10 @@ export class MyDataClient {
       dateFrom: params.dateFrom,
       dateTo: params.dateTo,
       entityVatNumber: params.entityVatNumber,
+      // Sent under both names — see the doc comment on `counterVatNumber`
+      // in `MyDataDocsQueryParams` for why.
       counterVatNumber: params.counterVatNumber,
+      receiverVatNumber: params.counterVatNumber,
       invType: params.invType,
       maxMark: params.maxMark,
       nextPartitionKey: params.nextPartitionKey,

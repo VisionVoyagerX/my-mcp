@@ -1,4 +1,8 @@
 [
-  { "id": 3, "descr": "Ανώνυμη Εταιρεία", "descrEn": "Societe Anonyme" },
-  { "id": 7, "descr": "Ιδιωτική Κεφαλαιουχική Εταιρεία", "descrEn": "Private Company" }
+  { "id": "3", "descr": "Ανώνυμη Εταιρεία", "descrEn": "Societe Anonyme" },
+  {
+    "id": "7",
+    "descr": "Ιδιωτική Κεφαλαιουχική Εταιρεία",
+    "descrEn": "Private Company"
+  }
 ]

@@ -47,7 +47,11 @@ export const MyDataIncomeClassificationDetailSchema = z.object({
     .min(1)
     .describe("Classification category code (XSD Appendix §8.8)."),
   amount: z.number(),
-  id: z.number().int().optional().describe("Optional unique id for this classification entry."),
+  id: z
+    .number()
+    .int()
+    .optional()
+    .describe("Optional unique id for this classification entry."),
 });
 export type MyDataIncomeClassificationDetail = z.infer<
   typeof MyDataIncomeClassificationDetailSchema
@@ -155,7 +159,11 @@ export const MyDataInvoiceInputSchema = z.object({
 export type MyDataInvoiceInput = z.infer<typeof MyDataInvoiceInputSchema>;
 
 export const MyDataIncomeClassificationLineSchema = z.object({
-  lineNumber: z.number().int().min(1).describe("The invoice line being classified."),
+  lineNumber: z
+    .number()
+    .int()
+    .min(1)
+    .describe("The invoice line being classified."),
   details: z.array(MyDataIncomeClassificationDetailSchema).min(1),
 });
 export type MyDataIncomeClassificationLine = z.infer<
@@ -174,7 +182,9 @@ export const MyDataClassificationInputSchema = z
     invoiceMark: z
       .string()
       .min(1)
-      .describe("The `mark` of the already-submitted invoice being classified."),
+      .describe(
+        "The `mark` of the already-submitted invoice being classified.",
+      ),
     entityVatNumber: z
       .string()
       .optional()
@@ -192,10 +202,18 @@ export const MyDataClassificationInputSchema = z
         "Per-line classification details. Mutually exclusive with `transactionMode` — provide exactly one.",
       ),
   })
-  .refine((v) => (v.transactionMode !== undefined) !== (v.lines !== undefined && v.lines.length > 0), {
-    message: "Provide exactly one of transactionMode or lines (the myDATA XSD models these as a choice).",
-  });
-export type MyDataClassificationInput = z.infer<typeof MyDataClassificationInputSchema>;
+  .refine(
+    (v) =>
+      (v.transactionMode !== undefined) !==
+      (v.lines !== undefined && v.lines.length > 0),
+    {
+      message:
+        "Provide exactly one of transactionMode or lines (the myDATA XSD models these as a choice).",
+    },
+  );
+export type MyDataClassificationInput = z.infer<
+  typeof MyDataClassificationInputSchema
+>;
 
 /**
  * `ExpensesClassificationType` (confirmed against
@@ -218,7 +236,11 @@ export type MyDataExpensesClassificationDetail = z.infer<
 >;
 
 export const MyDataExpensesClassificationLineSchema = z.object({
-  lineNumber: z.number().int().min(1).describe("The invoice line being classified."),
+  lineNumber: z
+    .number()
+    .int()
+    .min(1)
+    .describe("The invoice line being classified."),
   details: z.array(MyDataExpensesClassificationDetailSchema).min(1),
 });
 export type MyDataExpensesClassificationLine = z.infer<
@@ -230,7 +252,9 @@ export const MyDataExpensesClassificationInputSchema = z
     invoiceMark: z
       .string()
       .min(1)
-      .describe("The `mark` of the already-submitted invoice being classified."),
+      .describe(
+        "The `mark` of the already-submitted invoice being classified.",
+      ),
     entityVatNumber: z
       .string()
       .optional()
@@ -254,9 +278,15 @@ export const MyDataExpensesClassificationInputSchema = z
         "0 or 1 — submission method for the classification. See AADE's SendExpensesClassificationPostPerInvoiceGuidelines.",
       ),
   })
-  .refine((v) => (v.transactionMode !== undefined) !== (v.lines !== undefined && v.lines.length > 0), {
-    message: "Provide exactly one of transactionMode or lines (the myDATA XSD models these as a choice).",
-  });
+  .refine(
+    (v) =>
+      (v.transactionMode !== undefined) !==
+      (v.lines !== undefined && v.lines.length > 0),
+    {
+      message:
+        "Provide exactly one of transactionMode or lines (the myDATA XSD models these as a choice).",
+    },
+  );
 export type MyDataExpensesClassificationInput = z.infer<
   typeof MyDataExpensesClassificationInputSchema
 >;
