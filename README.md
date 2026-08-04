@@ -16,81 +16,88 @@ how few tools each service exposes).
 Users compose bundles themselves: install whichever domain bundles you need,
 not a persona-shaped combination someone else picked for you.
 
-## Bundles
+## Servers
 
-| Package                                                          | Domain                   | Services                                  | Auth                                                                                        |
-| ---------------------------------------------------------------- | ------------------------ | ----------------------------------------- | ------------------------------------------------------------------------------------------- |
-| [`packages/bundle-transparency`](./packages/bundle-transparency) | Transparency / open-data | Diavgeia, data.gov.gr, Geodata.gov.gr     | None required; optional free token for data.gov.gr                                          |
-| [`packages/bundle-business`](./packages/bundle-business)         | Business / tax           | ΓΕΜΗ, myDATA, Ergani, (+ shared Diavgeia) | ΓΕΜΗ needs a free server-side API key; myDATA/Ergani are bring-your-own-credential per call |
+Exactly two, both public Cloudflare Workers — no local install or stdio
+process required.
 
-A service can appear in more than one bundle when it's genuinely
-cross-domain — Diavgeia does, since procurement decisions matter to both
-transparency and business users. That's packaging duplication only: both
-bundles import the same client from `packages/core`, nothing is
-reimplemented.
+| Server                                                               | Domain                   | Services                                  | Auth                                                                                                                                                        |
+| -------------------------------------------------------------------- | ------------------------ | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`packages/citizen-mcp`](./packages/citizen-mcp) — **CitizenMCP**    | Transparency / open-data | Diavgeia, data.gov.gr                     | None required; optional free token for data.gov.gr                                                                                                          |
+| [`packages/business-mcp`](./packages/business-mcp) — **BusinessMCP** | Business / tax           | ΓΕΜΗ, myDATA, Ergani, (+ shared Diavgeia) | ΓΕΜΗ needs a free server-side API key; myDATA/Ergani are bring-your-own-credential, with an optional connect-once token so you don't resend them every call |
+
+"CitizenMCP" and "BusinessMCP" are product names for the same two domain
+groupings this repo has always used — not a persona-based redesign. A
+service can appear in more than one when it's genuinely cross-domain —
+Diavgeia does, since procurement decisions matter to both. That's packaging
+duplication only: both workers import the same client from `packages/core`,
+nothing is reimplemented.
 
 ## Architecture
 
 ```
 packages/
-  core/                   shared per-service API clients + auth handling
-  bundle-transparency/    thin MCP server: Diavgeia, CKAN, Geodata tools
-  bundle-business/        thin MCP server: GEMI, myDATA, Ergani (+ Diavgeia) tools
+  core/            shared per-service API clients, MCP tool registration,
+                    and auth handling (including the credentials/ module
+                    used by BusinessMCP's connect-once token system)
+  citizen-mcp/      Cloudflare Worker: Diavgeia, CKAN tools
+  business-mcp/     Cloudflare Worker: Diavgeia, GEMI, myDATA, Ergani tools
 ```
 
-`packages/core` holds all the actual HTTP/API integration logic and has no
-`@modelcontextprotocol/sdk` dependency — it's a plain client library. Each
-bundle package is a thin MCP server that imports clients from `core` and
-registers only the tools relevant to its domain. See `CLAUDE.md` for the
-full architecture strategy and `PLAN.md` for the phase-by-phase build log.
+`packages/core` holds all the actual HTTP/API integration logic _and_ the
+`server.registerTool(...)` MCP wiring for every service — it does depend on
+`@modelcontextprotocol/sdk`, unlike a plain client library, precisely so
+that tool logic is shared instead of duplicated across workers. Each worker
+package is a thin Cloudflare Worker (`src/worker.ts`) that imports
+`registerXTools` functions from `core`, wires up its own auth/rate-limiting
+bindings, and registers only the tools relevant to its domain. See
+`CLAUDE.md` for the full architecture strategy.
 
-## Hosted: GreekGovMCP
-
-[`packages/worker-greekgov`](./packages/worker-greekgov) deploys the Diavgeia
-tools as a public, no-auth, rate-limited remote MCP server on Cloudflare
-Workers — no local install required. Live at:
+## Live servers
 
 ```
-https://greekgov-mcp.nickdandis96.workers.dev
+https://citizen-mcp.nickdandis96.workers.dev
+https://business-mcp.nickdandis96.workers.dev
 ```
 
-This is v0.1: Diavgeia only. See the package README for how to point an MCP
-client at it and what's planned for later versions.
+See each package's README for its exact tool list, rate limits, and how to
+point an MCP client at it:
+
+- [`packages/citizen-mcp/README.md`](./packages/citizen-mcp/README.md)
+- [`packages/business-mcp/README.md`](./packages/business-mcp/README.md)
 
 ## Getting started
 
 ```sh
 pnpm install
-pnpm run build   # builds core, then both bundles (topologically ordered)
+pnpm run build   # builds core, then both workers (topologically ordered)
 pnpm run test
 pnpm run lint
 pnpm run typecheck
 ```
 
-Then follow the install/config instructions in whichever bundle's README you
-want to use:
-
-- [`packages/bundle-transparency/README.md`](./packages/bundle-transparency/README.md)
-- [`packages/bundle-business/README.md`](./packages/bundle-business/README.md)
+Cloudflare Workers commands (`wrangler dev`/`deploy`) require Node.js 22+;
+the rest of the repo works on Node 20+. See each worker's README for local
+dev and deployment instructions, including BusinessMCP's KV namespace and
+secret setup.
 
 ## Verification status
 
-Diavgeia has been verified live end-to-end: direct calls to
-`diavgeia.gov.gr`, MCP Inspector / tools-list / tools-call runs against the
-built `bundle-transparency` server, and (as of the GreekGovMCP deploy) real
-tool calls through the deployed Cloudflare Worker all return real 200
-responses from this development environment. Earlier phases of `PLAN.md`
-hit a sandboxed network that blocked `.gov.gr`/`.gr` domains — that
-restriction does not apply universally; re-check reachability per
-environment rather than assuming it's blocked. The other services
-(data.gov.gr, Geodata.gov.gr, ΓΕΜΗ, myDATA, Ergani) are still unverified
-against live traffic — do a real liveness check before relying on them in
-production. Per-service confidence ratings are in
-[`RESEARCH.md`](./RESEARCH.md); per-phase verification notes are in
-[`PLAN.md`](./PLAN.md).
+Diavgeia, ΓΕΜΗ, and data.gov.gr have been verified live end-to-end: direct
+calls to their production APIs, and real tool calls through the deployed
+Cloudflare Workers, all return real 200 responses. myDATA's credential-token
+wiring is verified live (a real request with dummy credentials returns a
+genuine 403 from AADE, proving the encrypt/store/resolve/call path works)
+but hasn't been exercised with real credentials. Ergani hasn't been
+exercised live at all — do a real liveness check before relying on either
+in production. Per-service confidence ratings are in
+[`RESEARCH.md`](./RESEARCH.md).
 
 ## Publishing
 
-Packages are currently `"private": true` and unpublished. Before publishing
-to npm: pick a real license (currently `UNLICENSED` as a placeholder),
-confirm package names/scopes, and complete the live-verification pass above.
+Packages are currently `"private": true` and unpublished — both are
+deployed as Cloudflare Workers rather than published to npm, so this
+mostly applies to `packages/core` if it's ever split out for reuse. Before
+publishing anything to npm: pick a real license (currently `UNLICENSED` as
+a placeholder), confirm package names/scopes, and complete the
+live-verification pass above.

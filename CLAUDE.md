@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project state
 
-A pnpm workspaces monorepo with `packages/core` (shared library with HTTP client and per-service client implementations), `packages/bundle-transparency` (working MCP server exposing Diavgeia, CKAN/data.gov.gr, and Geodata.gov.gr tools), and `packages/bundle-business` (working MCP server exposing Diavgeia, ΓΕΜΗ, myDATA, and Ergani tools). Both bundles are feature-complete for their respective domains; current focus is testing and deployment.
+A pnpm workspaces monorepo with `packages/core` (shared library with HTTP client, per-service client implementations, and MCP tool registration for every service) and exactly two public MCP servers, both Cloudflare Workers: `packages/citizen-mcp` (Diavgeia, CKAN/data.gov.gr — no auth needed) and `packages/business-mcp` (Diavgeia, ΓΕΜΗ, myDATA, Ergani). There is no local/stdio distribution mode — both packages are Worker-only, matching the pattern the earlier `worker-greekgov` package proved out before being superseded by this two-worker split. `packages/business-mcp` additionally implements a connect-once credential-token system (`packages/core/src/credentials/`) for myDATA/Ergani, since those need per-caller credentials rather than one shared server key like ΓΕΜΗ.
 
 ### Build/lint/test commands
 
@@ -16,8 +16,8 @@ Run from the repo root (requires `pnpm`):
 - `pnpm run lint` — `eslint .` across the whole repo (flat config in `eslint.config.js`, typescript-eslint + eslint-config-prettier)
 - `pnpm run format` — `prettier --write .`
 - `pnpm run test` — run each package's `vitest` suite
-- Per-package: `pnpm --filter @my-mcp/<pkg> <script>` (e.g. `pnpm --filter @my-mcp/bundle-transparency run build`)
-- Manually exercise a bundle server: `node packages/bundle-transparency/dist/index.js`, or drive it with the MCP Inspector CLI: `npx @modelcontextprotocol/inspector --cli node packages/bundle-transparency/dist/index.js --method tools/list`
+- Per-package: `pnpm --filter @my-mcp/<pkg> <script>` (e.g. `pnpm --filter @my-mcp/citizen-mcp run build`)
+- Manually exercise a worker locally: `pnpm --filter @my-mcp/citizen-mcp run dev` (needs Node 22+ for `wrangler`; use `nvm use` if the default Node is older) starts it on `http://localhost:8787`, then either drive it with the MCP Inspector CLI (`npx @modelcontextprotocol/inspector --cli http://localhost:8787 --method tools/list`) or `curl` the Streamable HTTP endpoint directly (`POST /` with a JSON-RPC body, `Accept: application/json, text/event-stream`)
 
 TypeScript is pinned to `^5.9.3`, not the `latest` npm dist-tag (currently 7.0.2) — `typescript-eslint` doesn't support the TS 7 line yet. Re-evaluate this pin once the lint tooling catches up.
 
@@ -27,9 +27,9 @@ The goal (per `RESEARCH.md`) is an MCP server exposing Greek government/public-s
 
 Key points from that research to carry into implementation decisions:
 
-- **Recommended v1 scope**, in priority order: Diavgeia (transparency/procurement decisions, no auth), data.gov.gr (CKAN open-data catalog, free token), Geodata.gov.gr (geospatial, no auth), ΓΕΜΗ open data (business registry, free API key), AADE myDATA (e-invoicing — requires the _user's own_ Taxisnet subscription key, so the MCP would be a thin client rather than holding a shared credential), Ergani (labor/employment — same bring-your-own-credentials pattern).
+- **Recommended v1 scope**, in priority order: Diavgeia (transparency/procurement decisions, no auth), data.gov.gr (CKAN open-data catalog, free token), ΓΕΜΗ open data (business registry, free API key), AADE myDATA (e-invoicing — requires the _user's own_ Taxisnet subscription key, so the MCP would be a thin client rather than holding a shared credential), Ergani (labor/employment — same bring-your-own-credentials pattern). Geodata.gov.gr was in this list originally but was dropped 2026-08-04 — see the RESEARCH.md Tier 1 note.
 - **Tier 3 services have no public developer API** (gov.gr Wallet, Taxisnet personal e-services, e-EFKA/ΑΜΚΑ, ΕΟΠΥΥ) and should not be integrated — only flagged as unsupported if requested.
-- **Auth patterns vary by service** and should stay explicit in code rather than unified behind one abstraction: some services are fully open (Diavgeia, Geodata), some need a free self-service API key/token owned by the MCP deployment (data.gov.gr, ΓΕΜΗ), and some need per-user credentials the MCP cannot supply itself (myDATA, Ergani).
+- **Auth patterns vary by service** and should stay explicit in code rather than unified behind one abstraction: some services are fully open (Diavgeia), some need a free self-service API key/token owned by the MCP deployment (data.gov.gr, ΓΕΜΗ), and some need per-user credentials the MCP cannot supply itself (myDATA, Ergani).
 - Confidence ratings in the research table are based on search evidence, not verified live HTTP checks (this sandbox's network policy blocks outbound requests to `.gov.gr`/`.gr` domains). Before wiring up a new endpoint, do a real liveness check from an unrestricted network rather than trusting the table alone.
 - The `monopigi.com` competitive note is explicitly unresolved/unverified — don't treat it as confirmed prior art.
 
@@ -37,10 +37,10 @@ Key points from that research to carry into implementation decisions:
 
 We are not shipping a single MCP server exposing every Greek gov service, and not shipping one MCP server per service. Instead: multiple MCP servers, each bundling the services for one **data domain**.
 
-- **Split axis is domain (what the data is about), never persona (who uses it).** Personas overlap endlessly (a researcher, an accountant, and a journalist might all want business data) so persona-based bundles never converge on clean boundaries. Domains don't overlap this way.
-- **Planned bundles** (may grow as `RESEARCH.md` scope grows):
-  - Transparency/open-data: Diavgeia, data.gov.gr, Geodata.gov.gr
-  - Business/tax: ΓΕΜΗ, myDATA, Ergani
+- **Split axis is domain (what the data is about), never persona (who uses it).** Personas overlap endlessly (a researcher, an accountant, and a journalist might all want business data) so persona-based bundles never converge on clean boundaries. Domains don't overlap this way. "CitizenMCP" and "BusinessMCP" are product names for these same two domain groupings (transparency/open-data, business/tax) — not a persona-based redesign. A researcher who wants business data installs BusinessMCP same as an accountant would; the naming is just friendlier than "bundle-transparency"/"bundle-business" was, the domain boundary underneath is unchanged.
+- **Bundles** (may grow as `RESEARCH.md` scope grows):
+  - `citizen-mcp` — transparency/open-data: Diavgeia, data.gov.gr
+  - `business-mcp` — business/tax: ΓΕΜΗ, myDATA, Ergani (+ shared Diavgeia)
   - Health: reserved for if/when a viable service appears (e.g. ΙΔΙΚΑ) — kept separate so installing it never pulls in business/tax tools
 - **Users compose bundles themselves.** A researcher who also wants business data installs the open-data bundle _and_ the business bundle — we don't build a combined "researcher" bundle.
 - **A service can appear in more than one bundle** if it's genuinely cross-domain (e.g. Diavgeia's procurement decisions matter to both the transparency and business bundles). Duplication at the packaging level is fine; it's just re-exposing the same client, not reimplementing it.

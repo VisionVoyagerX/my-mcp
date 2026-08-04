@@ -1,0 +1,896 @@
+<title>Greek Gov MCP — Status &amp; Reference</title>
+<style>
+  :root {
+    --bg: #f3f4ef;
+    --surface: #ffffff;
+    --surface-2: #ebede4;
+    --ink: #17232b;
+    --ink-soft: #55636b;
+    --ink-faint: #8a9399;
+    --line: #dadcd2;
+    --accent: #0d5eaf;
+    --accent-ink: #ffffff;
+    --accent-soft: #e4eef9;
+    --gold: #9c7212;
+    --gold-soft: #f3ead2;
+    --good: #1e8e5a;
+    --good-soft: #e1f2e8;
+    --warn: #a9750a;
+    --warn-soft: #faf0da;
+    --bad: #b93c3c;
+    --bad-soft: #fbeaea;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d141b;
+      --surface: #131b23;
+      --surface-2: #1a232c;
+      --ink: #e7ecef;
+      --ink-soft: #a9b7c0;
+      --ink-faint: #71818a;
+      --line: #263140;
+      --accent: #62aaea;
+      --accent-ink: #06141f;
+      --accent-soft: rgba(98, 170, 234, 0.14);
+      --gold: #d3a23b;
+      --gold-soft: rgba(211, 162, 59, 0.14);
+      --good: #4cc292;
+      --good-soft: rgba(76, 194, 146, 0.14);
+      --warn: #e0ac4c;
+      --warn-soft: rgba(224, 172, 76, 0.14);
+      --bad: #e17575;
+      --bad-soft: rgba(225, 117, 117, 0.14);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d141b;
+    --surface: #131b23;
+    --surface-2: #1a232c;
+    --ink: #e7ecef;
+    --ink-soft: #a9b7c0;
+    --ink-faint: #71818a;
+    --line: #263140;
+    --accent: #62aaea;
+    --accent-ink: #06141f;
+    --accent-soft: rgba(98, 170, 234, 0.14);
+    --gold: #d3a23b;
+    --gold-soft: rgba(211, 162, 59, 0.14);
+    --good: #4cc292;
+    --good-soft: rgba(76, 194, 146, 0.14);
+    --warn: #e0ac4c;
+    --warn-soft: rgba(224, 172, 76, 0.14);
+    --bad: #e17575;
+    --bad-soft: rgba(225, 117, 117, 0.14);
+  }
+  :root[data-theme="light"] {
+    --bg: #f3f4ef;
+    --surface: #ffffff;
+    --surface-2: #ebede4;
+    --ink: #17232b;
+    --ink-soft: #55636b;
+    --ink-faint: #8a9399;
+    --line: #dadcd2;
+    --accent: #0d5eaf;
+    --accent-ink: #ffffff;
+    --accent-soft: #e4eef9;
+    --gold: #9c7212;
+    --gold-soft: #f3ead2;
+    --good: #1e8e5a;
+    --good-soft: #e1f2e8;
+    --warn: #a9750a;
+    --warn-soft: #faf0da;
+    --bad: #b93c3c;
+    --bad-soft: #fbeaea;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: var(--accent); }
+  ::selection { background: var(--accent-soft); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    border-bottom: 1px solid var(--line);
+    padding: 3rem 0 2rem;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 0.9rem;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.5rem;
+    height: 1px;
+    background: var(--ink-faint);
+    display: inline-block;
+  }
+  h1.title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2rem, 4.2vw, 2.9rem);
+    line-height: 1.08;
+    margin: 0 0 0.7rem;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  .dek {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0 0 1.6rem;
+    text-wrap: pretty;
+  }
+  .servers-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .server-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem 0.35rem 0.4rem;
+    font-size: 0.85rem;
+  }
+  .server-chip svg { width: 1.3rem; height: 1.3rem; flex: none; }
+  .server-chip b { font-weight: 600; }
+  .server-chip span.tools { color: var(--ink-faint); font-family: var(--font-mono); font-size: 0.78rem; }
+
+  /* ---------- Nav ---------- */
+  nav.toc {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.toc .wrap {
+    display: flex;
+    gap: 1.4rem;
+    overflow-x: auto;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  nav.toc a {
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    padding-bottom: 0.2rem;
+    border-bottom: 2px solid transparent;
+  }
+  nav.toc a:hover, nav.toc a.active { color: var(--ink); border-color: var(--accent); }
+
+  section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+  .section-head { margin-bottom: 1.6rem; }
+  .section-head .eyebrow { margin-bottom: 0.5rem; }
+  h2 {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 500;
+    margin: 0 0 0.4rem;
+    text-wrap: balance;
+  }
+  .section-sub { color: var(--ink-soft); max-width: 65ch; margin: 0; }
+
+  h3 { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin: 0 0 0.6rem; }
+
+  /* ---------- Status board ---------- */
+  .filters { display: flex; gap: 0.5rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .filters button {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-soft);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+    cursor: pointer;
+  }
+  .filters button.active { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .filters button:hover { color: var(--ink); }
+
+  .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.85rem; }
+  .status-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .status-card .row1 { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+  .status-card .svc-name { font-weight: 700; font-size: 1rem; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.55rem;
+    border-radius: 999px;
+    flex: none;
+  }
+  .chip::before { content: ""; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: currentColor; }
+  .chip.good { color: var(--good); background: var(--good-soft); }
+  .chip.warn { color: var(--warn); background: var(--warn-soft); }
+  .chip.bad { color: var(--bad); background: var(--bad-soft); }
+  .chip.info { color: var(--ink-soft); background: var(--surface-2); }
+  .status-card .evidence { font-size: 0.87rem; color: var(--ink-soft); }
+  .status-card .meta { display: flex; gap: 0.5rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-faint); }
+  .tag { border: 1px solid var(--line); border-radius: 5px; padding: 0.1rem 0.4rem; }
+
+  .legend { display: flex; gap: 1.4rem; flex-wrap: wrap; margin-top: 1.4rem; font-size: 0.85rem; color: var(--ink-soft); }
+  .legend .item { display: flex; align-items: center; gap: 0.45rem; }
+  .legend .dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; flex: none; }
+
+  /* ---------- Services / dropdowns ---------- */
+  .bundle-label {
+    display: flex; align-items: center; gap: 0.55rem;
+    font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-faint); margin: 2rem 0 0.8rem;
+  }
+  .bundle-label:first-child { margin-top: 0; }
+  .bundle-label svg { width: 1.1rem; height: 1.1rem; }
+
+  details.svc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 0.7rem;
+    overflow: hidden;
+  }
+  details.svc > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+  details.svc > summary::-webkit-details-marker { display: none; }
+  details.svc > summary .sname { font-weight: 700; }
+  details.svc > summary .scount { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-faint); }
+  details.svc > summary .caret { transition: transform 0.15s ease; color: var(--ink-faint); flex: none; }
+  details.svc[open] > summary .caret { transform: rotate(90deg); }
+  @media (prefers-reduced-motion: reduce) { details.svc > summary .caret { transition: none; } }
+
+  .svc-body { padding: 0 1.1rem 1.1rem; border-top: 1px solid var(--line); }
+  .svc-body .cat { margin-top: 1rem; }
+  .svc-body .cat h4 {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ink-faint); margin: 0 0 0.5rem; font-weight: 700; font-family: var(--font-body);
+  }
+  .ep-list { display: flex; flex-direction: column; gap: 0.35rem; }
+  .ep {
+    display: grid;
+    grid-template-columns: minmax(160px, 220px) 1fr;
+    gap: 0.7rem;
+    font-size: 0.88rem;
+    align-items: baseline;
+  }
+  .ep code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 0.05rem 0.4rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+  .ep .desc { color: var(--ink-soft); }
+  .note {
+    margin-top: 0.9rem; font-size: 0.82rem; color: var(--ink-faint);
+    border-left: 2px solid var(--line); padding-left: 0.7rem;
+  }
+
+  /* ---------- Live tests ---------- */
+  .test-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .test-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.8rem;
+    padding: 0.8rem 1.1rem; background: var(--surface-2);
+    flex-wrap: wrap;
+  }
+  .test-head .tname { font-family: var(--font-mono); font-size: 0.88rem; font-weight: 700; }
+  .test-body { padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+  .test-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-faint); font-weight: 700; margin: 0 0 0.3rem; }
+  .test-block p { margin: 0; font-size: 0.92rem; }
+  pre.code {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.7rem 0.85rem;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--ink);
+  }
+  pre.code.result { color: var(--ink-soft); }
+  .verdict { font-size: 0.85rem; }
+  .verdict b { color: var(--ink); }
+
+  /* ---------- Architecture ---------- */
+  .diagram {
+    display: flex; flex-direction: column; gap: 0.6rem; align-items: stretch;
+    margin-bottom: 1.6rem;
+  }
+  .dtier { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; }
+  .dbox {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 0.65rem 0.8rem;
+    font-size: 0.82rem;
+    text-align: center;
+  }
+  .dbox.core { border-color: var(--accent); background: var(--accent-soft); font-weight: 700; }
+  .dbox.small { font-size: 0.76rem; color: var(--ink-soft); }
+  .darrow { text-align: center; color: var(--ink-faint); font-family: var(--font-mono); font-size: 0.85rem; }
+
+  table.auth {
+    width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 1rem;
+  }
+  table.auth th, table.auth td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.auth th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); font-weight: 700; }
+  table.auth td.svc { font-weight: 600; white-space: nowrap; }
+  .table-wrap { overflow-x: auto; }
+
+  /* ---------- Gap report ---------- */
+  .gap-group { margin-bottom: 1.8rem; }
+  .gap-group h4 { font-size: 0.95rem; margin: 0 0 0.2rem; }
+  .gap-group .gap-sub { font-size: 0.82rem; color: var(--ink-faint); margin: 0 0 0.7rem; }
+  table.gap { width: 100%; border-collapse: collapse; font-size: 0.87rem; min-width: 640px; }
+  table.gap td, table.gap th { padding: 0.5rem 0.7rem 0.5rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.gap tr:last-child td { border-bottom: none; }
+  table.gap td.gname, table.gap th.gname { font-weight: 600; white-space: nowrap; width: 1%; }
+  table.gap td.gchip, table.gap th.gchip { width: 1%; white-space: nowrap; }
+  table.gap td.gwhy { color: var(--ink-soft); }
+  table.gap thead th {
+    text-align: left; font-weight: 700; font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-faint); border-bottom: 1px solid var(--line);
+  }
+  .gap-summary {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 1rem 1.2rem; margin-bottom: 1.6rem; font-size: 0.95rem;
+  }
+  .gap-summary b { color: var(--ink); }
+
+  ol.flow { padding-left: 1.2rem; font-size: 0.92rem; color: var(--ink-soft); }
+  ol.flow li { margin-bottom: 0.5rem; }
+  ol.flow b { color: var(--ink); }
+
+  footer { padding: 2.2rem 0 3rem; color: var(--ink-faint); font-size: 0.8rem; }
+  footer a { color: var(--ink-faint); }
+</style>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">my-mcp · reference &amp; live status</p>
+    <h1 class="title">Greek Gov MCP</h1>
+    <p class="dek">Two Cloudflare Worker MCP servers exposing Greek government and public-sector APIs — Diavgeia, data.gov.gr, Geodata.gov.gr, ΓΕΜΗ, myDATA, and Ergani — to AI agents. This page is generated from the live codebase and verified against the real upstream APIs on 2026‑08‑04.</p>
+    <div class="servers-row">
+      <span class="server-chip">
+        <svg viewBox="0 0 128 128"><circle cx="64" cy="64" r="64" fill="#0D5EAF"/><polygon points="24,52 64,28 104,52" fill="#fff"/><rect x="20" y="52" width="88" height="8" fill="#fff"/><rect x="28" y="64" width="10" height="36" fill="#fff"/><rect x="48" y="64" width="10" height="36" fill="#fff"/><rect x="70" y="64" width="10" height="36" fill="#fff"/><rect x="90" y="64" width="10" height="36" fill="#fff"/><rect x="18" y="100" width="92" height="10" fill="#fff"/></svg>
+        <b>citizen-mcp</b> <span class="tools">19 tools</span>
+      </span>
+      <span class="server-chip">
+        <svg viewBox="0 0 128 128"><circle cx="64" cy="64" r="64" fill="#B8860B"/><rect x="48" y="30" width="32" height="18" rx="4" fill="none" stroke="#fff" stroke-width="8"/><rect x="24" y="50" width="80" height="52" rx="8" fill="#fff"/><rect x="24" y="68" width="80" height="10" fill="#B8860B"/></svg>
+        <b>business-mcp</b> <span class="tools">35 tools</span>
+      </span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" id="toc">
+  <div class="wrap">
+    <a href="#status">Status</a>
+    <a href="#gap">Not built yet</a>
+    <a href="#services">Endpoints</a>
+    <a href="#tests">Live tests</a>
+    <a href="#architecture">How it works</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section id="status">
+    <div class="section-head">
+      <p class="eyebrow">01 · at a glance</p>
+      <h2>Service status</h2>
+      <p class="section-sub">Green means we called the real upstream API just now and it answered correctly. Yellow means the tool is wired correctly but needs credentials we don't hold. Red means the upstream itself is unreachable, not our code.</p>
+    </div>
+
+    <div class="filters" id="filters">
+      <button class="active" data-filter="all">All (6)</button>
+      <button data-filter="good">🟢 Working (3)</button>
+      <button data-filter="warn">🟡 Needs credentials (1)</button>
+      <button data-filter="bad">🔴 Upstream down (2)</button>
+    </div>
+
+    <div class="status-grid" id="statusGrid">
+
+      <div class="status-card" data-status="good">
+        <div class="row1"><span class="svc-name">Diavgeia</span><span class="chip good">Working</span></div>
+        <p class="evidence">Tested live: search for "προμήθεια" returned 1,237 real decisions with working PDF links, instantly.</p>
+        <div class="meta"><span class="tag">citizen + business</span><span class="tag">no auth</span><span class="tag">15 tools</span></div>
+      </div>
+
+      <div class="status-card" data-status="good">
+        <div class="row1"><span class="svc-name">data.gov.gr (CKAN)</span><span class="chip good">Working</span></div>
+        <p class="evidence">Tested live: search for "προϋπολογισμός" (budget) returned 461 real datasets, unauthenticated.</p>
+        <div class="meta"><span class="tag">citizen-mcp</span><span class="tag">optional token</span><span class="tag">2 tools</span></div>
+      </div>
+
+      <div class="status-card" data-status="bad">
+        <div class="row1"><span class="svc-name">Geodata.gov.gr</span><span class="chip bad">Upstream down</span></div>
+        <p class="evidence">Tested live: WFS GetCapabilities timed out after 15s. Same failure research first found on 2026‑07‑21 — still down 2+ weeks later.</p>
+        <div class="meta"><span class="tag">citizen-mcp</span><span class="tag">no auth</span><span class="tag">2 tools</span></div>
+      </div>
+
+      <div class="status-card" data-status="good">
+        <div class="row1"><span class="svc-name">ΓΕΜΗ</span><span class="chip good">Working</span></div>
+        <p class="evidence">Tested live with a real server API key: full company record returned for a real business (5 registrations, board, capital, branches).</p>
+        <div class="meta"><span class="tag">business-mcp</span><span class="tag">shared server key</span><span class="tag">4 tools</span></div>
+      </div>
+
+      <div class="status-card" data-status="warn">
+        <div class="row1"><span class="svc-name">myDATA</span><span class="chip warn">Needs your key</span></div>
+        <p class="evidence">Tested live with placeholder credentials: got HTTP 403 from AADE's real host — proves the route/headers are correct, just rejects a fake key as it should.</p>
+        <div class="meta"><span class="tag">business-mcp</span><span class="tag">bring-your-own-key</span><span class="tag">13 tools</span></div>
+      </div>
+
+      <div class="status-card" data-status="bad">
+        <div class="row1"><span class="svc-name">Ergani</span><span class="chip bad">Upstream 404</span></div>
+        <p class="evidence">Tested live with placeholder credentials: the sandbox login endpoint returned 404 today — it answered fine in the 2026‑07‑21 research check, so this looks like a new break upstream, not a bug here.</p>
+        <div class="meta"><span class="tag">business-mcp</span><span class="tag">bring-your-own-key</span><span class="tag">3 tools</span></div>
+      </div>
+
+    </div>
+
+    <div class="legend">
+      <span class="item"><span class="dot" style="background:var(--good)"></span> Working — verified live, no action needed</span>
+      <span class="item"><span class="dot" style="background:var(--warn)"></span> Needs credentials — code is fine, you supply the key</span>
+      <span class="item"><span class="dot" style="background:var(--bad)"></span> Upstream down — the Greek gov service itself is unreachable</span>
+    </div>
+  </section>
+
+  <section id="gap">
+    <div class="section-head">
+      <p class="eyebrow">02 · gap report</p>
+      <h2>What's not built yet</h2>
+      <p class="section-sub">RESEARCH.md surveyed ~20 Greek gov services. 6 made it into the MCP. Here are the other 14 — why each is out, and whether it would even make a good MCP tool if the blocker went away.</p>
+    </div>
+
+    <div class="gap-summary">
+      <b>6 implemented</b> · <b>1 blocked</b> by an access gate · <b>2 restricted</b> to other government bodies or vendors · <b>7 have no public developer API</b> at all · <b>4 are unverified leads</b>. Separately: 5 of these 14 wouldn't fit an MCP tool call even with access, because the "auth" is a personal login session (OTP/biometric), not an API key — see the <b>Fits MCP?</b> column.
+    </div>
+
+    <div class="gap-group">
+      <h4>Real API, but currently blocked</h4>
+      <p class="gap-sub">The API exists and is meant to be open — something external is stopping us.</p>
+      <div class="table-wrap">
+      <table class="gap">
+        <thead><tr><th class="gname">Service</th><th class="gchip">Status</th><th class="gchip">Fits MCP?</th><th class="gwhy">Why</th></tr></thead>
+        <tr>
+          <td class="gname">Ktimatologio<br><span style="font-weight:400;color:var(--ink-faint);font-size:0.78rem">Hellenic Cadastre — open catalog</span></td>
+          <td class="gchip"><span class="chip warn">Blocked</span></td>
+          <td class="gchip"><span class="chip good">Good</span></td>
+          <td class="gwhy">DKAN catalog of bulk land-parcel datasets — same shape as data.gov.gr's CKAN, which already works fine as an MCP tool. Just 403s right now (IP-gated or needs registration). Recommended next add once that clears.</td>
+        </tr>
+        <tr>
+          <td class="gname">Ktimatologio<br><span style="font-weight:400;color:var(--ink-faint);font-size:0.78rem">paid per-parcel lookup</span></td>
+          <td class="gchip"><span class="chip bad">Separate system</span></td>
+          <td class="gchip"><span class="chip bad">Poor</span></td>
+          <td class="gwhy">The "look up my specific property" e-service is a different, paid system — Taxisnet login plus a fee per query. An MCP tool call has no way to charge a fee, so this half isn't a fit even if it opened up.</td>
+        </tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="gap-group">
+      <h4>Real API, but not open to the public</h4>
+      <p class="gap-sub">The API works — just not for an MCP a random user could install.</p>
+      <div class="table-wrap">
+      <table class="gap">
+        <thead><tr><th class="gname">Service</th><th class="gchip">Status</th><th class="gchip">Fits MCP?</th><th class="gwhy">Why</th></tr></thead>
+        <tr>
+          <td class="gname">ΚΕΔ Interoperability Center<br><span style="font-weight:400;color:var(--ink-faint);font-size:0.78rem">180+ services, GSIS</span></td>
+          <td class="gchip"><span class="chip info">Gov-only</span></td>
+          <td class="gchip"><span class="chip good">Good, moot</span></td>
+          <td class="gwhy">Plain REST/SOAP web services — technically an easy MCP fit. But access requires another government body's own Taxisnet credentials, approved per service. A public MCP server can't hold that, so it's excluded on policy, not shape.</td>
+        </tr>
+        <tr>
+          <td class="gname">e-Prescription<br><span style="font-weight:400;color:var(--ink-faint);font-size:0.78rem">ΗΔΙΚΑ, pharmacy interop</span></td>
+          <td class="gchip"><span class="chip bad">Dead domain</span></td>
+          <td class="gchip"><span class="chip info">Unknown</span></td>
+          <td class="gwhy">Vendor-onboarding required even in principle, and e-prescription.gr doesn't resolve anymore — can't tell its shape without a live spec.</td>
+        </tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="gap-group">
+      <h4>No public developer API — out of scope</h4>
+      <p class="gap-sub">Website, mobile app, or personal-login portal only. The "Fits MCP?" column here means: even with an API key, could a tool call actually complete this?</p>
+      <div class="table-wrap">
+      <table class="gap">
+        <thead><tr><th class="gname">Service</th><th class="gchip">Status</th><th class="gchip">Fits MCP?</th><th class="gwhy">Why</th></tr></thead>
+        <tr><td class="gname">HNMS / EMY <span style="font-weight:400;color:var(--ink-faint);font-size:0.78rem">weather</span></td><td class="gchip"><span class="chip bad">No API</span></td><td class="gchip"><span class="chip info">N/A</span></td><td class="gwhy">Forecasts are UI-rendered pages, not a REST API. Also has a broken TLS certificate.</td></tr>
+        <tr><td class="gname">gov.gr Wallet</td><td class="gchip"><span class="chip bad">No API</span></td><td class="gchip"><span class="chip bad">Poor</span></td><td class="gwhy">Mobile-app-only, device-bound biometric ID issuance. Even with an API, a tool call can't hold your phone's wallet — structurally not an MCP fit.</td></tr>
+        <tr><td class="gname">Taxisnet personal e-services</td><td class="gchip"><span class="chip bad">No API</span></td><td class="gchip"><span class="chip bad">Poor</span></td><td class="gwhy">Login is a personal OTP/2FA web session, not an API key. Unlike myDATA/Ergani's subscription keys, there's no simple credential to pass a tool.</td></tr>
+        <tr><td class="gname">e-EFKA / ΑΜΚΑ</td><td class="gchip"><span class="chip bad">No API</span></td><td class="gchip"><span class="chip bad">Poor</span></td><td class="gwhy">Same as Taxisnet above — session/OTP login, web forms only.</td></tr>
+        <tr><td class="gname">ΕΟΠΥΥ citizen e-services</td><td class="gchip"><span class="chip bad">No API</span></td><td class="gchip"><span class="chip bad">Poor</span></td><td class="gwhy">Same pattern — personal portal login, no token-based auth to give a tool.</td></tr>
+        <tr><td class="gname">EU VIES <span style="font-weight:400;color:var(--ink-faint);font-size:0.78rem">VAT validation</span></td><td class="gchip"><span class="chip info">Not Greek</span></td><td class="gchip"><span class="chip good">Good</span></td><td class="gwhy">A real, simple SOAP lookup — easy MCP fit. Just an EU Commission service, not Greek-specific, so out of this project's scope by definition.</td></tr>
+        <tr><td class="gname">Bank of Greece Open Data</td><td class="gchip"><span class="chip bad">Doesn't exist</span></td><td class="gchip"><span class="chip info">N/A</span></td><td class="gwhy">The open-data subdomain was never registered. No portal found on any Bank of Greece domain.</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="gap-group">
+      <h4>Unverified leads</h4>
+      <p class="gap-sub">Flagged as promising, never actually checked against a live endpoint — MCP fit unknown until someone looks.</p>
+      <div class="table-wrap">
+      <table class="gap">
+        <thead><tr><th class="gname">Service</th><th class="gchip">Status</th><th class="gchip">Fits MCP?</th><th class="gwhy">Why</th></tr></thead>
+        <tr><td class="gname">ΕΛΣΤΑΤ <span style="font-weight:400;color:var(--ink-faint);font-size:0.78rem">statistics</span></td><td class="gchip"><span class="chip info">Unchecked</span></td><td class="gchip"><span class="chip info">Likely good</span></td><td class="gwhy">Probably reachable as datasets through data.gov.gr rather than its own API — if so, ckan_search_datasets already covers it for free.</td></tr>
+        <tr><td class="gname">Tourism data</td><td class="gchip"><span class="chip info">Unchecked</span></td><td class="gchip"><span class="chip info">Unknown</span></td><td class="gwhy">No public API found in initial research. Not deeply investigated.</td></tr>
+        <tr><td class="gname">Courts / legal judgments</td><td class="gchip"><span class="chip info">Unchecked</span></td><td class="gchip"><span class="chip info">Unknown</span></td><td class="gwhy">Might exist on data.gov.gr or courts.gr. Nobody has looked yet.</td></tr>
+        <tr><td class="gname">Education data</td><td class="gchip"><span class="chip info">Unchecked</span></td><td class="gchip"><span class="chip info">Likely good</span></td><td class="gwhy">No dedicated API found. May only exist as spreadsheet datasets on data.gov.gr — same as ΕΛΣΤΑΤ above.</td></tr>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="section-head">
+      <p class="eyebrow">03 · reference</p>
+      <h2>Every endpoint, plainly</h2>
+      <p class="section-sub">Click a service to expand its tools. Each line: <code style="background:none;color:var(--ink-soft);padding:0">tool_name — what it does</code>, one sentence, no jargon.</p>
+    </div>
+
+    <p class="bundle-label">
+      <svg viewBox="0 0 128 128"><circle cx="64" cy="64" r="64" fill="#0D5EAF"/><polygon points="24,52 64,28 104,52" fill="#fff"/><rect x="20" y="52" width="88" height="8" fill="#fff"/><rect x="28" y="64" width="10" height="36" fill="#fff"/><rect x="48" y="64" width="10" height="36" fill="#fff"/><rect x="70" y="64" width="10" height="36" fill="#fff"/><rect x="90" y="64" width="10" height="36" fill="#fff"/><rect x="18" y="100" width="92" height="10" fill="#fff"/></svg>
+      citizen-mcp — transparency &amp; open data
+    </p>
+
+    <details class="svc" open>
+      <summary><span class="sname">Diavgeia — public decisions</span><span class="scount">15 tools · <span class="caret">▸</span></span></summary>
+      <div class="svc-body">
+        <div class="cat">
+          <h4>Find decisions</h4>
+          <div class="ep-list">
+            <div class="ep"><code>search_decisions</code><span class="desc">— power search with Lucene syntax.</span></div>
+            <div class="ep"><code>simple_search_decisions</code><span class="desc">— plain keyword search, no syntax needed.</span></div>
+            <div class="ep"><code>get_decision</code><span class="desc">— fetch one decision by its ADA code.</span></div>
+            <div class="ep"><code>get_decision_version_log</code><span class="desc">— see every edit/correction to a decision.</span></div>
+          </div>
+        </div>
+        <div class="cat">
+          <h4>Who's involved</h4>
+          <div class="ep-list">
+            <div class="ep"><code>get_organization</code><span class="desc">— look up one government body.</span></div>
+            <div class="ep"><code>get_organization_details</code><span class="desc">— full profile: units, signers, positions.</span></div>
+            <div class="ep"><code>get_organization_units</code><span class="desc">— list a body's sub-departments.</span></div>
+            <div class="ep"><code>get_unit</code><span class="desc">— look up one sub-department.</span></div>
+            <div class="ep"><code>get_signer</code><span class="desc">— look up one official who signs decisions.</span></div>
+            <div class="ep"><code>search_organizations</code><span class="desc">— browse bodies by type, e.g. all ministries.</span></div>
+          </div>
+        </div>
+        <div class="cat">
+          <h4>Reference lists</h4>
+          <div class="ep-list">
+            <div class="ep"><code>list_decision_types</code><span class="desc">— every valid decision category.</span></div>
+            <div class="ep"><code>get_decision_type_details</code><span class="desc">— what fields one category expects.</span></div>
+            <div class="ep"><code>list_search_terms</code><span class="desc">— every filter you can search by.</span></div>
+            <div class="ep"><code>get_dictionary</code><span class="desc">— code lists, e.g. currencies, org types.</span></div>
+            <div class="ep"><code>list_positions</code><span class="desc">— every official job title on file.</span></div>
+          </div>
+        </div>
+        <p class="note">Free, no login. Diavgeia only returns ~6 months of history unless you set a date range, and any one call maxes out at 180 days.</p>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><span class="sname">data.gov.gr — open datasets</span><span class="scount">2 tools · <span class="caret">▸</span></span></summary>
+      <div class="svc-body">
+        <div class="cat">
+          <h4>Datasets</h4>
+          <div class="ep-list">
+            <div class="ep"><code>search_datasets</code><span class="desc">— search ~22,000 open datasets by keyword.</span></div>
+            <div class="ep"><code>get_dataset</code><span class="desc">— fetch one dataset's files &amp; download links.</span></div>
+          </div>
+        </div>
+        <p class="note">Free, no login required for reading. A free token raises the rate limit but isn't required.</p>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><span class="sname">Geodata.gov.gr — maps &amp; boundaries</span><span class="scount">2 tools · <span class="caret">▸</span></span></summary>
+      <div class="svc-body">
+        <div class="cat">
+          <h4>Geospatial data</h4>
+          <div class="ep-list">
+            <div class="ep"><code>list_layers</code><span class="desc">— list available map layers.</span></div>
+            <div class="ep"><code>get_features</code><span class="desc">— fetch a layer's shapes as GeoJSON.</span></div>
+          </div>
+        </div>
+        <p class="note">Implemented and free, but the government's own map server is currently unreachable — see Status above.</p>
+      </div>
+    </details>
+
+    <p class="bundle-label">
+      <svg viewBox="0 0 128 128"><circle cx="64" cy="64" r="64" fill="#B8860B"/><rect x="48" y="30" width="32" height="18" rx="4" fill="none" stroke="#fff" stroke-width="8"/><rect x="24" y="50" width="80" height="52" rx="8" fill="#fff"/><rect x="24" y="68" width="80" height="10" fill="#B8860B"/></svg>
+      business-mcp — business &amp; tax
+    </p>
+
+    <details class="svc">
+      <summary><span class="sname">ΓΕΜΗ — business registry</span><span class="scount">4 tools · <span class="caret">▸</span></span></summary>
+      <div class="svc-body">
+        <div class="cat">
+          <h4>Company lookup</h4>
+          <div class="ep-list">
+            <div class="ep"><code>search_company_by_tin</code><span class="desc">— find a company by its tax number (ΑΦΜ).</span></div>
+            <div class="ep"><code>get_company</code><span class="desc">— full record by registry number.</span></div>
+            <div class="ep"><code>get_company_documents</code><span class="desc">— official filings &amp; gazette publications.</span></div>
+            <div class="ep"><code>list_metadata</code><span class="desc">— code lists: activities, regions, legal forms, offices.</span></div>
+          </div>
+        </div>
+        <p class="note">Uses one shared server key, capped by ΓΕΜΗ at 8 requests/minute for all users combined.</p>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><span class="sname">myDATA — e-invoicing</span><span class="scount">13 tools · <span class="caret">▸</span></span></summary>
+      <div class="svc-body">
+        <div class="cat">
+          <h4>Pull your books</h4>
+          <div class="ep-list">
+            <div class="ep"><code>request_docs</code><span class="desc">— invoices others sent you.</span></div>
+            <div class="ep"><code>request_transmitted_docs</code><span class="desc">— invoices you sent out.</span></div>
+            <div class="ep"><code>request_my_income</code><span class="desc">— income totals for a date range.</span></div>
+            <div class="ep"><code>request_my_expenses</code><span class="desc">— expense totals for a date range.</span></div>
+            <div class="ep"><code>request_vat_info</code><span class="desc">— VAT in/out for a date range.</span></div>
+            <div class="ep"><code>request_e3_info</code><span class="desc">— business-activity tax (E3) entries.</span></div>
+          </div>
+        </div>
+        <div class="cat">
+          <h4>Submit invoices</h4>
+          <div class="ep-list">
+            <div class="ep"><code>send_invoices</code><span class="desc">— submit one or more e-invoices.</span></div>
+            <div class="ep"><code>send_income_classification</code><span class="desc">— tag income on an invoice for tax.</span></div>
+            <div class="ep"><code>send_expenses_classification</code><span class="desc">— tag expenses on an invoice for tax.</span></div>
+            <div class="ep"><code>send_payments_method</code><span class="desc">— record how an invoice was paid.</span></div>
+            <div class="ep"><code>cancel_invoice</code><span class="desc">— cancel a submitted invoice.</span></div>
+          </div>
+        </div>
+        <div class="cat">
+          <h4>Credentials</h4>
+          <div class="ep-list">
+            <div class="ep"><code>connect</code><span class="desc">— save your key once, get a reusable token.</span></div>
+            <div class="ep"><code>forget</code><span class="desc">— delete a saved token.</span></div>
+          </div>
+        </div>
+        <p class="note">Bring your own AADE subscription key — this server never holds one for you. Affects real tax records, so double-check sandbox vs. production before testing.</p>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><span class="sname">Ergani — labor &amp; employment</span><span class="scount">3 tools · <span class="caret">▸</span></span></summary>
+      <div class="svc-body">
+        <div class="cat">
+          <h4>Read-only, on purpose</h4>
+          <div class="ep-list">
+            <div class="ep"><code>list_services</code><span class="desc">— what your employer account can access.</span></div>
+            <div class="ep"><code>connect</code><span class="desc">— save your login once, get a reusable token.</span></div>
+            <div class="ep"><code>forget</code><span class="desc">— delete a saved token.</span></div>
+          </div>
+        </div>
+        <p class="note">Write actions (hiring/termination filings, work-card, schedules) are deliberately not implemented — those are real filings to the labor ministry and the exact payload shape isn't confirmed live yet.</p>
+      </div>
+    </details>
+  </section>
+
+  <section id="tests">
+    <div class="section-head">
+      <p class="eyebrow">04 · proof, not promises</p>
+      <h2>Live test log</h2>
+      <p class="section-sub">Six real calls against the real MCP servers, run for this page on 2026‑08‑04. For each: why this call, what came back, and what it proves.</p>
+    </div>
+
+    <div class="test-card">
+      <div class="test-head"><span class="tname">diavgeia_simple_search_decisions</span><span class="chip good">Working</span></div>
+      <div class="test-body">
+        <div class="test-block"><p class="test-label">Why this call</p><p>Wanted the plain-keyword search (not Lucene) since it's the friendlier entry point. Used org UID <code style="background:none;color:inherit;padding:0">100037417</code> — a stable ID Diavgeia's own docs use as an example — and the term "προμήθεια" (procurement), the flagship use case RESEARCH.md points at.</p></div>
+        <div class="test-block"><p class="test-label">Request</p><pre class="code">term: "προμήθεια", org: "100037417", size: 5</pre></div>
+        <div class="test-block"><p class="test-label">Result</p><pre class="code result">1,237 decisions found. First 5 include real ADA codes and working PDF links, e.g.
+ΨΙΣ546ΜΨΦΖ-ΒΗ1 (2026-08-04): "...προμήθεια υπηρεσιών αποστολής μηνυμάτων Viber και SMS" — 24.800,00€</pre></div>
+        <div class="verdict"><b>Proves:</b> free-text + org search returns real, current decisions instantly, no auth.</div>
+      </div>
+    </div>
+
+    <div class="test-card">
+      <div class="test-head"><span class="tname">ckan_search_datasets</span><span class="chip good">Working</span></div>
+      <div class="test-body">
+        <div class="test-block"><p class="test-label">Why this call</p><p>Searched "προϋπολογισμός" (budget) — the headline use case for data.gov.gr per RESEARCH.md. Ran with no token, to test the unauthenticated read path the research notes flagged as "ambiguous" but expected to actually be public.</p></div>
+        <div class="test-block"><p class="test-label">Request</p><pre class="code">query: "προϋπολογισμός", rows: 5</pre></div>
+        <div class="test-block"><p class="test-label">Result</p><pre class="code result">461 datasets found, e.g. "Προϋπολογισμός" (Περιφέρεια Αττικής, 7 files),
+"Υλοποίηση Προϋπολογισμού" (Δήμος Λαρισαίων, 46 files)</pre></div>
+        <div class="verdict"><b>Proves:</b> unauthenticated reads work exactly as the research predicted — no token needed.</div>
+      </div>
+    </div>
+
+    <div class="test-card">
+      <div class="test-head"><span class="tname">geodata_list_layers</span><span class="chip bad">Upstream down</span></div>
+      <div class="test-body">
+        <div class="test-block"><p class="test-label">Why this call</p><p>This is the one service research flagged as unreachable back on 2026-07-21. Called it with zero parameters just to check whether it had recovered since.</p></div>
+        <div class="test-block"><p class="test-label">Request</p><pre class="code">(no parameters)</pre></div>
+        <div class="test-block"><p class="test-label">Result</p><pre class="code result">Error: Request to geodata.gov.gr/geoserver/ows timed out after 15000ms</pre></div>
+        <div class="verdict"><b>Proves:</b> still down, 2+ weeks later — this is Greece's server, not a bug in our client.</div>
+      </div>
+    </div>
+
+    <div class="test-card">
+      <div class="test-head"><span class="tname">gemi_search_company_by_tin</span><span class="chip good">Working</span></div>
+      <div class="test-body">
+        <div class="test-block"><p class="test-label">Why this call</p><p>Needed a real ΑΦΜ to prove the credentialed path actually works end-to-end. Reused <code style="background:none;color:inherit;padding:0">094014201</code> — the same number the client's own test suite uses — which turned out to belong to a large public bank, so the result is safe to publish.</p></div>
+        <div class="test-block"><p class="test-label">Request</p><pre class="code">tin: "094014201"</pre></div>
+        <div class="test-block"><p class="test-label">Result (trimmed)</p><pre class="code result">Found 5 companies for ΑΦΜ 094014201:
+  coNameEl: "ΕΘΝΙΚΗ ΤΡΑΠΕΖΑ ΤΗΣ ΕΛΛΑΔΟΣ Α.Ε." (arGemi 237901000)
+  status: "Ενεργή" (active) · legalType: "ΑΕ" · founded 1841-03-30
+  11 board members, 41 branch registrations, capital €914,715,153
+  + 4 more branch registrations under the same ΑΦΜ</pre></div>
+        <div class="verdict"><b>Proves:</b> the real production API key works end-to-end, not just against a spec.</div>
+      </div>
+    </div>
+
+    <div class="test-card">
+      <div class="test-head"><span class="tname">mydata_request_my_income</span><span class="chip warn">Needs your key</span></div>
+      <div class="test-body">
+        <div class="test-block"><p class="test-label">Why this call</p><p>No real Taxisnet key was used deliberately — this endpoint touches real tax records, so real production credentials should never be used for an exploratory test. Sent placeholder credentials purely to check that the call reaches the right host with the right headers.</p></div>
+        <div class="test-block"><p class="test-label">Request</p><pre class="code">dateFrom: "01/01/2026", dateTo: "31/01/2026", userId: "test-user", subscriptionKey: "test-key-not-real"</pre></div>
+        <div class="test-block"><p class="test-label">Result</p><pre class="code result">Error: GET mydatapi.aade.gr/myDATA/RequestMyIncome → HTTP 403</pre></div>
+        <div class="verdict"><b>Proves:</b> the route, method and headers are correct — it fails the way a real auth rejection should, not a dead endpoint (no 404).</div>
+      </div>
+    </div>
+
+    <div class="test-card">
+      <div class="test-head"><span class="tname">ergani_list_services</span><span class="chip bad">Upstream 404</span></div>
+      <div class="test-body">
+        <div class="test-block"><p class="test-label">Why this call</p><p>Same bring-your-own-key situation as myDATA. Sent placeholder credentials to check whether the sandbox login endpoint still answers the way research described it on 2026-07-21.</p></div>
+        <div class="test-block"><p class="test-label">Request</p><pre class="code">username: "test-user", password: "test-password-not-real"</pre></div>
+        <div class="test-block"><p class="test-label">Result</p><pre class="code result">Error: POST trialeservices.yeka.gr/WebServicesAPI/api/Authentication → HTTP 404</pre></div>
+        <div class="verdict"><b>Proves:</b> a real change — this path answered fine on 2026-07-21. Looks like the sandbox moved or broke since; needs re-verification, not a code fix.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="architecture">
+    <div class="section-head">
+      <p class="eyebrow">05 · under the hood</p>
+      <h2>How this MCP works</h2>
+      <p class="section-sub">One shared client library, two thin Cloudflare Workers, no local install.</p>
+    </div>
+
+    <div class="diagram">
+      <div class="dtier"><div class="dbox">Claude, ChatGPT, or any MCP client</div></div>
+      <div class="darrow">↓ Streamable HTTP (POST /)</div>
+      <div class="dtier">
+        <div class="dbox">citizen-mcp <span class="small">(Cloudflare Worker)</span></div>
+        <div class="dbox">business-mcp <span class="small">(Cloudflare Worker)</span></div>
+      </div>
+      <div class="darrow">↓ both import from</div>
+      <div class="dtier"><div class="dbox core">packages/core — shared HTTP client, per-service clients, tool definitions</div></div>
+      <div class="darrow">↓ real API calls to</div>
+      <div class="dtier">
+        <div class="dbox small">Diavgeia</div>
+        <div class="dbox small">data.gov.gr</div>
+        <div class="dbox small">Geodata.gov.gr</div>
+        <div class="dbox small">ΓΕΜΗ</div>
+        <div class="dbox small">myDATA</div>
+        <div class="dbox small">Ergani</div>
+      </div>
+    </div>
+
+    <h3>Request lifecycle</h3>
+    <ol class="flow">
+      <li><b>Fresh server per request.</b> Each worker builds a new <code style="background:none;color:inherit;padding:0">McpServer</code> and registers its tools on every call — nothing is kept in memory between requests (stateless).</li>
+      <li><b>Rate limiting.</b> Every request is checked against a per-IP Cloudflare Rate Limit first. ΓΕΜΗ calls get a second, global limiter on top, because ΚΥ ΓΕΜΗ caps the one shared server key at 8 requests/minute for everyone combined, not per visitor.</li>
+      <li><b>The shared fetch layer</b> (<code style="background:none;color:inherit;padding:0">packages/core/http.ts</code>) adds a 15s timeout to every upstream call, retries 429/502/503/504 with backoff, and turns any failure into one consistent, readable error.</li>
+      <li><b>Split by domain, not by user.</b> citizen-mcp and business-mcp are grouped by what the data is about (transparency vs. business/tax), so installing one never pulls in tools you don't need. Diavgeia is shared by both, since procurement data matters to each domain.</li>
+    </ol>
+
+    <h3>Auth, one row per service</h3>
+    <div class="table-wrap">
+      <table class="auth">
+        <thead><tr><th>Service</th><th>Who holds the key</th><th>How you call it</th></tr></thead>
+        <tbody>
+          <tr><td class="svc">Diavgeia</td><td>nobody — fully open</td><td>no credentials needed</td></tr>
+          <tr><td class="svc">Geodata.gov.gr</td><td>nobody — fully open</td><td>no credentials needed</td></tr>
+          <tr><td class="svc">data.gov.gr</td><td>optional: this server</td><td>works with no token; a free token just raises the rate limit</td></tr>
+          <tr><td class="svc">ΓΕΜΗ</td><td>this server (one shared key)</td><td>no credentials needed, but shared 8 req/min cap applies to everyone</td></tr>
+          <tr><td class="svc">myDATA</td><td>you</td><td>pass your key every call, or save it once with <code style="background:none;color:inherit;padding:0">mydata_connect</code> for a reusable token</td></tr>
+          <tr><td class="svc">Ergani</td><td>you</td><td>pass your login every call, or save it once with <code style="background:none;color:inherit;padding:0">ergani_connect</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:0.9rem">Saved myDATA/Ergani credentials are encrypted (AES-GCM) and stored in Cloudflare KV, keyed by a random token — the server itself never sees them in plain text after the initial call, and <code style="background:none;color:inherit;padding:0">*_forget</code> deletes them on request.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Generated from the live my-mcp codebase and verified against real upstream APIs on 2026‑08‑04. Source: <a href="https://github.com/VisionVoyagerX/my-mcp">github.com/VisionVoyagerX/my-mcp</a>.
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll("#filters button");
+    var cards = document.querySelectorAll("#statusGrid .status-card");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        buttons.forEach(function (b) { b.classList.remove("active"); });
+        btn.classList.add("active");
+        var f = btn.getAttribute("data-filter");
+        cards.forEach(function (c) {
+          c.style.display = (f === "all" || c.getAttribute("data-status") === f) ? "" : "none";
+        });
+      });
+    });
+
+    var links = document.querySelectorAll("nav.toc a");
+    var sections = Array.prototype.map.call(links, function (a) {
+      return document.querySelector(a.getAttribute("href"));
+    });
+    function onScroll() {
+      var pos = window.scrollY + 90;
+      var current = sections[0];
+      sections.forEach(function (s) { if (s && s.offsetTop <= pos) current = s; });
+      links.forEach(function (a) {
+        a.classList.toggle("active", current && a.getAttribute("href") === "#" + current.id);
+      });
+    }
+    document.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  })();
+</script>

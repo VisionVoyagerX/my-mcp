@@ -55,8 +55,12 @@ https://diavgeia.gov.gr/luminapi/opendata
 **Δοκιμή μέσω MCP Inspector** (γενική μορφή· δείτε §6 για τα ακριβή ορίσματα κάθε δοκιμής):
 
 ```bash
-# από τη ρίζα του repo, μετά από `pnpm run build`
-npx @modelcontextprotocol/inspector --cli node packages/bundle-transparency/dist/index.js \
+# από τη ρίζα του repo: ξεκινήστε το citizen-mcp worker τοπικά
+# (χρειάζεται Node 22+ για το wrangler)
+pnpm --filter @my-mcp/citizen-mcp run dev   # http://localhost:8787
+
+# σε άλλο τερματικό:
+npx @modelcontextprotocol/inspector --cli http://localhost:8787 \
   --method tools/call --tool-name <όνομα εργαλείου> --tool-arg <παράμετρος>=<τιμή>
 ```
 
@@ -157,7 +161,7 @@ curl ".../search/advanced?q=organizationUid:\"100037417\"%20AND%20issueDate:[DT(
 
 ## 6. Αναφορά δοκιμών — κάθε κλήση που δοκιμάστηκε, ανά endpoint
 
-Όλες οι δοκιμές έγιναν live στο `https://diavgeia.gov.gr/luminapi/opendata` στις 2026-07-23, τόσο με απευθείας `curl` (για να επαληθευτεί η ακριβής συμπεριφορά του upstream API πριν γραφτεί ο client) όσο και μέσω `npx @modelcontextprotocol/inspector --cli node packages/bundle-transparency/dist/index.js --method tools/call ...` (για να επαληθευτεί ολόκληρο το MCP tool, από είσοδο έως μορφοποιημένη έξοδο).
+Όλες οι δοκιμές έγιναν live στο `https://diavgeia.gov.gr/luminapi/opendata` στις 2026-07-23, τόσο με απευθείας `curl` (για να επαληθευτεί η ακριβής συμπεριφορά του upstream API πριν γραφτεί ο client) όσο και μέσω `npx @modelcontextprotocol/inspector --cli node packages/bundle-transparency/dist/index.js --method tools/call ...` (για να επαληθευτεί ολόκληρο το MCP tool, από είσοδο έως μορφοποιημένη έξοδο· ιστορική εγγραφή — το πακέτο `bundle-transparency` έχει έκτοτε αντικατασταθεί από το `citizen-mcp`, δείτε §2 για την τρέχουσα εντολή δοκιμής).
 
 ### `GET /search/advanced` — `diavgeia_search_decisions`
 
