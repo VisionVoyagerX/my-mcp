@@ -1,13 +1,14 @@
-name = "greekgov-mcp"
+name = "citizen-mcp"
 main = "src/worker.ts"
 compatibility_date = "2024-12-16"
 compatibility_flags = ["nodejs_compat"]
 
-# IP-based rate limiting for the open public endpoint (no accounts/API keys).
+# IP-based rate limiting for the open public endpoint (no accounts/API keys
+# needed anywhere in CitizenMCP — Diavgeia and CKAN are both unauthenticated).
 # See: https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/
 [[ratelimits]]
 name = "RATE_LIMITER"
-namespace_id = "1001"
+namespace_id = "2001"
 
   [ratelimits.simple]
   limit = 30

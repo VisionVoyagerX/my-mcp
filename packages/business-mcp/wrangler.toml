@@ -1,0 +1,32 @@
+name = "business-mcp"
+main = "src/worker.ts"
+compatibility_date = "2024-12-16"
+compatibility_flags = ["nodejs_compat"]
+
+# IP-based rate limiting for the open public endpoint (no accounts/API keys).
+# See: https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "3001"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60
+
+# GLOBAL (not per-IP — every request uses the same fixed key, see worker.ts)
+# rate limit for GEMI tool calls, matching ΚΥ ΓΕΜΗ's 8 req/min cap on the
+# single server-held GEMI_API_KEY (set separately via `wrangler secret put`,
+# never as a plain var). All public visitors share this one key and quota.
+[[ratelimits]]
+name = "GEMI_RATE_LIMITER"
+namespace_id = "3002"
+
+  [ratelimits.simple]
+  limit = 8
+  period = 60
+
+# Stores encrypted myDATA/Ergani credentials for the connect-once /
+# credentialToken system (see core/src/credentials/).
+[[kv_namespaces]]
+binding = "CREDENTIALS_KV"
+id = "86979364fbf64d97982994bd51d08077"

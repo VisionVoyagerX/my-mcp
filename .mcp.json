@@ -1,9 +1,8 @@
 {
   "mcpServers": {
-    "diavgeia-local": {
-      "command": "node",
-      "args": ["packages/bundle-transparency/dist/index.js"],
-      "cwd": "/home/nick/Projects/my-mcp"
+    "citizen-mcp": {
+      "type": "http",
+      "url": "https://citizen-mcp.nickdandis96.workers.dev"
     }
   }
 }

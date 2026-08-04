@@ -1,0 +1,40 @@
+{
+  "name": "@my-mcp/business-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cloudflare Worker hosting BusinessMCP: a public, rate-limited MCP server for Greek business/tax data (Diavgeia, ΓΕΜΗ, myDATA, Ergani).",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VisionVoyagerX/my-mcp",
+    "directory": "packages/business-mcp"
+  },
+  "keywords": [
+    "mcp",
+    "cloudflare",
+    "worker",
+    "greece",
+    "gov.gr",
+    "diavgeia",
+    "gemi",
+    "mydata",
+    "ergani"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "wrangler deploy --dry-run --outdir=dist",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@cloudflare/workers-types": "^5.20260721.1",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@my-mcp/core": "workspace:*",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "wrangler": "^4.113.0"
+  }
+}
