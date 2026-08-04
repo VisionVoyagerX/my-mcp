@@ -1,4 +1,5 @@
-import { buildQuery, fetchJson, GovApiError } from "../http.js";
+import * as XLSX from "xlsx";
+import { buildQuery, fetchBinary, fetchJson, GovApiError } from "../http.js";
 import {
   CkanDatasetSchema,
   CkanEnvelopeSchema,
@@ -6,6 +7,31 @@ import {
   type CkanDataset,
   type CkanSearchResult,
 } from "./types.js";
+
+/** Resources over this size aren't parsed in-memory in a Worker. */
+const MAX_RESOURCE_BYTES = 25 * 1024 * 1024;
+
+/** Data rows (excluding the header) returned per call unless overridden. */
+const DEFAULT_ROW_LIMIT = 50;
+const MAX_ROW_LIMIT = 500;
+
+export interface CkanResourceDataParams {
+  /** Max number of data rows to return, after the header row. Defaults to 50, capped at 500. */
+  limit?: number;
+  /** Row offset (0-based, after the header row). Defaults to 0. */
+  offset?: number;
+  /** Sheet name to read, for multi-sheet workbooks. Defaults to the first sheet. */
+  sheet?: string;
+}
+
+export interface CkanResourceData {
+  sheetNames: string[];
+  sheet: string;
+  columns: string[];
+  rows: unknown[][];
+  /** Total data rows in the sheet, independent of `limit`/`offset`. */
+  totalRows: number;
+}
 
 /**
  * data.gov.gr's CKAN Action API base, confirmed via the official token page
@@ -77,5 +103,71 @@ export class CkanClient {
       );
     }
     return envelope.result;
+  }
+
+  /**
+   * Downloads a dataset resource (from the `url` on a `CkanResource`, e.g.
+   * a CSV/XLS/XLSX file) and parses it into rows so callers can analyze
+   * tabular data without needing their own spreadsheet tooling.
+   *
+   * Deliberately doesn't send the CKAN API token: resource URLs can point
+   * to any host the dataset publisher chose (mirrors, external file
+   * stores), not just this client's configured CKAN `baseUrl`, so
+   * attaching a secret meant for the Action API would leak it to arbitrary
+   * third parties.
+   */
+  async getResourceData(
+    url: string,
+    params: CkanResourceDataParams = {},
+  ): Promise<CkanResourceData> {
+    const buffer = await fetchBinary(url);
+    if (buffer.byteLength > MAX_RESOURCE_BYTES) {
+      throw new GovApiError(
+        `Resource is ${(buffer.byteLength / (1024 * 1024)).toFixed(1)}MB, over the ` +
+          `${MAX_RESOURCE_BYTES / (1024 * 1024)}MB limit this tool can parse in-memory.`,
+        { url },
+      );
+    }
+
+    let workbook: XLSX.WorkBook;
+    try {
+      workbook = XLSX.read(new Uint8Array(buffer), { type: "array" });
+    } catch (cause) {
+      throw new GovApiError(
+        "Failed to parse resource as a spreadsheet (expected CSV, XLS, or XLSX)",
+        { url, cause },
+      );
+    }
+
+    const sheetNames = workbook.SheetNames;
+    const sheetName = params.sheet ?? sheetNames[0];
+    const worksheet = sheetName ? workbook.Sheets[sheetName] : undefined;
+    if (!sheetName || !worksheet) {
+      throw new GovApiError(
+        `Sheet "${params.sheet ?? ""}" not found. Available sheets: ${sheetNames.join(", ") || "none"}`,
+        { url },
+      );
+    }
+
+    const allRows = XLSX.utils.sheet_to_json<unknown[]>(worksheet, {
+      header: 1,
+      blankrows: false,
+      defval: null,
+    });
+    const [header, ...dataRows] = allRows;
+    const columns = (header ?? []).map((cell) =>
+      cell === null || cell === undefined ? "" : String(cell),
+    );
+
+    const offset = Math.max(params.offset ?? 0, 0);
+    const limit = Math.min(params.limit ?? DEFAULT_ROW_LIMIT, MAX_ROW_LIMIT);
+
+    return {
+      sheetNames,
+      sheet: sheetName,
+      columns,
+      rows: dataRows.slice(offset, offset + limit),
+      totalRows: dataRows.length,
+    };
   }
 }

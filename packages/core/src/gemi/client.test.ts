@@ -57,7 +57,7 @@ describe("GemiClient", () => {
       }),
     );
     expect(company.coNameEl).toBe("ΠΑΡΑΔΕΙΓΜΑ ΑΕ");
-    expect(company.arGemi).toBe(237954001);
+    expect(company.arGemi).toBe("237954001");
     expect(company.persons[0]?.personName).toBe("ΓΕΩΡΓΙΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ");
   });
 
@@ -75,7 +75,7 @@ describe("GemiClient", () => {
     const calledUrl = new URL(fetchMock.mock.calls[0]![0] as string);
     expect(calledUrl.searchParams.get("afm")).toBe("094014201");
     expect(results).toHaveLength(1);
-    expect(results[0]?.arGemi).toBe(237954001);
+    expect(results[0]?.arGemi).toBe("237954001");
     expect(results[0]?.coNameEl).toBe("ΠΑΡΑΔΕΙΓΜΑ ΑΕ");
   });
 
@@ -119,6 +119,7 @@ describe("GemiClient", () => {
       }),
     );
     expect(legalTypes).toHaveLength(2);
+    expect(legalTypes[0]?.id).toBe("3");
     expect(legalTypes[0]?.descr).toBe("Ανώνυμη Εταιρεία");
   });
 });

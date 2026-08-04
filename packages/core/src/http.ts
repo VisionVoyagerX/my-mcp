@@ -106,6 +106,46 @@ export async function fetchText(
   );
 }
 
+/**
+ * Same as `fetchText`, but returns the raw response bytes instead of
+ * decoding them as text — for binary payloads (spreadsheets, PDFs) where
+ * decoding as UTF-8 text would corrupt the content.
+ */
+export async function fetchBinary(
+  url: string | URL,
+  options: FetchJsonOptions = {},
+): Promise<ArrayBuffer> {
+  const { timeoutMs = 15_000, maxRetries = 2, ...init } = options;
+
+  let lastResponse: Response | undefined;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const response = await attemptFetch(url, init, timeoutMs);
+
+    if (response.ok) {
+      return await response.arrayBuffer();
+    }
+
+    lastResponse = response;
+
+    if (!RETRYABLE_STATUSES.has(response.status) || attempt === maxRetries) {
+      break;
+    }
+
+    const retryAfterMs = parseRetryAfterMs(response.headers.get("retry-after"));
+    await sleep(retryAfterMs ?? 2 ** attempt * 500);
+  }
+
+  const body = await lastResponse!.text().catch(() => "");
+  throw new GovApiError(
+    `${init.method ?? "GET"} ${String(url)} returned HTTP ${lastResponse!.status}`,
+    {
+      url: String(url),
+      status: lastResponse!.status,
+      body: body.slice(0, 2000),
+    },
+  );
+}
+
 /** Same as `fetchText`, but parses the body as JSON. */
 export async function fetchJson<T>(
   url: string | URL,

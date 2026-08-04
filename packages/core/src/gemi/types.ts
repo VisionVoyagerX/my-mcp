@@ -7,8 +7,13 @@ import { z } from "zod";
  * is only discoverable via the `Swagger-API-Docs-URL` response header on a
  * HEAD request to that page). Field names below are taken directly from
  * that spec's `definitions`. `.loose()` + `.nullish()` throughout since the
- * spec doesn't mark most fields `required` and this hasn't been exercised
- * against a live response from this sandbox (see CLAUDE.md network caveat).
+ * spec doesn't mark most fields `required`.
+ *
+ * Exercised end-to-end against real responses on 2026-08-04 with a real
+ * `GEMI_API_KEY` (metadata endpoints, `/companies` search, `/companies/{id}`,
+ * `/companies/{id}/documents`). The spec's claimed types are wrong in a few
+ * places it doesn't cover with a live check — search inline comments below
+ * for "2026-08-04" for the specific fields that diverge and why.
  */
 
 /** The small `{ id, descr }` shape used for nested refs inside `Company` (municipality, prefecture, legalType, gemiOffice, assemblySubjects, status). */
@@ -70,7 +75,10 @@ const GemiStockSchema = z
 
 export const GemiCompanySchema = z
   .object({
-    arGemi: z.number().nullish(),
+    // Spec says integer; every live response (search + single-company GET,
+    // verified 2026-08-04 with a real key) actually returns this as a
+    // string (e.g. "8515901000"). Accept both rather than trusting the spec.
+    arGemi: z.union([z.string(), z.number()]).nullish(),
     afm: z.string().nullish(),
     coNameEl: z.string().nullish(),
     coNamesEn: z.array(z.string()).default([]),
@@ -191,10 +199,14 @@ export const GemiMunicipalitySchema = z
   .loose();
 export type GemiMunicipality = z.infer<typeof GemiMunicipalitySchema>;
 
-/** `GET /metadata/companyStatuses`. */
+/**
+ * `GET /metadata/companyStatuses`. Spec says `id` is an integer; live
+ * responses (verified 2026-08-04) return it as a string, unlike the
+ * `status.id` on a nested `Company.status` ref, which really is a number.
+ */
 export const GemiCompanyStatusSchema = z
   .object({
-    id: z.number().nullish(),
+    id: z.string().nullish(),
     descr: z.string().nullish(),
     descrEn: z.string().nullish(),
     isActive: z.boolean().nullish(),
@@ -203,10 +215,15 @@ export const GemiCompanyStatusSchema = z
   .loose();
 export type GemiCompanyStatus = z.infer<typeof GemiCompanyStatusSchema>;
 
-/** `GET /metadata/legalTypes` — legal form codes (ΑΕ, ΕΠΕ, ΙΚΕ, ...). */
+/**
+ * `GET /metadata/legalTypes` — legal form codes (ΑΕ, ΕΠΕ, ΙΚΕ, ...). Spec
+ * says `id` is an integer; live responses (verified 2026-08-04) return it
+ * as a string, unlike the `legalType.id` on a nested `Company.legalType`
+ * ref, which really is a number.
+ */
 export const GemiLegalTypeSchema = z
   .object({
-    id: z.number().nullish(),
+    id: z.string().nullish(),
     descr: z.string().nullish(),
     descrEn: z.string().nullish(),
     lastUpdated: z.string().nullish(),
@@ -214,10 +231,15 @@ export const GemiLegalTypeSchema = z
   .loose();
 export type GemiLegalType = z.infer<typeof GemiLegalTypeSchema>;
 
-/** `GET /metadata/gemiOffices` — local ΓΕΜΗ registry offices. */
+/**
+ * `GET /metadata/gemiOffices` — local ΓΕΜΗ registry offices. Spec says
+ * `id` is an integer; live responses (verified 2026-08-04) return it as a
+ * string, unlike the `gemiOffice.id` on a nested `Company.gemiOffice` ref,
+ * which really is a number.
+ */
 export const GemiOfficeSchema = z
   .object({
-    id: z.number().nullish(),
+    id: z.string().nullish(),
     descr: z.string().nullish(),
     descrEn: z.string().nullish(),
     lastUpdated: z.string().nullish(),

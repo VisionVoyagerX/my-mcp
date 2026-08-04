@@ -69,7 +69,7 @@ describe("MyDataClient", () => {
 
   // ---- requestDocs additional tests ----
 
-  it("requestDocs includes counterVatNumber in query params", async () => {
+  it("requestDocs sends counterVatNumber under both counterVatNumber and receiverVatNumber (AADE's own PDF disagrees on the name)", async () => {
     fetchMock.mockResolvedValueOnce(xmlResponse("<RequestedDoc/>"));
     const client = new MyDataClient({ baseUrl: "https://example.test/myDATA" });
 
@@ -80,6 +80,32 @@ describe("MyDataClient", () => {
 
     const url = new URL(fetchMock.mock.calls[0]![0] as string);
     expect(url.searchParams.get("counterVatNumber")).toBe("123456789");
+    expect(url.searchParams.get("receiverVatNumber")).toBe("123456789");
+  });
+
+  it("requestTransmittedDocs sends counterVatNumber under both counterVatNumber and receiverVatNumber", async () => {
+    fetchMock.mockResolvedValueOnce(xmlResponse("<RequestedDocs/>"));
+    const client = new MyDataClient({ baseUrl: "https://example.test/myDATA" });
+
+    await client.requestTransmittedDocs(
+      { userId: "u", subscriptionKey: "k" },
+      { counterVatNumber: "987654321" },
+    );
+
+    const url = new URL(fetchMock.mock.calls[0]![0] as string);
+    expect(url.searchParams.get("counterVatNumber")).toBe("987654321");
+    expect(url.searchParams.get("receiverVatNumber")).toBe("987654321");
+  });
+
+  it("requestDocs omits both counterVatNumber and receiverVatNumber when not provided", async () => {
+    fetchMock.mockResolvedValueOnce(xmlResponse("<RequestedDoc/>"));
+    const client = new MyDataClient({ baseUrl: "https://example.test/myDATA" });
+
+    await client.requestDocs({ userId: "u", subscriptionKey: "k" });
+
+    const url = new URL(fetchMock.mock.calls[0]![0] as string);
+    expect(url.searchParams.has("counterVatNumber")).toBe(false);
+    expect(url.searchParams.has("receiverVatNumber")).toBe(false);
   });
 
   it("requestDocs includes pagination and maxMark params", async () => {
