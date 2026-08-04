@@ -1,13 +1,13 @@
 {
-  "name": "@my-mcp/worker-greekgov",
+  "name": "@my-mcp/citizen-mcp",
   "version": "0.1.0",
   "private": true,
-  "description": "Cloudflare Worker hosting GreekGovMCP: a public, IP-rate-limited MCP server for Diavgeia (Greek government transparency portal).",
+  "description": "Cloudflare Worker hosting CitizenMCP: a public, rate-limited MCP server for Greek government transparency/open data (Diavgeia, data.gov.gr).",
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
     "url": "https://github.com/VisionVoyagerX/my-mcp",
-    "directory": "packages/worker-greekgov"
+    "directory": "packages/citizen-mcp"
   },
   "keywords": [
     "mcp",
@@ -15,7 +15,8 @@
     "worker",
     "greece",
     "gov.gr",
-    "diavgeia"
+    "diavgeia",
+    "ckan"
   ],
   "type": "module",
   "scripts": {

@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
-import { registerDiavgeiaTools } from "@my-mcp/core";
+import { registerDiavgeiaTools, registerCkanTools } from "@my-mcp/core";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -25,10 +25,16 @@ const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
 
 interface Env {
   RATE_LIMITER: RateLimit;
+  /** Optional: raises data.gov.gr's rate limit. Free self-service token from data.gov.gr's registration page. */
+  DATA_GOV_GR_TOKEN?: string;
 }
 
+const FRAMING =
+  "CitizenMCP: a public MCP server for Greek government transparency and open data — Diavgeia " +
+  "(procurement/decisions) and data.gov.gr (open dataset catalog). See also BusinessMCP for " +
+  "ΓΕΜΗ/myDATA/Ergani business data.";
+
 async function handleRequest(request: Request, env: Env): Promise<Response> {
-  // Handle CORS preflight
   if (request.method === "OPTIONS") {
     return new Response(null, {
       status: 204,
@@ -47,6 +53,17 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     });
   }
 
+  // The MCP endpoint is the bare origin URL only. Anything else — notably
+  // OAuth discovery probes like /.well-known/oauth-protected-resource,
+  // which MCP clients check first to decide whether auth is even needed —
+  // must 404 cleanly. Letting these fall through to the transport below
+  // returns a 406 (wrong Accept header) instead, which some clients read
+  // as "this server wants some kind of auth" and then fail trying to
+  // register OAuth against a server that has none.
+  if (url.pathname !== "/" && url.pathname !== "") {
+    return new Response("Not Found", { status: 404, headers: CORS_HEADERS });
+  }
+
   const clientIp = request.headers.get("CF-Connecting-IP") ?? "unknown";
   const { success } = await env.RATE_LIMITER.limit({ key: clientIp });
   if (!success) {
@@ -61,9 +78,9 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
 
   // Create a fresh server and transport per request (stateless mode)
   const server = new McpServer({
-    name: "greekgov-mcp",
+    name: "citizen-mcp",
     version: "0.1.0",
-    title: "GreekGovMCP",
+    title: "CitizenMCP",
     websiteUrl: "https://github.com/VisionVoyagerX/my-mcp",
     icons: [
       {
@@ -74,10 +91,8 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     ],
   });
 
-  registerDiavgeiaTools(server, {
-    framing:
-      "GreekGovMCP: a public MCP server for Greek government transparency data (Diavgeia). Current release (v0.1) exposes only Diavgeia; future releases will add data.gov.gr, Geodata.gov.gr, and other domains.",
-  });
+  registerDiavgeiaTools(server, { framing: FRAMING });
+  registerCkanTools(server, { framing: FRAMING, token: env.DATA_GOV_GR_TOKEN });
 
   const transport = new WebStandardStreamableHTTPServerTransport();
   await server.connect(transport);
