@@ -191,7 +191,7 @@ server.registerTool(
    μετατρέπει σε JSON Schema για τον agent και επικυρώνει τα εισερχόμενα
    ορίσματα πριν καν τρέξει ο handler.
 2. **Η `rateLimitError()` τρέχει πριν από κάθε κλήση προς το upstream API.**
-   Το `api_key` του ΓΕΜΗ έχει όριο 8 requests/λεπτό _συνολικά_, όχι ανά
+   Το `api_key` του ΓΕΜΗ έχει όριο 30 requests/λεπτό _συνολικά_, όχι ανά
    καλούντα, οπότε σε μια δημόσια multi-tenant εγκατάσταση όπως το
    `business-mcp` κάθε επισκέπτης μοιράζεται το ίδιο όριο. Η
    `registerGemiTools` δέχεται μια προαιρετική callback `checkRateLimit`

@@ -30,7 +30,7 @@ interface Env {
   /**
    * A second, GLOBAL (fixed-key, not per-IP) rate limiter for ΓΕΜΗ tool
    * calls. ΓΕΜΗ requires a single server-held API key (GEMI_API_KEY below)
-   * that ΚΥ ΓΕΜΗ caps at 8 requests/minute in total — across every visitor
+   * that ΚΥ ΓΕΜΗ caps at 30 requests/minute in total — across every visitor
    * to this public worker, not per caller.
    */
   GEMI_RATE_LIMITER: RateLimit;

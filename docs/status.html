@@ -674,7 +674,7 @@
             <div class="ep"><code>list_metadata</code><span class="desc">— code lists: activities, regions, legal forms, offices.</span></div>
           </div>
         </div>
-        <p class="note">Uses one shared server key, capped by ΓΕΜΗ at 8 requests/minute for all users combined.</p>
+        <p class="note">Uses one shared server key, capped by ΓΕΜΗ at 30 requests/minute for all users combined.</p>
       </div>
     </details>
 
@@ -833,7 +833,7 @@
     <h3>Request lifecycle</h3>
     <ol class="flow">
       <li><b>Fresh server per request.</b> Each worker builds a new <code style="background:none;color:inherit;padding:0">McpServer</code> and registers its tools on every call — nothing is kept in memory between requests (stateless).</li>
-      <li><b>Rate limiting.</b> Every request is checked against a per-IP Cloudflare Rate Limit first. ΓΕΜΗ calls get a second, global limiter on top, because ΚΥ ΓΕΜΗ caps the one shared server key at 8 requests/minute for everyone combined, not per visitor.</li>
+      <li><b>Rate limiting.</b> ΓΕΜΗ calls go through a global limiter, because ΚΥ ΓΕΜΗ caps the one shared server key at 30 requests/minute for everyone combined, not per visitor.</li>
       <li><b>The shared fetch layer</b> (<code style="background:none;color:inherit;padding:0">packages/core/http.ts</code>) adds a 15s timeout to every upstream call, retries 429/502/503/504 with backoff, and turns any failure into one consistent, readable error.</li>
       <li><b>Split by domain, not by user.</b> citizen-mcp and business-mcp are grouped by what the data is about (transparency vs. business/tax), so installing one never pulls in tools you don't need. Diavgeia is shared by both, since procurement data matters to each domain.</li>
     </ol>
@@ -846,7 +846,7 @@
           <tr><td class="svc">Diavgeia</td><td>nobody — fully open</td><td>no credentials needed</td></tr>
           <tr><td class="svc">Geodata.gov.gr</td><td>nobody — fully open</td><td>no credentials needed</td></tr>
           <tr><td class="svc">data.gov.gr</td><td>optional: this server</td><td>works with no token; a free token just raises the rate limit</td></tr>
-          <tr><td class="svc">ΓΕΜΗ</td><td>this server (one shared key)</td><td>no credentials needed, but shared 8 req/min cap applies to everyone</td></tr>
+          <tr><td class="svc">ΓΕΜΗ</td><td>this server (one shared key)</td><td>no credentials needed, but shared 30 req/min cap applies to everyone</td></tr>
           <tr><td class="svc">myDATA</td><td>you</td><td>pass your key every call, or save it once with <code style="background:none;color:inherit;padding:0">mydata_connect</code> for a reusable token</td></tr>
           <tr><td class="svc">Ergani</td><td>you</td><td>pass your login every call, or save it once with <code style="background:none;color:inherit;padding:0">ergani_connect</code></td></tr>
         </tbody>

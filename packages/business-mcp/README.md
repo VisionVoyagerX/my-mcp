@@ -18,15 +18,14 @@ This package deploys the Diavgeia, ΓΕΜΗ, myDATA, and Ergani tool sets from `
 ## Auth models — three different patterns on one worker
 
 - **Diavgeia**: fully open, no key.
-- **ΓΕΜΗ**: a single manually-approved `api_key` held server-side (`GEMI_API_KEY` secret), shared by every caller of this worker. ΚΥ ΓΕΜΗ caps that one key at **8 requests/minute in total** — see Rate limiting below.
+- **ΓΕΜΗ**: a single manually-approved `api_key` held server-side (`GEMI_API_KEY` secret), shared by every caller of this worker. ΚΥ ΓΕΜΗ caps that one key at **30 requests/minute in total** — see Rate limiting below.
 - **myDATA / Ergani**: credentials belong to an individual business/employer, so there's no shared server key. Every tool accepts raw credentials (`userId`+`subscriptionKey`, or `username`+`password`) on every call — **or** you can call `mydata_connect`/`ergani_connect` once to encrypt and store them server-side (Cloudflare KV, AES-GCM), getting back an opaque `credentialToken` to pass on future calls instead. Call `mydata_forget`/`ergani_forget` to delete a stored token. If the KV/encryption-key setup below isn't done yet, connect/forget tools simply don't appear — raw-credential calls still work.
 
-## Rate limiting — two independent limiters
+## Rate limiting — ΓΕΜΗ only
 
-- **Diavgeia**: 30 requests per 60 seconds **per IP address**.
-- **ΓΕΜΗ**: 8 requests per 60 seconds **globally, shared across every visitor to this worker** — not per IP, because the underlying `api_key` itself is capped that way regardless of caller. ΓΕΜΗ tool calls will 429 quickly under any real concurrent traffic; that's expected, not a bug.
+- **ΓΕΜΗ**: 30 requests per 60 seconds **globally, shared across every visitor to this worker** — not per IP, because the underlying `api_key` itself is capped that way regardless of caller. ΓΕΜΗ tool calls will 429 quickly under any real concurrent traffic; that's expected, not a bug.
 
-Both use Cloudflare's native `ratelimit` binding (requires Wrangler v4.36.0+).
+Uses Cloudflare's native `ratelimit` binding (requires Wrangler v4.36.0+).
 
 ## Local Development
 
@@ -86,7 +85,7 @@ Deploys to `https://business-mcp.<your-account-subdomain>.workers.dev` (or a cus
 
 Edit `wrangler.toml` to adjust:
 
-- **Rate limits**: `[ratelimits.simple] limit`/`period` under either `[[ratelimits]]` block — `RATE_LIMITER` (Diavgeia, per-IP) or `GEMI_RATE_LIMITER` (ΓΕΜΗ, global). Raising the ΓΕΜΗ one above 8/min only helps if ΚΥ ΓΕΜΗ has actually granted your key a higher quota (request that at `support@uhc.gr`) — otherwise the worker just forwards more 429s from upstream instead of serving them itself.
+- **Rate limit**: `[ratelimits.simple] limit`/`period` under the `GEMI_RATE_LIMITER` `[[ratelimits]]` block. Raising it above 30/min only helps if ΚΥ ΓΕΜΗ has actually granted your key a higher quota (request that at `support@uhc.gr`) — otherwise the worker just forwards more 429s from upstream instead of serving them itself.
 - **Worker name**: `name = "business-mcp"`
 - **Compatibility**: `compatibility_date` if needed for specific Cloudflare API versions
 
@@ -101,6 +100,14 @@ Edit `wrangler.toml` to adjust:
   }
 }
 ```
+
+### From claude.ai (web) as a custom connector
+
+1. Go to **Settings → Connectors** in claude.ai.
+2. Scroll to **Custom Connectors** and click **Add custom connector**.
+3. Name it (e.g. `BusinessMCP`) and paste the URL: `https://business-mcp.nickdandis96.workers.dev`.
+4. Click **Add** — no OAuth or API key prompt appears at setup time. ΓΕΜΗ's key is already held server-side; myDATA/Ergani credentials are supplied per-call (or once via `mydata_connect`/`ergani_connect`) from inside the conversation, not during connector setup.
+5. In a chat, open the tools/search picker next to the message box and enable BusinessMCP's tools for that conversation.
 
 ## Architecture
 

@@ -66,6 +66,24 @@ point an MCP client at it:
 - [`packages/citizen-mcp/README.md`](./packages/citizen-mcp/README.md)
 - [`packages/business-mcp/README.md`](./packages/business-mcp/README.md)
 
+## Connecting from claude.ai (web)
+
+Both servers work as **custom connectors** in the claude.ai web app — no
+local install, no OAuth:
+
+1. **Settings → Connectors → Add custom connector** in claude.ai.
+2. Give it a name and paste the live URL (`https://citizen-mcp.nickdandis96.workers.dev`
+   or `https://business-mcp.nickdandis96.workers.dev`).
+3. Click **Add**. Neither server requires an OAuth or API-key step at
+   connector setup — CitizenMCP is fully open, and BusinessMCP's ΓΕΜΗ key is
+   held server-side (myDATA/Ergani credentials are supplied from within the
+   conversation instead, per-call or via `mydata_connect`/`ergani_connect`).
+4. In a chat, open the tools/search picker next to the message box and
+   enable the connector's tools for that conversation.
+
+Repeat for the other bundle if you want both installed. See each package's
+README (linked above) for the exact steps with that server's URL.
+
 ## Getting started
 
 ```sh
