@@ -173,7 +173,7 @@ Four things matter here:
    `zod` schema; the SDK converts it to JSON Schema for the agent and
    validates incoming arguments against it before the handler ever runs.
 2. **`rateLimitError()` runs before any upstream call.** ΓΕΜΗ's `api_key`
-   is capped at 8 requests/minute _in total_, not per caller, so on a
+   is capped at 30 requests/minute _in total_, not per caller, so on a
    public multi-tenant deployment like `business-mcp` every visitor shares
    one quota. `registerGemiTools` accepts an optional `checkRateLimit`
    callback ([tools.ts:37–53](../packages/core/src/gemi/tools.ts#L37-L53));
@@ -273,7 +273,7 @@ the deployed `business-mcp` worker:
    `gemi_get_company`, validates the arguments against its `inputSchema`
    (`{ registrationNumber: z.string().min(1) }`), and invokes the handler
    from [tools.ts:153–167](../packages/core/src/gemi/tools.ts#L153-L167).
-5. The handler calls `rateLimitError()` — ΓΕΜΗ's global 8/min limiter, via
+5. The handler calls `rateLimitError()` — ΓΕΜΗ's global 30/min limiter, via
    the `checkRateLimit` callback the worker supplied. If that's also clear,
    it calls `client.getCompany("000237954001")`.
 6. `GemiClient.getCompany()` ([client.ts:124–130](../packages/core/src/gemi/client.ts#L124-L130))

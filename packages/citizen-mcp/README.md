@@ -1,6 +1,6 @@
 # @my-mcp/citizen-mcp
 
-**CitizenMCP**: A public, rate-limited Cloudflare Worker exposing Greek government transparency and open data — Diavgeia and data.gov.gr — as an MCP server.
+**CitizenMCP**: A public Cloudflare Worker exposing Greek government transparency and open data — Diavgeia and data.gov.gr — as an MCP server.
 
 ## Overview
 
@@ -17,7 +17,7 @@ See also [`@my-mcp/business-mcp`](../business-mcp) for ΓΕΜΗ/myDATA/Ergani bu
 - All 15 Diavgeia tools (search/get decisions and version history, organization/unit/signer lookups, decision-type and dictionary metadata, positions, organization browsing). See [`packages/core/src/diavgeia/tools.ts`](/packages/core/src/diavgeia/tools.ts).
 - `ckan_search_datasets`, `ckan_get_dataset` — data.gov.gr's ~22k-dataset open-data catalog. See [`packages/core/src/ckan/tools.ts`](/packages/core/src/ckan/tools.ts).
 
-**Rate limiting**: 30 requests per 60 seconds per IP address (Cloudflare native `ratelimit` binding, requires Wrangler v4.36.0+). No accounts or API keys — this is an open public endpoint.
+No accounts or API keys required — this is an open public endpoint.
 
 ## Local Development
 
@@ -55,7 +55,6 @@ Deploys to `https://citizen-mcp.<your-account-subdomain>.workers.dev` (or a cust
 
 Edit `wrangler.toml` to adjust:
 
-- **Rate limit**: `[ratelimits.simple] limit`/`period`
 - **Worker name**: `name = "citizen-mcp"`
 - **Compatibility**: `compatibility_date` if needed for specific Cloudflare API versions
 
@@ -73,11 +72,18 @@ The server speaks MCP's [Streamable HTTP transport](https://spec.modelcontextpro
 }
 ```
 
+### From claude.ai (web) as a custom connector
+
+1. Go to **Settings → Connectors** in claude.ai.
+2. Scroll to **Custom Connectors** and click **Add custom connector**.
+3. Name it (e.g. `CitizenMCP`) and paste the URL: `https://citizen-mcp.nickdandis96.workers.dev`.
+4. Click **Add** — no OAuth or API key prompt appears, since neither Diavgeia nor CKAN needs one.
+5. In a chat, open the tools/search picker next to the message box and enable CitizenMCP's tools for that conversation.
+
 ## Architecture
 
 - **Stateless**: Each HTTP request creates a fresh MCP server instance (no persistent sessions)
 - **Transport**: `WebStandardStreamableHTTPServerTransport` (Web Standard APIs — works on any runtime: Cloudflare Workers, Node.js 18+, Deno, Bun, etc.)
-- **Rate limiting**: Cloudflare Workers' native `ratelimit` binding checks IP address before MCP logic runs
 - **Icon**: served at `/icon.svg` and referenced from `serverInfo.icons` per MCP's icons extension ([SEP-973](https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/2573))
 
 ## See Also

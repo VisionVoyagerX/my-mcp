@@ -42,7 +42,7 @@ export interface RegisterGemiToolsOptions {
   baseUrl?: string;
   /**
    * Called before each upstream ΓΕΜΗ API call to enforce a rate limit.
-   * ΓΕΜΗ caps a single `api_key` at 8 requests/minute *in total*, not per
+   * ΓΕΜΗ caps a single `api_key` at 30 requests/minute *in total*, not per
    * caller — so a multi-tenant deployment (e.g. the public Cloudflare
    * worker, where every visitor shares one server-held key) needs a
    * global limiter here, not a per-caller one. Return `{ success: false }`
@@ -59,7 +59,7 @@ const RATE_LIMIT_MESSAGE: ToolTextResult = {
       type: "text",
       text:
         "ΓΕΜΗ's API key is shared across every user of this server and ΚΥ ΓΕΜΗ " +
-        "caps it at 8 requests/minute in total. That shared limit has been " +
+        "caps it at 30 requests/minute in total. That shared limit has been " +
         "reached — please wait a minute and try again.",
     },
   ],
