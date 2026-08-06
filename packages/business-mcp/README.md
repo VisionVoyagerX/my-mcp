@@ -4,7 +4,7 @@
 
 ## Overview
 
-This package deploys the Diavgeia, ΓΕΜΗ, myDATA, and Ergani tool sets from `@my-mcp/core` to Cloudflare Workers. See also [`@my-mcp/citizen-mcp`](../citizen-mcp) for transparency/open-data tools — Diavgeia is shared between both since procurement decisions are genuinely cross-domain.
+This package deploys the Diavgeia, ΓΕΜΗ, myDATA, and Ergani tool sets from `@my-mcp/core` to Cloudflare Workers. See also [`@my-mcp/citizen-mcp`](../citizen-mcp) for transparency/open-data tools — Diavgeia and ΓΕΜΗ are both shared between the two workers, since procurement decisions and the business registry are genuinely cross-domain.
 
 **Live URL**: `https://business-mcp.nickdandis96.workers.dev`
 
@@ -18,7 +18,7 @@ This package deploys the Diavgeia, ΓΕΜΗ, myDATA, and Ergani tool sets from `
 ## Auth models — three different patterns on one worker
 
 - **Diavgeia**: fully open, no key.
-- **ΓΕΜΗ**: a single manually-approved `api_key` held server-side (`GEMI_API_KEY` secret), shared by every caller of this worker. ΚΥ ΓΕΜΗ caps that one key at **30 requests/minute in total** — see Rate limiting below.
+- **ΓΕΜΗ**: a single manually-approved `api_key` held server-side (`GEMI_API_KEY` secret), shared by every caller of this worker. ΚΥ ΓΕΜΗ caps that one key at **30 requests/minute in total** — see Rate limiting below. **This worker needs its own ΓΕΜΗ API key, separate from citizen-mcp's** — the 30 req/min cap is per key, so reusing the same key across both independently-rate-limited workers would double-book that shared quota.
 - **myDATA / Ergani**: credentials belong to an individual business/employer, so there's no shared server key. Every tool accepts raw credentials (`userId`+`subscriptionKey`, or `username`+`password`) on every call — **or** you can call `mydata_connect`/`ergani_connect` once to encrypt and store them server-side (Cloudflare KV, AES-GCM), getting back an opaque `credentialToken` to pass on future calls instead. Call `mydata_forget`/`ergani_forget` to delete a stored token. If the KV/encryption-key setup below isn't done yet, connect/forget tools simply don't appear — raw-credential calls still work.
 
 ## Rate limiting — ΓΕΜΗ only

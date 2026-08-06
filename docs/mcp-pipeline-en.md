@@ -239,8 +239,9 @@ registry — this is also exactly why the domain-bundle architecture in
 `CLAUDE.md` works cleanly: a _different_ worker
 ([`packages/citizen-mcp`](../packages/citizen-mcp)) imports the very same
 `registerDiavgeiaTools` from `core` and ends up with the same Diavgeia
-tools, without duplicating any logic, even though it exposes a completely
-different set of other tools (CKAN instead of ΓΕΜΗ/myDATA/Ergani).
+tools, without duplicating any logic, even though most of its other tools
+differ (CKAN instead of myDATA/Ergani) — ΓΕΜΗ itself is shared the same way
+as Diavgeia, just with its own server-held API key per worker.
 
 `WebStandardStreamableHTTPServerTransport` is what actually moves bytes: it
 reads a JSON-RPC request from the incoming `Request` body and writes the

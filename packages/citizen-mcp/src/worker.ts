@@ -1,6 +1,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
-import { registerDiavgeiaTools, registerCkanTools } from "@my-mcp/core";
+import {
+  registerDiavgeiaTools,
+  registerCkanTools,
+  registerGemiTools,
+} from "@my-mcp/core";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -27,12 +31,26 @@ interface Env {
   RATE_LIMITER: RateLimit;
   /** Optional: raises data.gov.gr's rate limit. Free self-service token from data.gov.gr's registration page. */
   DATA_GOV_GR_TOKEN?: string;
+  /**
+   * A second, GLOBAL (fixed-key, not per-IP) rate limiter for ΓΕΜΗ tool
+   * calls. ΓΕΜΗ requires a single server-held API key (GEMI_API_KEY below)
+   * that ΚΥ ΓΕΜΗ caps at 30 requests/minute in total — across every visitor
+   * to this public worker, not per caller. This worker uses its own
+   * GEMI_API_KEY, separate from business-mcp's — sharing one key across
+   * two independently-limited workers would double-book the 30 req/min
+   * quota, since each worker's rate limiter binding only tracks its own
+   * traffic.
+   */
+  GEMI_RATE_LIMITER: RateLimit;
+  /** Secret: `wrangler secret put GEMI_API_KEY`. Never set as a plain `var`. */
+  GEMI_API_KEY: string;
 }
 
 const FRAMING =
   "CitizenMCP: a public MCP server for Greek government transparency and open data — Diavgeia " +
-  "(procurement/decisions) and data.gov.gr (open dataset catalog). See also BusinessMCP for " +
-  "ΓΕΜΗ/myDATA/Ergani business data.";
+  "(procurement/decisions), data.gov.gr (open dataset catalog), and ΓΕΜΗ (business registry open " +
+  "data). See also BusinessMCP for myDATA/Ergani business data (ΓΕΜΗ is shared between both, like " +
+  "Diavgeia, since the business registry is genuinely cross-domain).";
 
 async function handleRequest(request: Request, env: Env): Promise<Response> {
   if (request.method === "OPTIONS") {
@@ -93,6 +111,11 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
 
   registerDiavgeiaTools(server, { framing: FRAMING });
   registerCkanTools(server, { framing: FRAMING, token: env.DATA_GOV_GR_TOKEN });
+  registerGemiTools(server, {
+    framing: FRAMING,
+    apiKey: env.GEMI_API_KEY,
+    checkRateLimit: () => env.GEMI_RATE_LIMITER.limit({ key: "gemi-global" }),
+  });
 
   const transport = new WebStandardStreamableHTTPServerTransport();
   await server.connect(transport);
