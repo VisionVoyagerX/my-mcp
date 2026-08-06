@@ -7,3 +7,6 @@ dist/
 !.env.example
 .dev.vars
 .dev.vars.*
+
+# Personal/scratch notes unrelated to the project
+notes/
