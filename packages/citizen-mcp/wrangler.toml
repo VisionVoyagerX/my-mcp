@@ -3,12 +3,26 @@ main = "src/worker.ts"
 compatibility_date = "2024-12-16"
 compatibility_flags = ["nodejs_compat"]
 
-# IP-based rate limiting for the open public endpoint (no accounts/API keys
-# needed anywhere in CitizenMCP — Diavgeia and CKAN are both unauthenticated).
+# IP-based rate limiting for the open public endpoint (Diavgeia and CKAN
+# are both unauthenticated; GEMI_RATE_LIMITER below covers ΓΕΜΗ separately).
 # See: https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/
 [[ratelimits]]
 name = "RATE_LIMITER"
 namespace_id = "2001"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60
+
+# GLOBAL (not per-IP — every request uses the same fixed key, see worker.ts)
+# rate limit for GEMI tool calls, matching ΚΥ ΓΕΜΗ's 30 req/min cap on the
+# single server-held GEMI_API_KEY (set separately via `wrangler secret put`,
+# never as a plain var). This worker uses its own key, distinct from
+# business-mcp's, so the two workers' rate limiters don't double-book one
+# shared quota.
+[[ratelimits]]
+name = "GEMI_RATE_LIMITER"
+namespace_id = "2002"
 
   [ratelimits.simple]
   limit = 30

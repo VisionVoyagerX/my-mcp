@@ -21,17 +21,19 @@ not a persona-shaped combination someone else picked for you.
 Exactly two, both public Cloudflare Workers — no local install or stdio
 process required.
 
-| Server                                                               | Domain                   | Services                                  | Auth                                                                                                                                                        |
-| -------------------------------------------------------------------- | ------------------------ | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`packages/citizen-mcp`](./packages/citizen-mcp) — **CitizenMCP**    | Transparency / open-data | Diavgeia, data.gov.gr                     | None required; optional free token for data.gov.gr                                                                                                          |
-| [`packages/business-mcp`](./packages/business-mcp) — **BusinessMCP** | Business / tax           | ΓΕΜΗ, myDATA, Ergani, (+ shared Diavgeia) | ΓΕΜΗ needs a free server-side API key; myDATA/Ergani are bring-your-own-credential, with an optional connect-once token so you don't resend them every call |
+| Server                                                               | Domain                   | Services                                          | Auth                                                                                                                                                        |
+| -------------------------------------------------------------------- | ------------------------ | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`packages/citizen-mcp`](./packages/citizen-mcp) — **CitizenMCP**    | Transparency / open-data | Diavgeia, data.gov.gr, ΓΕΜΗ                        | Diavgeia/data.gov.gr need nothing (optional free token for data.gov.gr); ΓΕΜΗ needs a free server-side API key                                             |
+| [`packages/business-mcp`](./packages/business-mcp) — **BusinessMCP** | Business / tax           | ΓΕΜΗ, myDATA, Ergani, (+ shared Diavgeia)          | ΓΕΜΗ needs a free server-side API key; myDATA/Ergani are bring-your-own-credential, with an optional connect-once token so you don't resend them every call |
 
 "CitizenMCP" and "BusinessMCP" are product names for the same two domain
 groupings this repo has always used — not a persona-based redesign. A
 service can appear in more than one when it's genuinely cross-domain —
-Diavgeia does, since procurement decisions matter to both. That's packaging
-duplication only: both workers import the same client from `packages/core`,
-nothing is reimplemented.
+Diavgeia and ΓΕΜΗ both do, since procurement decisions and the business
+registry matter to both domains. That's packaging duplication only: both
+workers import the same client from `packages/core`, nothing is
+reimplemented. (Each worker does hold its own ΓΕΜΗ API key, though — ΚΥ
+ΓΕΜΗ's 30 req/min cap is per key, so the two workers can't share one.)
 
 ## Architecture
 
@@ -40,7 +42,7 @@ packages/
   core/            shared per-service API clients, MCP tool registration,
                     and auth handling (including the credentials/ module
                     used by BusinessMCP's connect-once token system)
-  citizen-mcp/      Cloudflare Worker: Diavgeia, CKAN tools
+  citizen-mcp/      Cloudflare Worker: Diavgeia, CKAN, GEMI tools
   business-mcp/     Cloudflare Worker: Diavgeia, GEMI, myDATA, Ergani tools
 ```
 
@@ -75,9 +77,10 @@ local install, no OAuth:
 2. Give it a name and paste the live URL (`https://citizen-mcp.nickdandis96.workers.dev`
    or `https://business-mcp.nickdandis96.workers.dev`).
 3. Click **Add**. Neither server requires an OAuth or API-key step at
-   connector setup — CitizenMCP is fully open, and BusinessMCP's ΓΕΜΗ key is
-   held server-side (myDATA/Ergani credentials are supplied from within the
-   conversation instead, per-call or via `mydata_connect`/`ergani_connect`).
+   connector setup — both servers' ΓΕΜΗ keys are held server-side, and the
+   rest of CitizenMCP is fully open (myDATA/Ergani credentials on
+   BusinessMCP are supplied from within the conversation instead, per-call
+   or via `mydata_connect`/`ergani_connect`).
 4. In a chat, open the tools/search picker next to the message box and
    enable the connector's tools for that conversation.
 
@@ -103,7 +106,9 @@ secret setup.
 
 Diavgeia, ΓΕΜΗ, and data.gov.gr have been verified live end-to-end: direct
 calls to their production APIs, and real tool calls through the deployed
-Cloudflare Workers, all return real 200 responses. myDATA's credential-token
+Cloudflare Workers, all return real 200 responses. ΓΕΜΗ is verified live on
+both workers independently, each against its own separate `GEMI_API_KEY`
+(see above). myDATA's credential-token
 wiring is verified live (a real request with dummy credentials returns a
 genuine 403 from AADE, proving the encrypt/store/resolve/call path works)
 but hasn't been exercised with real credentials. Ergani hasn't been

@@ -406,11 +406,11 @@
   <div class="wrap">
     <p class="eyebrow">my-mcp · reference &amp; live status</p>
     <h1 class="title">Greek Gov MCP</h1>
-    <p class="dek">Two Cloudflare Worker MCP servers exposing Greek government and public-sector APIs — Diavgeia, data.gov.gr, Geodata.gov.gr, ΓΕΜΗ, myDATA, and Ergani — to AI agents. This page is generated from the live codebase and verified against the real upstream APIs on 2026‑08‑04.</p>
+    <p class="dek">Two Cloudflare Worker MCP servers exposing Greek government and public-sector APIs — Diavgeia, data.gov.gr, Geodata.gov.gr, ΓΕΜΗ, myDATA, and Ergani — to AI agents. ΓΕΜΗ is now available on both workers (each with its own server-held API key), same as Diavgeia. This page is generated from the live codebase and verified against the real upstream APIs on 2026‑08‑04.</p>
     <div class="servers-row">
       <span class="server-chip">
         <svg viewBox="0 0 128 128"><circle cx="64" cy="64" r="64" fill="#0D5EAF"/><polygon points="24,52 64,28 104,52" fill="#fff"/><rect x="20" y="52" width="88" height="8" fill="#fff"/><rect x="28" y="64" width="10" height="36" fill="#fff"/><rect x="48" y="64" width="10" height="36" fill="#fff"/><rect x="70" y="64" width="10" height="36" fill="#fff"/><rect x="90" y="64" width="10" height="36" fill="#fff"/><rect x="18" y="100" width="92" height="10" fill="#fff"/></svg>
-        <b>citizen-mcp</b> <span class="tools">19 tools</span>
+        <b>citizen-mcp</b> <span class="tools">23 tools</span>
       </span>
       <span class="server-chip">
         <svg viewBox="0 0 128 128"><circle cx="64" cy="64" r="64" fill="#B8860B"/><rect x="48" y="30" width="32" height="18" rx="4" fill="none" stroke="#fff" stroke-width="8"/><rect x="24" y="50" width="80" height="52" rx="8" fill="#fff"/><rect x="24" y="68" width="80" height="10" fill="#B8860B"/></svg>
@@ -468,8 +468,8 @@
 
       <div class="status-card" data-status="good">
         <div class="row1"><span class="svc-name">ΓΕΜΗ</span><span class="chip good">Working</span></div>
-        <p class="evidence">Tested live with a real server API key: full company record returned for a real business (5 registrations, board, capital, branches).</p>
-        <div class="meta"><span class="tag">business-mcp</span><span class="tag">shared server key</span><span class="tag">4 tools</span></div>
+        <p class="evidence">Tested live with a real server API key on business-mcp: full company record returned for a real business (5 registrations, board, capital, branches). citizen-mcp's own separate key is now provisioned and verified live too — the same ΑΦΜ lookup on citizen-mcp returned the identical 5-registration record.</p>
+        <div class="meta"><span class="tag">citizen + business</span><span class="tag">server key per worker</span><span class="tag">4 tools</span></div>
       </div>
 
       <div class="status-card" data-status="warn">
@@ -674,7 +674,7 @@
             <div class="ep"><code>list_metadata</code><span class="desc">— code lists: activities, regions, legal forms, offices.</span></div>
           </div>
         </div>
-        <p class="note">Uses one shared server key, capped by ΓΕΜΗ at 30 requests/minute for all users combined.</p>
+        <p class="note">Uses one shared server key, capped by ΓΕΜΗ at 30 requests/minute for all users combined. These same 4 tools are also on citizen-mcp (grouped here since ΓΕΜΗ's "home" bundle is business/tax) — that worker holds its own separate server key, since the 30 req/min cap is per key and the two workers can't share one.</p>
       </div>
     </details>
 
@@ -833,9 +833,9 @@
     <h3>Request lifecycle</h3>
     <ol class="flow">
       <li><b>Fresh server per request.</b> Each worker builds a new <code style="background:none;color:inherit;padding:0">McpServer</code> and registers its tools on every call — nothing is kept in memory between requests (stateless).</li>
-      <li><b>Rate limiting.</b> ΓΕΜΗ calls go through a global limiter, because ΚΥ ΓΕΜΗ caps the one shared server key at 30 requests/minute for everyone combined, not per visitor.</li>
+      <li><b>Rate limiting.</b> ΓΕΜΗ calls go through a global limiter on each worker, because ΚΥ ΓΕΜΗ caps a single server key at 30 requests/minute for everyone combined, not per visitor. citizen-mcp and business-mcp each hold their own ΓΕΜΗ key and limiter — sharing one key across both would double-book that quota.</li>
       <li><b>The shared fetch layer</b> (<code style="background:none;color:inherit;padding:0">packages/core/http.ts</code>) adds a 15s timeout to every upstream call, retries 429/502/503/504 with backoff, and turns any failure into one consistent, readable error.</li>
-      <li><b>Split by domain, not by user.</b> citizen-mcp and business-mcp are grouped by what the data is about (transparency vs. business/tax), so installing one never pulls in tools you don't need. Diavgeia is shared by both, since procurement data matters to each domain.</li>
+      <li><b>Split by domain, not by user.</b> citizen-mcp and business-mcp are grouped by what the data is about (transparency vs. business/tax), so installing one never pulls in tools you don't need. Diavgeia and ΓΕΜΗ are each shared by both, since procurement data and the business registry matter to each domain.</li>
     </ol>
 
     <h3>Auth, one row per service</h3>
@@ -846,7 +846,7 @@
           <tr><td class="svc">Diavgeia</td><td>nobody — fully open</td><td>no credentials needed</td></tr>
           <tr><td class="svc">Geodata.gov.gr</td><td>nobody — fully open</td><td>no credentials needed</td></tr>
           <tr><td class="svc">data.gov.gr</td><td>optional: this server</td><td>works with no token; a free token just raises the rate limit</td></tr>
-          <tr><td class="svc">ΓΕΜΗ</td><td>this server (one shared key)</td><td>no credentials needed, but shared 30 req/min cap applies to everyone</td></tr>
+          <tr><td class="svc">ΓΕΜΗ</td><td>each server (own shared key)</td><td>no credentials needed, but each worker's shared 30 req/min cap applies to everyone on it</td></tr>
           <tr><td class="svc">myDATA</td><td>you</td><td>pass your key every call, or save it once with <code style="background:none;color:inherit;padding:0">mydata_connect</code> for a reusable token</td></tr>
           <tr><td class="svc">Ergani</td><td>you</td><td>pass your login every call, or save it once with <code style="background:none;color:inherit;padding:0">ergani_connect</code></td></tr>
         </tbody>

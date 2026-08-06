@@ -264,8 +264,10 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
 ένας _διαφορετικός_ worker
 ([`packages/citizen-mcp`](../packages/citizen-mcp)) εισάγει την ίδια ακριβώς
 `registerDiavgeiaTools` από το `core` και καταλήγει με τα ίδια tools
-Διαύγειας, χωρίς να διπλασιάζεται καμία λογική, παρότι εκθέτει ένα εντελώς
-διαφορετικό σύνολο άλλων tools (CKAN αντί για ΓΕΜΗ/myDATA/Εργάνη).
+Διαύγειας, χωρίς να διπλασιάζεται καμία λογική, παρότι τα περισσότερα από τα
+άλλα tools του διαφέρουν (CKAN αντί για myDATA/Εργάνη) — το ίδιο το ΓΕΜΗ
+μοιράζεται με τον ίδιο τρόπο όπως η Διαύγεια, απλώς με το δικό του API key
+ανά worker.
 
 Το `WebStandardStreamableHTTPServerTransport` είναι αυτό που πραγματικά
 μεταφέρει τα bytes: διαβάζει ένα αίτημα JSON-RPC από το σώμα του
