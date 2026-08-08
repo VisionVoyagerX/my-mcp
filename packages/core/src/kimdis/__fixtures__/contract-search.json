@@ -1,0 +1,459 @@
+{
+  "content": [
+    {
+      "title": "ΣΥΜΦΩΝΗΤΙΚΟ \"Προμήθεια και Τοποθέτηση Υλικών Οριοθέτησης κάδων\" για την ΟΜΑΔΑ 1(Πλαστικά στοπ τροχών",
+      "referenceNumber": "26SYMV019602331",
+      "prevReferenceNo": null,
+      "noticeReferenceNumber": null,
+      "submissionDate": "2026-08-07T22:35:46.408",
+      "lastUpdateDate": null,
+      "contractSignedDate": "2026-08-07",
+      "startDate": "2026-08-07",
+      "noEndDate": false,
+      "endDate": "2026-10-07",
+      "cancelled": false,
+      "cancellationDate": null,
+      "cancellationType": null,
+      "cancellationReason": null,
+      "cancellationADA": null,
+      "decisionRelatedAda": null,
+      "contractNumber": "208653",
+      "authorEmail": null,
+      "organizationVatNumber": "090025537",
+      "greekOrganizationVatNumber": null,
+      "commitmentNo": null,
+      "diavgeiaADA": null,
+      "aaht": "1007.E84501.0001",
+      "budget": null,
+      "contractBudget": 8910,
+      "bidsSubmitted": null,
+      "maxBidsSubmitted": 2,
+      "numberOfSections": 2,
+      "assignedContract": {
+        "key": "2",
+        "value": "Όχι"
+      },
+      "socialContract": {
+        "key": "2",
+        "value": "Όχι"
+      },
+      "centralGovernmentAuthority": {
+        "key": "2",
+        "value": "Όχι"
+      },
+      "nutsCodes": [
+        {
+          "nutsCode": {
+            "key": "EL303",
+            "value": "Κεντρικός Τομέας Αθηνών"
+          }
+        }
+      ],
+      "approvedRequestsList": [],
+      "organization": {
+        "key": "6013",
+        "value": "ΔΗΜΟΣ ΑΘΗΝΑΙΩΝ"
+      },
+      "procedureType": {
+        "key": "1",
+        "value": "Ανοιχτή διαδικασία"
+      },
+      "awardProcedure": null,
+      "nutsCode": {
+        "key": "EL303",
+        "value": "Κεντρικός Τομέας Αθηνών"
+      },
+      "nutsCity": "ΑΘΗΝΑ",
+      "nutsPostalCode": "10438",
+      "nutsCountry": {
+        "key": "GR",
+        "value": "Ελλάδα"
+      },
+      "centralizedMarkets": [
+        {
+          "centralizedMarket": {
+            "key": "8",
+            "value": "Δεν χρησιμοποιείται"
+          }
+        }
+      ],
+      "legalContext": {
+        "key": "4",
+        "value": "ν.4412/2016 - Βιβλίο Ι – άνω των ορίων"
+      },
+      "contractType": {
+        "key": "13",
+        "value": "Προμήθειες"
+      },
+      "assignCriteria": {
+        "key": "13",
+        "value": "Βάσει τιμής"
+      },
+      "classificationOfPublicLawOrganization": {
+        "key": "2",
+        "value": "ΟΤΑ"
+      },
+      "typeOfContractingAuthority": {
+        "key": "9",
+        "value": "ΝΠΔΔ"
+      },
+      "contractingAuthorityActivity": {
+        "key": "5",
+        "value": "Οικονομικές και δημοσιονομικές υποθέσεις"
+      },
+      "contractDuration": 2,
+      "contractDurationUnitOfMeasure": {
+        "key": "3",
+        "value": "Μήνες"
+      },
+      "contractRelatedADA": {
+        "number1": null,
+        "number2": null,
+        "number3": "Ψ7Ω2Ω6Μ-ΕΝΕ"
+      },
+      "fundingDetails": {
+        "publicFundingRef": null,
+        "publicFundingRefNum": null,
+        "publicFundingRefOps": null,
+        "cofundProgramRef": null,
+        "selfFundProgramRef": null,
+        "espaFundProgramRef": null,
+        "regularBudgetFundedProgramRef": "ΑΛΕ 3230989 "
+      },
+      "contractingDataDetails": {
+        "unitsOperator": {
+          "key": "93100",
+          "value": "ΔΙΕΥΘΥΝΣΗ ΠΡΟΜΗΘΕΙΩΝ ΚΑΙ ΑΠΟΘΗΚΩΝ"
+        },
+        "signers": {
+          "key": "100084260",
+          "value": "ΧΑΡΗΣ ΔΟΥΚΑΣ - Δήμαρχος"
+        },
+        "contractingMembersDataList": [
+          {
+            "country": {
+              "key": "GR",
+              "value": "Ελλάδα"
+            },
+            "vatNumber": "055820830",
+            "greekVatNumber": true,
+            "name": "ΣΑΚΕΛΛΑΡΙΟΥ ΑΣΤΕΡΙΟΣ "
+          }
+        ]
+      },
+      "totalCostWithVAT": 11048.4,
+      "totalCostWithoutVAT": 8910.0,
+      "objectDetailsList": [
+        {
+          "quantity": 4500,
+          "type": {
+            "key": "KGM",
+            "value": "Kg"
+          },
+          "costWithoutVAT": 8910,
+          "vat": "24",
+          "currency": {
+            "key": "EUR",
+            "value": "Ευρώ"
+          },
+          "shortDescription": "2η ΟΜΑΔΑ:  1. ΚΙΤΡΙΝΟ ΧΡΩΜΑ ΔΙΑΓΡΑΜΜΙΣΗΣ",
+          "cpvs": [
+            {
+              "key": "44811000-8",
+              "value": "Χρώμα διαγράμμισης οδών"
+            }
+          ],
+          "greenContracts": {
+            "key": "1",
+            "value": "Δεν εμπίπτει στο ΕΣΔ"
+          },
+          "goodServices": null,
+          "cityOfConstruction": null,
+          "countryOfDelivery": {
+            "key": "GR",
+            "value": "Ελλάδα"
+          },
+          "addressForDelivery": null,
+          "postalCode": null,
+          "city": "ΑΘΗΝΑ",
+          "streetNumber": null,
+          "budgetCode": null,
+          "requestRefNo": "26AWRD019254928"
+        }
+      ],
+      "additionalContractTypes": [
+        {
+          "additionalContractType": {
+            "key": "3",
+            "value": "Υπηρεσίες"
+          }
+        }
+      ],
+      "mixedContract": false,
+      "requestRefNo": null,
+      "nextRefNo": null,
+      "nextExtended": null,
+      "nextModified": null,
+      "auctionRefNo": "26AWRD019254928",
+      "paymentRefNo": []
+    },
+    {
+      "title": "ΣΥΜΒΑΣΗ ΠΑΡΟΧΗΣ ΥΠΗΡΕΣΙΩΝ ΓΙΑ ΤΟ ΟΧΗΜΑ ΚΗΥ 8148",
+      "referenceNumber": "26SYMV019602329",
+      "prevReferenceNo": null,
+      "noticeReferenceNumber": null,
+      "submissionDate": "2026-08-07T22:12:37.322",
+      "lastUpdateDate": null,
+      "contractSignedDate": "2026-08-07",
+      "startDate": "2026-08-07",
+      "noEndDate": false,
+      "endDate": "2026-09-30",
+      "cancelled": false,
+      "cancellationDate": null,
+      "cancellationType": null,
+      "cancellationReason": null,
+      "cancellationADA": null,
+      "decisionRelatedAda": null,
+      "contractNumber": "16043",
+      "authorEmail": null,
+      "organizationVatNumber": "999254983",
+      "greekOrganizationVatNumber": null,
+      "commitmentNo": null,
+      "diavgeiaADA": null,
+      "aaht": "1007.E82203.0001",
+      "budget": null,
+      "contractBudget": 384,
+      "bidsSubmitted": null,
+      "maxBidsSubmitted": 1,
+      "numberOfSections": 2,
+      "assignedContract": {
+        "key": "2",
+        "value": "Όχι"
+      },
+      "socialContract": {
+        "key": "2",
+        "value": "Όχι"
+      },
+      "centralGovernmentAuthority": {
+        "key": "2",
+        "value": "Όχι"
+      },
+      "nutsCodes": [
+        {
+          "nutsCode": {
+            "key": "EL612",
+            "value": "Λάρισα"
+          }
+        }
+      ],
+      "approvedRequestsList": [],
+      "organization": {
+        "key": "6087",
+        "value": "ΔΗΜΟΣ ΕΛΑΣΣΟΝΑΣ"
+      },
+      "procedureType": {
+        "key": "6",
+        "value": "Απευθείας ανάθεση"
+      },
+      "awardProcedure": null,
+      "nutsCode": {
+        "key": "EL612",
+        "value": "Λάρισα"
+      },
+      "nutsCity": "ΕΛΑΣΣΟΝΑ",
+      "nutsPostalCode": "40200",
+      "nutsCountry": {
+        "key": "GR",
+        "value": "Ελλάδα"
+      },
+      "centralizedMarkets": [
+        {
+          "centralizedMarket": {
+            "key": "8",
+            "value": "Δεν χρησιμοποιείται"
+          }
+        }
+      ],
+      "legalContext": {
+        "key": "5",
+        "value": "ν.4412/2016 - Βιβλίο Ι – κάτω των ορίων"
+      },
+      "contractType": {
+        "key": "9",
+        "value": "Υπηρεσίες"
+      },
+      "assignCriteria": {
+        "key": "9",
+        "value": "Βάσει τιμής"
+      },
+      "classificationOfPublicLawOrganization": {
+        "key": "2",
+        "value": "ΟΤΑ"
+      },
+      "typeOfContractingAuthority": {
+        "key": "9",
+        "value": "ΝΠΔΔ"
+      },
+      "contractingAuthorityActivity": {
+        "key": "1",
+        "value": "Γενικές δημόσιες υπηρεσίες"
+      },
+      "contractDuration": 2,
+      "contractDurationUnitOfMeasure": {
+        "key": "3",
+        "value": "Μήνες"
+      },
+      "contractRelatedADA": {
+        "number1": null,
+        "number2": null,
+        "number3": "9ΡΓ7ΩΡΟ-8Χ1  "
+      },
+      "fundingDetails": {
+        "publicFundingRef": null,
+        "publicFundingRefNum": null,
+        "publicFundingRefOps": null,
+        "cofundProgramRef": null,
+        "selfFundProgramRef": null,
+        "espaFundProgramRef": null,
+        "regularBudgetFundedProgramRef": "02.00.030.2420302001"
+      },
+      "contractingDataDetails": {
+        "unitsOperator": {
+          "key": "100014982",
+          "value": "ΤΜΗΜΑ ΑΜΑΞΟΣΤΑΣΙΟΥ - ΣΥΝΤΗΡΗΣΗΣ ΚΑΙ ΚΙΝΗΣΗΣ ΟΧΗΜΑΤΩΝ"
+        },
+        "signers": {
+          "key": "100048853",
+          "value": "ΝΙΚΟΛΑΟΣ ΓΑΤΣΑΣ - Δήμαρχος"
+        },
+        "contractingMembersDataList": [
+          {
+            "country": {
+              "key": "GR",
+              "value": "Ελλάδα"
+            },
+            "vatNumber": "151902637",
+            "greekVatNumber": true,
+            "name": "ΜΠΟΛΗΣ ΑΘΑΝΑΣΙΟΣ"
+          }
+        ]
+      },
+      "totalCostWithVAT": 476.16,
+      "totalCostWithoutVAT": 384.0,
+      "objectDetailsList": [
+        {
+          "quantity": 3,
+          "type": {
+            "key": "E48",
+            "value": "Υπηρεσία"
+          },
+          "costWithoutVAT": 120,
+          "vat": "24",
+          "currency": {
+            "key": "EUR",
+            "value": "Ευρώ"
+          },
+          "shortDescription": "ΑΛΛΑΓΗ ΑΝΩ ΤΡΟΜΠΑ ΣΥΜΠΛΕΚΤΟΥ ΕΞΑΕΡΩΣΗ ΣΥΜΠΛΕΚΤΟΥ ΑΛΛΑΓΗ ΦΙΛΤΡΟ ΞΗΡΑΝΤΗΡΑ ",
+          "cpvs": [
+            {
+              "key": "50112000-3",
+              "value": "Υπηρεσίες επισκευής και συντήρησης αυτοκινήτων"
+            }
+          ],
+          "greenContracts": {
+            "key": "1",
+            "value": "Δεν εμπίπτει στο ΕΣΔ"
+          },
+          "goodServices": null,
+          "cityOfConstruction": null,
+          "countryOfDelivery": {
+            "key": "GR",
+            "value": "Ελλάδα"
+          },
+          "addressForDelivery": null,
+          "postalCode": null,
+          "city": "ΕΛΑΣΣΟΝΑ",
+          "streetNumber": null,
+          "budgetCode": null,
+          "requestRefNo": "26AWRD019594527"
+        },
+        {
+          "quantity": 5,
+          "type": {
+            "key": "C62",
+            "value": "Τεμάχιο"
+          },
+          "costWithoutVAT": 264,
+          "vat": "24",
+          "currency": {
+            "key": "EUR",
+            "value": "Ευρώ"
+          },
+          "shortDescription": "ΑΝΩ ΤΡΟΜΠΑΚΙ ΣΥΜΠΛΕΚΤΟΥ ΥΓΡΑ ΦΡΕΝΩΝ ΦΙΛΤΡΟ ΞΗΡΑΝΤΗΡΑ ΥΓΡΟ WABCO ",
+          "cpvs": [
+            {
+              "key": "34330000-9",
+              "value": "Ανταλλακτικά για οχήματα μεταφοράς αγαθών"
+            }
+          ],
+          "greenContracts": {
+            "key": "1",
+            "value": "Δεν εμπίπτει στο ΕΣΔ"
+          },
+          "goodServices": null,
+          "cityOfConstruction": null,
+          "countryOfDelivery": {
+            "key": "GR",
+            "value": "Ελλάδα"
+          },
+          "addressForDelivery": null,
+          "postalCode": null,
+          "city": "ΕΛΑΣΣΟΝΑ",
+          "streetNumber": null,
+          "budgetCode": null,
+          "requestRefNo": "26AWRD019594527"
+        }
+      ],
+      "additionalContractTypes": [
+        {
+          "additionalContractType": {
+            "key": "2",
+            "value": "Προμήθειες"
+          }
+        }
+      ],
+      "mixedContract": true,
+      "requestRefNo": null,
+      "nextRefNo": null,
+      "nextExtended": null,
+      "nextModified": null,
+      "auctionRefNo": "26AWRD019594527",
+      "paymentRefNo": []
+    }
+  ],
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 50,
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "offset": 0,
+    "unpaged": false,
+    "paged": true
+  },
+  "last": false,
+  "totalElements": 158197,
+  "totalPages": 3164,
+  "first": true,
+  "numberOfElements": 2,
+  "size": 2,
+  "number": 0,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "empty": false
+}

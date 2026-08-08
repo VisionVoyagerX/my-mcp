@@ -4,6 +4,7 @@ import {
   registerDiavgeiaTools,
   registerCkanTools,
   registerGemiTools,
+  registerKimdisTools,
 } from "@my-mcp/core";
 
 const CORS_HEADERS = {
@@ -48,9 +49,11 @@ interface Env {
 
 const FRAMING =
   "CitizenMCP: a public MCP server for Greek government transparency and open data — Diavgeia " +
-  "(procurement/decisions), data.gov.gr (open dataset catalog), and ΓΕΜΗ (business registry open " +
-  "data). See also BusinessMCP for myDATA/Ergani business data (ΓΕΜΗ is shared between both, like " +
-  "Diavgeia, since the business registry is genuinely cross-domain).";
+  "(procurement/decisions), data.gov.gr (open dataset catalog), ΓΕΜΗ (business registry open " +
+  "data), and ΚΗΜΔΗΣ (structured public-contracts registry — request/notice/award/contract/" +
+  "payment lifecycle data, complementing Diavgeia's free-text disclosure acts). See also " +
+  "BusinessMCP for myDATA/Ergani business data (ΓΕΜΗ is shared between both, like Diavgeia, " +
+  "since the business registry is genuinely cross-domain).";
 
 async function handleRequest(request: Request, env: Env): Promise<Response> {
   if (request.method === "OPTIONS") {
@@ -116,6 +119,7 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     apiKey: env.GEMI_API_KEY,
     checkRateLimit: () => env.GEMI_RATE_LIMITER.limit({ key: "gemi-global" }),
   });
+  registerKimdisTools(server, { framing: FRAMING });
 
   const transport = new WebStandardStreamableHTTPServerTransport();
   await server.connect(transport);

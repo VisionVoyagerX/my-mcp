@@ -34,6 +34,30 @@ export type { CkanDataset, CkanSearchResult } from "./ckan/types.js";
 export { registerCkanTools } from "./ckan/tools.js";
 export type { RegisterCkanToolsOptions } from "./ckan/tools.js";
 
+export { KimdisClient } from "./kimdis/client.js";
+export type {
+  KimdisRecordType,
+  KimdisBaseSearchParams,
+  KimdisRequestSearchParams,
+  KimdisNoticeSearchParams,
+  KimdisAwardSearchParams,
+  KimdisContractSearchParams,
+  KimdisPaymentSearchParams,
+} from "./kimdis/client.js";
+export type {
+  KimdisCode,
+  KimdisPage,
+  KimdisRequest,
+  KimdisNotice,
+  KimdisAward,
+  KimdisContract,
+  KimdisPayment,
+  KimdisAdamChain,
+  KimdisPdeResult,
+} from "./kimdis/types.js";
+export { registerKimdisTools } from "./kimdis/tools.js";
+export type { RegisterKimdisToolsOptions } from "./kimdis/tools.js";
+
 export { GemiClient } from "./gemi/client.js";
 export type {
   GemiActivity,
