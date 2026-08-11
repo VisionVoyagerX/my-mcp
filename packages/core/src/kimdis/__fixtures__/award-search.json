@@ -1,0 +1,259 @@
+{
+  "content": [
+    {
+      "title": "ΠΡΟΜΗΘΕΙΑ ΣΟΥΒΛΑΚΙΩΝ",
+      "referenceNumber": "26AWRD019602560",
+      "submissionDate": "2026-08-08T23:49:55.041",
+      "lastUpdateDate": null,
+      "signedDate": "2026-08-08",
+      "cancelled": false,
+      "cancellationDate": null,
+      "cancellationType": null,
+      "cancellationReason": null,
+      "cancellationADA": null,
+      "protocolNumber": null,
+      "aaht": "1007.E85402.0001",
+      "authorEmail": null,
+      "organizationVatNumber": "090393125",
+      "greekOrganizationVatNumber": null,
+      "budget": 1920,
+      "auctionAmount": null,
+      "commitmentNo": null,
+      "amendedAuctionADAM": null,
+      "amendPreviousAuction": false,
+      "numberOfSections": 1,
+      "assignedContract": {
+        "key": "1",
+        "value": "Ναι"
+      },
+      "socialContract": {
+        "key": "1",
+        "value": "Ναι"
+      },
+      "centralGovernmentAuthority": {
+        "key": "2",
+        "value": "Όχι"
+      },
+      "contractingData": {
+        "unitsOperator": {
+          "key": "86848",
+          "value": "ΔΗΜΟΣ ΦΟΥΡΝΩΝ ΚΟΡΣΕΩΝ"
+        },
+        "signers": {
+          "key": "100063952",
+          "value": "ΔΗΜΗΤΡΙΟΣ ΚΑΡΥΔΗΣ - Δήμαρχος"
+        }
+      },
+      "procedureType": {
+        "key": "6",
+        "value": "Απευθείας ανάθεση"
+      },
+      "organization": {
+        "key": "6311",
+        "value": "ΔΗΜΟΣ ΦΟΥΡΝΩΝ ΚΟΡΣΕΩΝ"
+      },
+      "contractType": {
+        "key": "13",
+        "value": "Προμήθειες"
+      },
+      "criteriaCode": {
+        "key": "2",
+        "value": "Βάσει τιμής"
+      },
+      "awardProcedure": null,
+      "nutsCode": {
+        "key": "EL412",
+        "value": "Ικαρία, Σάμος"
+      },
+      "nutsCity": "ΦΟΥΡΝΟΙ ΚΟΡΣΕΩΝ",
+      "nutsPostalCode": "83400",
+      "nutsCountry": {
+        "key": "GR",
+        "value": "Ελλάδα"
+      },
+      "centralizedMarkets": [
+        {
+          "centralizedMarket": {
+            "key": "8",
+            "value": "Δεν χρησιμοποιείται"
+          }
+        }
+      ],
+      "legalContext": {
+        "key": "5",
+        "value": "ν.4412/2016 - Βιβλίο Ι – κάτω των ορίων"
+      },
+      "centralizedTypes": null,
+      "classificationOfPublicLawOrganization": {
+        "key": "2",
+        "value": "ΟΤΑ"
+      },
+      "typeOfContractingAuthority": {
+        "key": "9",
+        "value": "ΝΠΔΔ"
+      },
+      "contractingAuthorityActivity": {
+        "key": "1",
+        "value": "Γενικές δημόσιες υπηρεσίες"
+      },
+      "contractDuration": 2,
+      "contractDurationUnitOfMeasure": {
+        "key": "1",
+        "value": "Ημέρες"
+      },
+      "contractingDataDetails": {
+        "contractingMembersDataList": []
+      },
+      "totalCostWithVAT": 0,
+      "totalCostWithoutVAT": 0,
+      "objectDetailsList": [],
+      "additionalContractTypes": null,
+      "mixedContract": false,
+      "approvedRequestsList": [],
+      "noticeRefNo": null,
+      "amendsAuctionRefNo": [],
+      "contractRefNo": [],
+      "paymentRefNo": []
+    },
+    {
+      "title": "ΔΑΠΑΝΗ ΔΙΑΜΟΝΗΣ ΤΩΝ ΣΥΝΤΕΛΕΣΤΩΝ ΤΟΥ ΣΥΜΙΑΚΟΥ ΘΕΑΤΡΟΥ ΓΙΑ ΤΗΝ ΠΑΡΑΣΤΑΣΗ ΣΤΙΣ 8/8/2026",
+      "referenceNumber": "26AWRD019602559",
+      "submissionDate": "2026-08-08T23:22:30.187",
+      "lastUpdateDate": null,
+      "signedDate": "2026-08-07",
+      "cancelled": false,
+      "cancellationDate": null,
+      "cancellationType": null,
+      "cancellationReason": null,
+      "cancellationADA": null,
+      "protocolNumber": null,
+      "aaht": "1007.E86903.0001",
+      "authorEmail": null,
+      "organizationVatNumber": "090001183",
+      "greekOrganizationVatNumber": null,
+      "budget": 310,
+      "auctionAmount": null,
+      "commitmentNo": null,
+      "amendedAuctionADAM": null,
+      "amendPreviousAuction": false,
+      "numberOfSections": 3,
+      "assignedContract": {
+        "key": "2",
+        "value": "Όχι"
+      },
+      "socialContract": {
+        "key": "2",
+        "value": "Όχι"
+      },
+      "centralGovernmentAuthority": {
+        "key": "2",
+        "value": "Όχι"
+      },
+      "contractingData": {
+        "unitsOperator": {
+          "key": "78540",
+          "value": "ΔΗΜΟΣ ΣΥΜΗΣ - ΤΜΗΜΑ ΔΙΟΙΚΗΤΙΚΩΝ - ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ"
+        },
+        "signers": {
+          "key": "109414",
+          "value": "ΕΛΕΥΘΕΡΙΟΣ ΠΑΠΑΚΑΛΟΔΟΥΚΑΣ - Δήμαρχος"
+        }
+      },
+      "procedureType": {
+        "key": "6",
+        "value": "Απευθείας ανάθεση"
+      },
+      "organization": {
+        "key": "6290",
+        "value": "ΔΗΜΟΣ ΣΥΜΗΣ"
+      },
+      "contractType": {
+        "key": "9",
+        "value": "Υπηρεσίες"
+      },
+      "criteriaCode": {
+        "key": "2",
+        "value": "Βάσει τιμής"
+      },
+      "awardProcedure": null,
+      "nutsCode": {
+        "key": "EL421",
+        "value": "Κάλυμνος, Κάρπαθος, Κως, Ρόδος"
+      },
+      "nutsCity": "ΣΥΜΗ",
+      "nutsPostalCode": "85600",
+      "nutsCountry": {
+        "key": "GR",
+        "value": "Ελλάδα"
+      },
+      "centralizedMarkets": [
+        {
+          "centralizedMarket": {
+            "key": "8",
+            "value": "Δεν χρησιμοποιείται"
+          }
+        }
+      ],
+      "legalContext": {
+        "key": "5",
+        "value": "ν.4412/2016 - Βιβλίο Ι – κάτω των ορίων"
+      },
+      "centralizedTypes": null,
+      "classificationOfPublicLawOrganization": {
+        "key": "2",
+        "value": "ΟΤΑ"
+      },
+      "typeOfContractingAuthority": {
+        "key": "9",
+        "value": "ΝΠΔΔ"
+      },
+      "contractingAuthorityActivity": {
+        "key": "1",
+        "value": "Γενικές δημόσιες υπηρεσίες"
+      },
+      "contractDuration": 2,
+      "contractDurationUnitOfMeasure": {
+        "key": "1",
+        "value": "Ημέρες"
+      },
+      "contractingDataDetails": {
+        "contractingMembersDataList": []
+      },
+      "totalCostWithVAT": 0,
+      "totalCostWithoutVAT": 0,
+      "objectDetailsList": [],
+      "additionalContractTypes": null,
+      "mixedContract": false,
+      "approvedRequestsList": [],
+      "noticeRefNo": null,
+      "amendsAuctionRefNo": [],
+      "contractRefNo": [],
+      "paymentRefNo": []
+    }
+  ],
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 50,
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "offset": 0,
+    "unpaged": false,
+    "paged": true
+  },
+  "last": false,
+  "totalElements": 146673,
+  "totalPages": 2934,
+  "first": true,
+  "numberOfElements": 2,
+  "size": 2,
+  "number": 0,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "empty": false
+}

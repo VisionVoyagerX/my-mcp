@@ -1,0 +1,189 @@
+{
+  "content": [
+    {
+      "title": "ΠΡΟΜΗΘΕΙΑ ΝΕΟΥ ΥΠΗΡΕΣΙΑΚΟΥ ΑΥΤΟΚΙΝΗΤΟΥ",
+      "referenceNumber": "26PAY019602557",
+      "auctionReferenceNumber": null,
+      "signedDate": "2026-08-07T00:00:00",
+      "submissionDate": "2026-08-08T22:56:33.097",
+      "lastUpdateDate": null,
+      "cancellationDate": null,
+      "cancellationType": null,
+      "cancellationReason": null,
+      "cancellationADA": null,
+      "cancelled": false,
+      "credit": false,
+      "paymentRelatedAda": null,
+      "protocolNumber": null,
+      "authorEmail": null,
+      "aaht": "1009.0000000000.0001",
+      "paymentCommitmentCode": "140846",
+      "organizationVatNumber": "090372363",
+      "greekOrganizationVatNumber": null,
+      "commitmentNo": null,
+      "contractValue": null,
+      "organization": {
+        "key": "10",
+        "value": "ΥΠΟΥΡΓΕΙΟ ΕΞΩΤΕΡΙΚΩΝ"
+      },
+      "nutsCode": {
+        "key": "EL",
+        "value": "ΕΛΛΑΔΑ"
+      },
+      "centralizedMarkets": [
+        {
+          "centralizedMarket": {
+            "key": "8",
+            "value": "Δεν χρησιμοποιείται"
+          }
+        }
+      ],
+      "legalContext": null,
+      "contractType": {
+        "key": "13",
+        "value": "Προμήθειες"
+      },
+      "classificationOfPublicLawOrganization": {
+        "key": "4",
+        "value": "Εκτός Γενικής Κυβέρνησης"
+      },
+      "typeOfContractingAuthority": {
+        "key": "9",
+        "value": "ΝΠΔΔ"
+      },
+      "contractingData": {
+        "unitsOperator": {
+          "key": "100017541",
+          "value": "ΓΕΝΙΚΟ ΠΡΟΞΕΝΕΙΟ ΤΗΣ ΕΛΛΑΔΟΣ ΣΤΟΝ ΑΓΙΟ ΦΡΑΓΚΙΣΚΟ (Η.Π.Α.)"
+        },
+        "signers": {
+          "key": "100017611",
+          "value": "ΓΡΗΓΟΡΙΟΣ ΤΑΣΣΙΟΠΟΥΛΟΣ - Διευθυντής"
+        }
+      },
+      "fundingDetails": {
+        "publicFundingRef": null,
+        "publicFundingRefNum": null,
+        "publicFundingRefOps": null,
+        "cofundProgramRef": null,
+        "selfFundProgramRef": null,
+        "espaFundProgramRef": null,
+        "regularBudgetFundedProgramRef": "3120201001"
+      },
+      "nutsCodes": [],
+      "totalCostWithVAT": 0,
+      "totalCostWithoutVAT": 0,
+      "objectDetails": [],
+      "additionalContractTypes": null,
+      "mixedContract": false,
+      "requestRefNo": null,
+      "auctionRefNo": null,
+      "contractRefNo": null
+    },
+    {
+      "title": "ΑΠΟΔΟΣΗ ΛΕΙΤΟΥΡΓΙΚΩΝ ΔΑΠΑΝΩΝ A΄ ΕΞΑΜΗΝΟΥ 2026 ΠΡΕΣΒΕΙΑ ΣΙΓΚΑΠΟΥΡΗΣ",
+      "referenceNumber": "26PAY019602550",
+      "auctionReferenceNumber": null,
+      "signedDate": "2026-08-01T00:00:00",
+      "submissionDate": "2026-08-08T20:08:48.169",
+      "lastUpdateDate": null,
+      "cancellationDate": null,
+      "cancellationType": null,
+      "cancellationReason": null,
+      "cancellationADA": null,
+      "cancelled": false,
+      "credit": false,
+      "paymentRelatedAda": null,
+      "protocolNumber": null,
+      "authorEmail": null,
+      "aaht": "1009.0000000000.0001",
+      "paymentCommitmentCode": "A/A",
+      "organizationVatNumber": "090372363",
+      "greekOrganizationVatNumber": true,
+      "commitmentNo": null,
+      "contractValue": null,
+      "organization": {
+        "key": "10",
+        "value": "ΥΠΟΥΡΓΕΙΟ ΕΞΩΤΕΡΙΚΩΝ"
+      },
+      "nutsCode": {
+        "key": "EL303",
+        "value": "Κεντρικός Τομέας Αθηνών"
+      },
+      "centralizedMarkets": [
+        {
+          "centralizedMarket": {
+            "key": "8",
+            "value": "Δεν χρησιμοποιείται"
+          }
+        }
+      ],
+      "legalContext": null,
+      "contractType": {
+        "key": "9",
+        "value": "Υπηρεσίες"
+      },
+      "classificationOfPublicLawOrganization": {
+        "key": "1",
+        "value": "Κεντρική Κυβέρνηση"
+      },
+      "typeOfContractingAuthority": {
+        "key": "12",
+        "value": "Κεντρική Διοίκηση"
+      },
+      "contractingData": {
+        "unitsOperator": {
+          "key": "100035330",
+          "value": "ΠΡΕΣΒΕΙΑ ΤΗΣ ΕΛΛΑΔΟΣ ΣΤΗ ΣΙΓΚΑΠΟΥΡΗ (ΣΙΓΚΑΠΟΥΡΗ)"
+        },
+        "signers": {
+          "key": "100017601",
+          "value": "ΧΡΙΣΤΟΔΟΥΛΟΣ ΜΑΡΓΑΡΙΤΗΣ - Διευθυντής"
+        }
+      },
+      "fundingDetails": {
+        "publicFundingRef": null,
+        "publicFundingRefNum": null,
+        "publicFundingRefOps": null,
+        "cofundProgramRef": null,
+        "selfFundProgramRef": null,
+        "espaFundProgramRef": null,
+        "regularBudgetFundedProgramRef": "401-2410201001 +"
+      },
+      "nutsCodes": [],
+      "totalCostWithVAT": 0,
+      "totalCostWithoutVAT": 0,
+      "objectDetails": [],
+      "additionalContractTypes": null,
+      "mixedContract": false,
+      "requestRefNo": "26REQ018471014",
+      "auctionRefNo": null,
+      "contractRefNo": null
+    }
+  ],
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 50,
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "offset": 0,
+    "unpaged": false,
+    "paged": true
+  },
+  "last": false,
+  "totalElements": 334015,
+  "totalPages": 6681,
+  "first": true,
+  "numberOfElements": 2,
+  "size": 2,
+  "number": 0,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "empty": false
+}

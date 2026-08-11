@@ -1,0 +1,155 @@
+{
+  "content": [
+    {
+      "title": "«Προμήθεια βυτίου μεταφοράς πόσιμου νερού»",
+      "referenceNumber": "26REQ019602548",
+      "previousRequestReferenceNumber": null,
+      "signedDate": "2026-08-08",
+      "lastUpdateDate": null,
+      "submissionDate": "2026-08-08T19:55:26.676",
+      "procurementDeliveryDate": "2026-08-31",
+      "cancellationDate": null,
+      "cancelled": false,
+      "cancellationReason": null,
+      "cancellationADA": null,
+      "cancellationType": null,
+      "protocolNumber": "5873",
+      "approvalCommitmentCode": null,
+      "procedureType": null,
+      "approvalADA": null,
+      "authorEmail": null,
+      "greekOrganizationVatNumber": null,
+      "organizationVatNumber": "997615160",
+      "budget": null,
+      "commitmentNo": null,
+      "preApproval": false,
+      "approved": false,
+      "organization": {
+        "key": "6199",
+        "value": "ΔΗΜΟΣ ΜΥΚΗΣ"
+      },
+      "nutsCode": {
+        "key": "EL512",
+        "value": "Ξάνθη"
+      },
+      "typeOfContractingAuthority": {
+        "key": "9",
+        "value": "ΝΠΔΔ"
+      },
+      "classificationOfPublicLawOrganization": {
+        "key": "2",
+        "value": "ΟΤΑ"
+      },
+      "aaht": "1007.E80603.0001",
+      "contractTypes": [],
+      "contractingData": {
+        "unitsOperator": {
+          "key": "100064433",
+          "value": "ΔΙΕΥΘΥΝΣΗ ΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΚΑΙ ΠΕΡΙΒΑΛΛΟΝΤΟΣ"
+        },
+        "signers": {
+          "key": "100012001",
+          "value": "Ιωάννα Κούτσικου - Αναπληρωτής Προϊστάμενος"
+        }
+      },
+      "totalCostWithVAT": 0,
+      "totalCostWithoutVAT": 0,
+      "objectDetails": [],
+      "additionalContractTypes": null,
+      "mixedContract": false,
+      "approvalRefNo": [],
+      "noticeRefNo": [],
+      "contractRefNo": [],
+      "paymentRefNo": [],
+      "auctionRefNo": []
+    },
+    {
+      "title": "ΑΔΣ 678 ",
+      "referenceNumber": "26REQ019602545",
+      "previousRequestReferenceNumber": "26REQ019497210",
+      "signedDate": "2026-07-09",
+      "lastUpdateDate": "2026-07-22T00:00:00",
+      "submissionDate": "2026-08-08T19:22:13.512",
+      "procurementDeliveryDate": "2026-07-31",
+      "cancellationDate": null,
+      "cancelled": false,
+      "cancellationReason": null,
+      "cancellationADA": null,
+      "cancellationType": null,
+      "protocolNumber": "678/35-09-07-2026",
+      "approvalCommitmentCode": null,
+      "procedureType": null,
+      "approvalADA": null,
+      "authorEmail": null,
+      "greekOrganizationVatNumber": null,
+      "organizationVatNumber": "999091563",
+      "budget": null,
+      "commitmentNo": null,
+      "preApproval": false,
+      "approved": true,
+      "organization": {
+        "key": "99221913",
+        "value": "ΝΟΜ.ΓΕΝ. ΝΟΣΟΚΟΜΕΙΟ ΚΑΡΔΙΤΣΑΣ"
+      },
+      "nutsCode": {
+        "key": "EL611",
+        "value": "Καρδίτσα, Τρίκαλα"
+      },
+      "typeOfContractingAuthority": {
+        "key": "9",
+        "value": "ΝΠΔΔ"
+      },
+      "classificationOfPublicLawOrganization": {
+        "key": "4",
+        "value": "Εκτός Γενικής Κυβέρνησης"
+      },
+      "aaht": "1015.E00228.0001",
+      "contractTypes": [],
+      "contractingData": {
+        "unitsOperator": {
+          "key": "93642",
+          "value": "ΓΕΝΙΚΟ ΝΟΣΟΚΟΜΕΙΟ ΚΑΡΔΙΤΣΑΣ"
+        },
+        "signers": {
+          "key": "100098366",
+          "value": "ΣΤΑΥΡΟΣ ΠΑΠΑΓΕΩΡΓΙΟΥ - Διοικητής"
+        }
+      },
+      "totalCostWithVAT": 0,
+      "totalCostWithoutVAT": 0,
+      "objectDetails": [],
+      "additionalContractTypes": null,
+      "mixedContract": false,
+      "approvalRefNo": [],
+      "noticeRefNo": [],
+      "contractRefNo": [],
+      "paymentRefNo": [],
+      "auctionRefNo": []
+    }
+  ],
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 50,
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "offset": 0,
+    "paged": true,
+    "unpaged": false
+  },
+  "totalPages": 7710,
+  "last": false,
+  "totalElements": 385479,
+  "first": true,
+  "numberOfElements": 2,
+  "size": 2,
+  "number": 0,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "empty": false
+}
