@@ -23,7 +23,7 @@ process required.
 
 | Server                                                               | Domain                   | Services                                          | Auth                                                                                                                                                        |
 | -------------------------------------------------------------------- | ------------------------ | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`packages/citizen-mcp`](./packages/citizen-mcp) — **CitizenMCP**    | Transparency / open-data | Diavgeia, data.gov.gr, ΓΕΜΗ                        | Diavgeia/data.gov.gr need nothing (optional free token for data.gov.gr); ΓΕΜΗ needs a free server-side API key                                             |
+| [`packages/citizen-mcp`](./packages/citizen-mcp) — **CitizenMCP**    | Transparency / open-data | Diavgeia, data.gov.gr, ΓΕΜΗ, ΚΗΜΔΗΣ                | Diavgeia/data.gov.gr/ΚΗΜΔΗΣ need nothing (optional free token for data.gov.gr); ΓΕΜΗ needs a free server-side API key                                       |
 | [`packages/business-mcp`](./packages/business-mcp) — **BusinessMCP** | Business / tax           | ΓΕΜΗ, myDATA, Ergani, (+ shared Diavgeia)          | ΓΕΜΗ needs a free server-side API key; myDATA/Ergani are bring-your-own-credential, with an optional connect-once token so you don't resend them every call |
 
 "CitizenMCP" and "BusinessMCP" are product names for the same two domain
@@ -42,7 +42,7 @@ packages/
   core/            shared per-service API clients, MCP tool registration,
                     and auth handling (including the credentials/ module
                     used by BusinessMCP's connect-once token system)
-  citizen-mcp/      Cloudflare Worker: Diavgeia, CKAN, GEMI tools
+  citizen-mcp/      Cloudflare Worker: Diavgeia, CKAN, GEMI, KIMDIS tools
   business-mcp/     Cloudflare Worker: Diavgeia, GEMI, myDATA, Ergani tools
 ```
 
@@ -104,11 +104,13 @@ secret setup.
 
 ## Verification status
 
-Diavgeia, ΓΕΜΗ, and data.gov.gr have been verified live end-to-end: direct
-calls to their production APIs, and real tool calls through the deployed
-Cloudflare Workers, all return real 200 responses. ΓΕΜΗ is verified live on
-both workers independently, each against its own separate `GEMI_API_KEY`
-(see above). myDATA's credential-token
+Diavgeia, ΓΕΜΗ, data.gov.gr, and ΚΗΜΔΗΣ have been verified live end-to-end:
+direct calls to their production APIs, and real tool calls through the
+deployed Cloudflare Workers, all return real 200 responses. ΓΕΜΗ is verified
+live on both workers independently, each against its own separate
+`GEMI_API_KEY` (see above). ΚΗΜΔΗΣ's `/pde` endpoint is the one exception —
+every ΠΔΕ number tried during verification returned 400, so its success
+response shape is unconfirmed. myDATA's credential-token
 wiring is verified live (a real request with dummy credentials returns a
 genuine 403 from AADE, proving the encrypt/store/resolve/call path works)
 but hasn't been exercised with real credentials. Ergani hasn't been
