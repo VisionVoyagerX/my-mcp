@@ -15,6 +15,7 @@ import {
   type KimdisNotice,
   type KimdisPage,
   type KimdisPayment,
+  type KimdisPdeResult,
   type KimdisRequest,
 } from "./types.js";
 
@@ -213,16 +214,14 @@ export class KimdisClient {
 
   /**
    * Look up the ΑΔΑΜ codes registered under a ΠΔΕ (public-investment-
-   * programme) funding reference number. NOT live-verified with a real ΠΔΕ
-   * number — every value tried during research returned 400 (invalid),
-   * confirming only the error path. See KimdisPdeResultSchema.
+   * programme) funding reference number, broken down by lifecycle stage.
+   * See KimdisPdeResultSchema.
    */
-  async lookupPdeAdamCodes(pdeNumber: string): Promise<string[]> {
+  async lookupPde(pdeNumber: string): Promise<KimdisPdeResult> {
     const qs = buildQuery({ pdeNumber });
     const raw = await fetchJson<unknown>(`${this.baseUrl}/pde${qs}`, {
       headers: { Accept: "application/json" },
     });
-    const parsed = KimdisPdeResultSchema.parse(raw);
-    return Array.isArray(parsed) ? parsed : parsed.content;
+    return KimdisPdeResultSchema.parse(raw);
   }
 }

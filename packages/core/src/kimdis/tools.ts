@@ -376,10 +376,8 @@ export function registerKimdisTools(
       title: "Look up ΑΔΑΜ codes by ΠΔΕ funding reference",
       description:
         "Look up the ΑΔΑΜ reference numbers registered under a ΠΔΕ (Πρόγραμμα Δημοσίων " +
-        "Επενδύσεων — public investment programme) funding reference number. CAUTION: this " +
-        "endpoint's success-response shape is not live-verified (only its 400 error path was " +
-        "confirmed during research) — treat results as provisional until confirmed against a " +
-        "known-good ΠΔΕ number." +
+        "Επενδύσεων — public investment programme) funding reference number, broken down by " +
+        "notice/contract/payment (ΠΔΕ linkage doesn't appear to reach back to the request stage)." +
         framingNote,
       inputSchema: {
         pdeNumber: z.string().min(1).describe("The ΠΔΕ funding reference number."),
@@ -387,13 +385,20 @@ export function registerKimdisTools(
     },
     async ({ pdeNumber }) => {
       try {
-        const codes = await client.lookupPdeAdamCodes(pdeNumber);
-        if (codes.length === 0) {
+        const result = await client.lookupPde(pdeNumber);
+        const sections: [string, string[]][] = [
+          ["Notices", result.notices],
+          ["Contracts", result.contracts],
+          ["Payments", result.payments],
+        ];
+        const nonEmpty = sections.filter(([, refs]) => refs.length > 0);
+        if (nonEmpty.length === 0) {
           return {
             content: [{ type: "text", text: `No ΑΔΑΜ codes found for ΠΔΕ "${pdeNumber}".` }],
           };
         }
-        return { content: [{ type: "text", text: codes.join(", ") }] };
+        const lines = nonEmpty.map(([label, refs]) => `**${label}:** ${refs.join(", ")}`);
+        return { content: [{ type: "text", text: lines.join("\n") }] };
       } catch (error) {
         return toolErrorResult(error, `Failed to look up ΠΔΕ "${pdeNumber}"`);
       }

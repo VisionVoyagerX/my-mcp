@@ -127,14 +127,24 @@ describe("KimdisClient", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("looks up ΑΔΑΜ codes for a ΠΔΕ number, accepting a bare array response", async () => {
+  it("looks up ΑΔΑΜ codes for a ΠΔΕ number, keyed by lifecycle stage", async () => {
     fetchMock.mockResolvedValueOnce(
-      jsonResponse(["26REQ019602548", "26PROC019602558"]),
+      jsonResponse({
+        notices: ["26PROC019602558"],
+        contracts: ["26SYMV019602331"],
+        payments: [],
+      }),
     );
     const client = new KimdisClient({ baseUrl: "https://example.test" });
 
-    const codes = await client.lookupPdeAdamCodes("2014ΣΕ54600000");
+    const result = await client.lookupPde("2025ΝΑ39100001");
 
-    expect(codes).toEqual(["26REQ019602548", "26PROC019602558"]);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://example.test/pde?pdeNumber=2025%CE%9D%CE%9139100001",
+      expect.anything(),
+    );
+    expect(result.notices).toEqual(["26PROC019602558"]);
+    expect(result.contracts).toEqual(["26SYMV019602331"]);
+    expect(result.payments).toEqual([]);
   });
 });

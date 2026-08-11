@@ -167,16 +167,18 @@ export const KimdisAdamChainSchema = z
 export type KimdisAdamChain = z.infer<typeof KimdisAdamChainSchema>;
 
 /**
- * GET /pde response shape is NOT live-verified — every ΠΔΕ number tried
- * during research returned 400 (invalid/nonexistent), so only the error path
- * was confirmed live, not a successful payload. Accepts either a bare array
- * of ΑΔΑΜ codes or a Page-style envelope, since the docs describe it as
- * "paginated ΑΔΑΜ codes" but the earlier OpenAPI summary listed no page
- * fields. Verify against a real ΠΔΕ number before trusting this shape.
+ * GET /pde response shape, live-verified 2026-08-11 against real ΠΔΕ funding
+ * reference numbers pulled from live /contract search results: a fixed
+ * object of three ΑΔΑΜ-code arrays, keyed by lifecycle stage. No `requests`
+ * or `auctions`/awards key appears in either verified response — ΠΔΕ linkage
+ * apparently starts at the notice stage, not the pre-tender request stage.
  */
-export const KimdisPdeResultSchema = z.union([
-  z.array(z.string()),
-  z.object({ content: z.array(z.string()).default([]) }).loose(),
-]);
+export const KimdisPdeResultSchema = z
+  .object({
+    notices: z.array(z.string()).default([]),
+    contracts: z.array(z.string()).default([]),
+    payments: z.array(z.string()).default([]),
+  })
+  .loose();
 
 export type KimdisPdeResult = z.infer<typeof KimdisPdeResultSchema>;
