@@ -1,10 +1,10 @@
 # @my-mcp/business-mcp
 
-**BusinessMCP**: A public, rate-limited Cloudflare Worker exposing Greek business/tax data — Diavgeia, ΓΕΜΗ, myDATA, and Ergani — as an MCP server.
+**BusinessMCP**: A public, rate-limited Cloudflare Worker exposing Greek business/tax data — Diavgeia, ΓΕΜΗ, ΚΗΜΔΗΣ, myDATA, and Ergani — as an MCP server.
 
 ## Overview
 
-This package deploys the Diavgeia, ΓΕΜΗ, myDATA, and Ergani tool sets from `@my-mcp/core` to Cloudflare Workers. See also [`@my-mcp/citizen-mcp`](../citizen-mcp) for transparency/open-data tools — Diavgeia and ΓΕΜΗ are both shared between the two workers, since procurement decisions and the business registry are genuinely cross-domain.
+This package deploys the Diavgeia, ΓΕΜΗ, ΚΗΜΔΗΣ, myDATA, and Ergani tool sets from `@my-mcp/core` to Cloudflare Workers. See also [`@my-mcp/citizen-mcp`](../citizen-mcp) for transparency/open-data tools — Diavgeia and ΓΕΜΗ are both shared between the two workers, since procurement decisions and the business registry are genuinely cross-domain. ΚΗΜΔΗΣ is also shared, complementing Diavgeia's free-text disclosure acts with structured public-contracts data that matters just as much to business/tax use cases as to transparency ones.
 
 **Live URL**: `https://business-mcp.nickdandis96.workers.dev`
 
@@ -12,18 +12,20 @@ This package deploys the Diavgeia, ΓΕΜΗ, myDATA, and Ergani tool sets from `
 
 - All 15 Diavgeia tools. See [`packages/core/src/diavgeia/tools.ts`](/packages/core/src/diavgeia/tools.ts).
 - `gemi_search_company_by_tin`, `gemi_get_company`, `gemi_get_company_documents`, `gemi_list_metadata`. See [`packages/core/src/gemi/tools.ts`](/packages/core/src/gemi/tools.ts).
+- `kimdis_search_requests`, `kimdis_search_notices`, `kimdis_search_awards`, `kimdis_search_contracts`, `kimdis_search_payments`, `kimdis_get_adam_chain`, `kimdis_get_attachment`, `kimdis_lookup_pde` — ΚΗΜΔΗΣ (public-contracts registry) structured open data. See [`packages/core/src/kimdis/tools.ts`](/packages/core/src/kimdis/tools.ts).
 - 10 myDATA tools (request/send invoices, income/expense/VAT/E3 summaries, classifications, payment methods, cancellation) plus `mydata_connect`/`mydata_forget`. See [`packages/core/src/mydata/tools.ts`](/packages/core/src/mydata/tools.ts).
 - `ergani_list_services` plus `ergani_connect`/`ergani_forget`. Read-only — Ergani's write endpoints (work-card submission, schedule declarations) aren't exposed since their exact live payload shape hasn't been confirmed. See [`packages/core/src/ergani/tools.ts`](/packages/core/src/ergani/tools.ts).
 
 ## Auth models — three different patterns on one worker
 
-- **Diavgeia**: fully open, no key.
+- **Diavgeia / ΚΗΜΔΗΣ**: fully open, no key.
 - **ΓΕΜΗ**: a single manually-approved `api_key` held server-side (`GEMI_API_KEY` secret), shared by every caller of this worker. ΚΥ ΓΕΜΗ caps that one key at **30 requests/minute in total** — see Rate limiting below. **This worker needs its own ΓΕΜΗ API key, separate from citizen-mcp's** — the 30 req/min cap is per key, so reusing the same key across both independently-rate-limited workers would double-book that shared quota.
 - **myDATA / Ergani**: credentials belong to an individual business/employer, so there's no shared server key. Every tool accepts raw credentials (`userId`+`subscriptionKey`, or `username`+`password`) on every call — **or** you can call `mydata_connect`/`ergani_connect` once to encrypt and store them server-side (Cloudflare KV, AES-GCM), getting back an opaque `credentialToken` to pass on future calls instead. Call `mydata_forget`/`ergani_forget` to delete a stored token. If the KV/encryption-key setup below isn't done yet, connect/forget tools simply don't appear — raw-credential calls still work.
 
-## Rate limiting — ΓΕΜΗ only
+## Rate limiting
 
 - **ΓΕΜΗ**: 30 requests per 60 seconds **globally, shared across every visitor to this worker** — not per IP, because the underlying `api_key` itself is capped that way regardless of caller. ΓΕΜΗ tool calls will 429 quickly under any real concurrent traffic; that's expected, not a bug.
+- **Diavgeia / ΚΗΜΔΗΣ / myDATA / Ergani**: no dedicated limiter — covered by the worker's general 30 requests/60s per-IP `RATE_LIMITER`. ΚΗΜΔΗΣ's own documented cap (350 req/min) sits well above that, so it's never the binding constraint.
 
 Uses Cloudflare's native `ratelimit` binding (requires Wrangler v4.36.0+).
 
@@ -111,10 +113,11 @@ Edit `wrangler.toml` to adjust:
 
 ## Architecture
 
+- **Bindings**: `RATE_LIMITER` · 30 req/60s per-IP — `GEMI_RATE_LIMITER` · 30 req/60s global — `CREDENTIALS_KV` · AES-GCM encrypted
 - **Stateless per request**: each HTTP request creates a fresh MCP server instance — except `CREDENTIALS_KV`, which is the one piece of state this worker persists across requests/callers by design (the whole point of the connect-once flow).
 - **Transport**: `WebStandardStreamableHTTPServerTransport` (Web Standard APIs — works on any runtime).
 - **Credential encryption**: AES-GCM via WebCrypto (`globalThis.crypto.subtle`), implemented in `packages/core/src/credentials/` — platform-agnostic; this worker only supplies the KV-backed `CredentialStore` and the imported `CryptoKey`.
-- **Icon**: served at `/icon.svg`, a briefcase glyph distinct from CitizenMCP's civic-building icon.
+- **Icon**: served at `/icon.svg` — a briefcase on a gold circle, pairing CitizenMCP's person-silhouette icon.
 
 ## See Also
 

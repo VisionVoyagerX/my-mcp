@@ -24,7 +24,7 @@ process required.
 | Server                                                               | Domain                   | Services                                          | Auth                                                                                                                                                        |
 | -------------------------------------------------------------------- | ------------------------ | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`packages/citizen-mcp`](./packages/citizen-mcp) — **CitizenMCP**    | Transparency / open-data | Diavgeia, data.gov.gr, ΓΕΜΗ, ΚΗΜΔΗΣ                | Diavgeia/data.gov.gr/ΚΗΜΔΗΣ need nothing (optional free token for data.gov.gr); ΓΕΜΗ needs a free server-side API key                                       |
-| [`packages/business-mcp`](./packages/business-mcp) — **BusinessMCP** | Business / tax           | ΓΕΜΗ, myDATA, Ergani, (+ shared Diavgeia)          | ΓΕΜΗ needs a free server-side API key; myDATA/Ergani are bring-your-own-credential, with an optional connect-once token so you don't resend them every call |
+| [`packages/business-mcp`](./packages/business-mcp) — **BusinessMCP** | Business / tax           | ΓΕΜΗ, ΚΗΜΔΗΣ, myDATA, Ergani, (+ shared Diavgeia)  | ΓΕΜΗ needs a free server-side API key; ΚΗΜΔΗΣ needs nothing; myDATA/Ergani are bring-your-own-credential, with an optional connect-once token so you don't resend them every call |
 
 "CitizenMCP" and "BusinessMCP" are product names for the same two domain
 groupings this repo has always used — not a persona-based redesign. A
@@ -43,7 +43,7 @@ packages/
                     and auth handling (including the credentials/ module
                     used by BusinessMCP's connect-once token system)
   citizen-mcp/      Cloudflare Worker: Diavgeia, CKAN, GEMI, KIMDIS tools
-  business-mcp/     Cloudflare Worker: Diavgeia, GEMI, myDATA, Ergani tools
+  business-mcp/     Cloudflare Worker: Diavgeia, GEMI, KIMDIS, myDATA, Ergani tools
 ```
 
 `packages/core` holds all the actual HTTP/API integration logic _and_ the

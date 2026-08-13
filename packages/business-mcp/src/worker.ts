@@ -3,6 +3,7 @@ import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/
 import {
   registerDiavgeiaTools,
   registerGemiTools,
+  registerKimdisTools,
   registerMyDataTools,
   registerErganiTools,
   importEncryptionKey,
@@ -15,14 +16,15 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type, Accept",
 };
 
-// Minimalist briefcase glyph in a warm gold, distinct from CitizenMCP's blue
-// civic-building icon. Served at /icon.svg, see citizen-mcp/src/worker.ts
-// for the icons-extension rationale (SEP-973).
+// Briefcase in a warm gold — the "business" half of this repo's icon pair
+// (CitizenMCP is a person silhouette instead). Served at /icon.svg, see
+// citizen-mcp/src/worker.ts for the icons-extension rationale (SEP-973).
 const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
   <circle cx="64" cy="64" r="64" fill="#B8860B"/>
-  <rect x="48" y="30" width="32" height="18" rx="4" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-  <rect x="24" y="50" width="80" height="52" rx="8" fill="#FFFFFF"/>
-  <rect x="24" y="68" width="80" height="10" fill="#B8860B"/>
+  <rect x="50" y="34" width="28" height="20" rx="10" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+  <rect x="24" y="54" width="80" height="54" rx="10" fill="#FFFFFF"/>
+  <rect x="24" y="76" width="80" height="8" fill="#B8860B"/>
+  <rect x="57" y="70" width="14" height="20" rx="3" fill="#B8860B"/>
 </svg>`;
 
 interface Env {
@@ -59,8 +61,9 @@ interface Env {
 
 const FRAMING =
   "BusinessMCP: a public MCP server for Greek business/tax data — Diavgeia (procurement " +
-  "decisions), ΓΕΜΗ (business registry), myDATA (e-invoicing), and Ergani (labor/employment). " +
-  "See also CitizenMCP for open-data/transparency tools.";
+  "decisions), ΓΕΜΗ (business registry), ΚΗΜΔΗΣ (structured public-contracts registry — " +
+  "request/notice/award/contract/payment lifecycle data), myDATA (e-invoicing), and Ergani " +
+  "(labor/employment). See also CitizenMCP for open-data/transparency tools.";
 
 /**
  * Builds the myDATA/Ergani credential-storage options from the worker's
@@ -151,6 +154,7 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     apiKey: env.GEMI_API_KEY,
     checkRateLimit: () => env.GEMI_RATE_LIMITER.limit({ key: "gemi-global" }),
   });
+  registerKimdisTools(server, { framing: FRAMING });
 
   const credentialOptions = await buildCredentialOptions(env);
   registerMyDataTools(server, {

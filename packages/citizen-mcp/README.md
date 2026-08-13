@@ -109,9 +109,10 @@ The server speaks MCP's [Streamable HTTP transport](https://spec.modelcontextpro
 
 ## Architecture
 
+- **Bindings**: `RATE_LIMITER` · 30 req/60s per-IP — `GEMI_RATE_LIMITER` · 30 req/60s global
 - **Stateless**: Each HTTP request creates a fresh MCP server instance (no persistent sessions)
 - **Transport**: `WebStandardStreamableHTTPServerTransport` (Web Standard APIs — works on any runtime: Cloudflare Workers, Node.js 18+, Deno, Bun, etc.)
-- **Icon**: served at `/icon.svg` and referenced from `serverInfo.icons` per MCP's icons extension ([SEP-973](https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/2573))
+- **Icon**: served at `/icon.svg` — a person silhouette on a blue circle, pairing with BusinessMCP's briefcase icon. Referenced from `serverInfo.icons` per MCP's icons extension ([SEP-973](https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/2573))
 
 ## See Also
 

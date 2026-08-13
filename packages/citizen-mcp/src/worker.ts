@@ -13,19 +13,15 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type, Accept",
 };
 
-// Minimalist civic-building glyph (pediment + columns) in Greek-flag blue.
-// Served at /icon.svg and referenced from serverInfo.icons per MCP's icons
-// extension (SEP-973) — not yet rendered by Claude.ai's connector list, but
-// forward-compatible for when it is.
+// Person silhouette in Greek-flag blue — the "citizen" half of this repo's
+// icon pair (BusinessMCP is a briefcase instead). Served at /icon.svg and
+// referenced from serverInfo.icons per MCP's icons extension (SEP-973) — not
+// yet rendered by Claude.ai's connector list, but forward-compatible for
+// when it is.
 const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
   <circle cx="64" cy="64" r="64" fill="#0D5EAF"/>
-  <polygon points="24,52 64,28 104,52" fill="#FFFFFF"/>
-  <rect x="20" y="52" width="88" height="8" fill="#FFFFFF"/>
-  <rect x="28" y="64" width="10" height="36" fill="#FFFFFF"/>
-  <rect x="48" y="64" width="10" height="36" fill="#FFFFFF"/>
-  <rect x="70" y="64" width="10" height="36" fill="#FFFFFF"/>
-  <rect x="90" y="64" width="10" height="36" fill="#FFFFFF"/>
-  <rect x="18" y="100" width="92" height="10" fill="#FFFFFF"/>
+  <circle cx="64" cy="42" r="22" fill="#FFFFFF"/>
+  <path d="M20,108 C20,66 108,66 108,108 Z" fill="#FFFFFF"/>
 </svg>`;
 
 interface Env {
